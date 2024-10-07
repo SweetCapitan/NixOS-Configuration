@@ -7,7 +7,7 @@
   home.homeDirectory = "/home/dancho";
   home.packages = with pkgs; [
     htop
-    kubectl
+    kubectl #TODO: home kubectl config
   ];
   programs.git = {
     enable = true;
