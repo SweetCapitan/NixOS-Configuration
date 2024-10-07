@@ -5,12 +5,15 @@
   # paths it should manage.
   home.username = "dancho";
   home.homeDirectory = "/home/dancho";
-  home.packages = with pkgs; [ htop ];
-	programs.git = {
-		enable = true;
-		userName = "SweetCapitan";
-		userEmail = "danil.duhanin@yandex.ru";
-};
+  home.packages = with pkgs; [
+    htop
+    kubectl
+  ];
+  programs.git = {
+    enable = true;
+    userName = "SweetCapitan";
+    userEmail = "danil.duhanin@yandex.ru";
+  };
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
