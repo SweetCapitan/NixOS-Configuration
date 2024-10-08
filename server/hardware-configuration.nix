@@ -1,1 +1,1 @@
-bash: line 1: nixos-generate-config: command not found
+throw "U forgot generate hardware conf!!";
