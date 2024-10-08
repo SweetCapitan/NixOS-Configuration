@@ -67,7 +67,7 @@
 
    services.openssh.enable = true;
    users.users.root.openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE1K50JhWnVMR1kSpSRnFmYDX5elbZx3YSb4MB9LG9sW dancho@arch"
+	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
    ];
 
   #
