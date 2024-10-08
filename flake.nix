@@ -5,14 +5,14 @@
     nixpkgs.url = "nixpkgs/nixos-24.05";
     home-manager.url = "github:nix-community/home-manager/release-24.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    inputs.disko.url = "github:nix-community/disko";
-    inputs.disko.inputs.nixpkgs.follows = "nixpkgs";
-    inputs.nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
     inputs@{
       self,
+      disko,
       nixpkgs,
       home-manager,
       ...
@@ -35,11 +35,9 @@
         system = "x86_64-linux";
         modules = [
           disko.nixosModules.disko
+          { disko.devices.disk.my-disk = "/dev/sda"; }
           ./server/configuration.nix
           ./server/hardware-configuration.nix
-          {
-            disko.devices.disk.my-disk.device = "/dev/vda";
-          }
         ];
       };
     };

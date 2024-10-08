@@ -3,6 +3,7 @@
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
 {
+  modulesPath,
   config,
   lib,
   pkgs,
@@ -10,29 +11,23 @@
 }:
 
 {
-#  imports = [
-#    # Include the results of the hardware scan.
-#    ./hardware-configuration.nix
-#  ];
+  #  imports = [
+  #    # Include the results of the hardware scan.
+  #    ./hardware-configuration.nix
+  #  ];
 
-   imports = [
-       (modulesPath + "/installer/scan/not-detected.nix")
-       (modulesPath + "/profiles/qemu-guest.nix")
-       ./disk-config.nix
-     ];
-
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+    (modulesPath + "/profiles/qemu-guest.nix")
+    ./disk-config.nix
+  ];
 
   # Use the systemd-boot EFI boot loader.
   #boot.loader.systemd-boot.enable = true;
   boot.loader = {
-    efi = {
-      canTouchEfiVariables = true;
-      efiSysMountPoint = "/boot/efi";
-    };
     grub = {
       efiSupport = true;
-      device = "nodev";
-      enable = true;
+      efiInstallAsRemovable = true;
     };
   };
 
@@ -56,19 +51,25 @@
   };
   environment.systemPackages = with pkgs; [
     vim
+    curl
+    gitMinimal
   ];
-
-  environment.systemPackages = map lib.lowPrio [
-      pkgs.curl
-      pkgs.gitMinimal
-    ];
 
   nixpkgs.config.allowUnfree = true;
 
-   services.openssh.enable = true;
-   users.users.root.openssh.authorizedKeys.keys = [
-	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
-   ];
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [
+      22
+      80
+    ];
+  };
+  services.openssh.enable = true;
+  services.sshd.enable = true;
+  users.users.root.password = "supersecret";
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
+  ];
 
   #
   system.stateVersion = "23.11"; # Did you read the comment?

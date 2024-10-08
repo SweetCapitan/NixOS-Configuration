@@ -1,18 +1,22 @@
+{ lib, ... }:
 {
   disko.devices = {
     disk = {
       my-disk = {
         type = "disk";
         # Change it on real machines! This only for VM.
-        device = "/dev/vda";
+        device = lib.mkDefault "/dev/sda";
         content = {
           type = "gpt";
           partitions = {
+            boot = {
+              name = "boot";
+              size = "1M";
+              type = "EF02";
+            };
             ESP = {
-              priority = 1;
               name = "ESP";
-              start = "1M";
-              end = "128M";
+              size = "500M";
               type = "EF00";
               content = {
                 type = "filesystem";
@@ -40,7 +44,10 @@
                   "/home/user" = { };
                   # Parent is not mounted so the mountpoint must be set
                   "/nix" = {
-                    mountOptions = [ "compress=zstd" "noatime" ];
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                    ];
                     mountpoint = "/nix";
                   };
                 };

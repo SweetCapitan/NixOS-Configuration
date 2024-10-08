@@ -1,1 +1,1 @@
-throw "Have you forgotten to run nixos-anywhere with `--generate-hardware-config nixos-generate-config ./hardware-configuration.nix`?"
+bash: line 1: nixos-generate-config: command not found
