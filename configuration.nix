@@ -20,6 +20,7 @@
     enable = true;
     vimAlias = true;
     colorschemes.gruvbox.enable = true;
+    extraConfigVim = "autocmd FileType nix setlocal equalprg=nixfmt";
   };
   # Use the systemd-boot EFI boot loader.
   #boot.loader.systemd-boot.enable = true;

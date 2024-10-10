@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "dancho/sweetcapitan's flake for several machenes working with Awesome NixOS";
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-24.05";
