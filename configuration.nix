@@ -6,6 +6,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 
@@ -15,6 +16,11 @@
     ./hardware-configuration.nix
   ];
 
+  programs.nixvim = {
+    enable = true;
+    vimAlias = true;
+    colorschemes.gruvbox.enable = true;
+  };
   # Use the systemd-boot EFI boot loader.
   #boot.loader.systemd-boot.enable = true;
   boot.loader = {
@@ -86,23 +92,18 @@
     sing-box # TODO: remove /usr/share/sing-box/geoip.db
     sing-geoip
     sing-geosite
-    # nvim
-    #    home-manager
   ];
-
-  #	services.sing-box = {
-  #		enable = true;
-  #		settings = ./configt.json;
+  #programs.nixvim.enable = true;
+  #programs.neovim = {
+  #	enable = true;
+  #	viAlias = true;
+  #	vimAlias = true;
+  #	configure = {
+  #		customRC = ''
+  #			set equalprg=nixfmt\
+  #			'';
+  #	};
   #};
-  services.xserver = {
-    enable = true;
-    displayManager.gdm.enable = true;
-    desktopManager = {
-      gnome.enable = true;
-      xterm.enable = false;
-    };
-    excludePackages = [ pkgs.xterm ];
-  };
 
   environment.gnome.excludePackages =
     (with pkgs; [
@@ -199,7 +200,7 @@
       #jetbrains.idea-ultimate
       home-manager
       firefox
-      vim
+      #vim
       #     tree
     ];
   };
