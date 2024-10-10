@@ -1,4 +1,4 @@
-# Edit this configuration file to define what should be installed on
+#Edt this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
@@ -12,16 +12,125 @@
 
 {
   imports = [
-    # Include the results of the hardware scan.
+    # Include the results of the hardware scan. 
     ./hardware-configuration.nix
   ];
-
   programs.nixvim = {
     enable = true;
     vimAlias = true;
+    #------------------
+
     colorschemes.gruvbox.enable = true;
-    extraConfigVim = "autocmd FileType nix setlocal equalprg=nixfmt";
+    #extraConfigLua = ''
+    #${builtins.readFile ./nvim/on_save.lua}
+    #${builtins.readFile ./nvim/init.lua}
+    #'';
+
+    extraConfigLua = ''
+      ${builtins.readFile ./nvim/init.lua}
+      vim.api.nvim_set_keymap('n', '<leader>k', 'gcc', { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('v', '<leader>k', 'gc', { noremap = true, silent = true })
+    '';
+    clipboard.register = "unnamedplus";
+    clipboard.providers.xsel.enable = true;
+    plugins.conform-nvim = {
+      enable = true;
+      settings = {
+        formatters_by_ft = {
+          nix = [ "nix-fmt-formatter" ];
+        };
+        log_level = "warn";
+        notify_on_error = false;
+        notify_no_formatters = false;
+        formatters = {
+          nix-fmt-formatter = {
+            command = lib.getExe pkgs.nixfmt-rfc-style;
+
+          };
+        };
+      };
+
+    };
+    plugins.comment = {
+      enable = true;
+      settings = {
+        mappings = {
+          basic = true;
+          extra = false;
+        };
+
+        toggler = {
+          line = "gcc"; # Key mapping for toggling comments
+          block = "gbc"; # Key mapping for block comments (optional)
+        };
+        opleader = {
+          line = "gc"; # Key mapping for operator-pending mode
+          block = "gb"; # Key mapping for operator-pending block comments (optional)
+        };
+      };
+    };
+    plugins.lsp = {
+      enable = true;
+      servers = {
+        lua_ls.enable = true;
+        nixd.enable = true;
+        typos-lsp = {
+          enable = true;
+          extraOptions.init_options.diagnosticSeverity = "Hint";
+        };
+      };
+      keymaps = {
+        lspBuf = {
+          "<leader>la" = {
+            action = "code_action";
+            desc = "LSP code action";
+          };
+
+          gd = {
+            action = "definition";
+            desc = "Go to definition";
+          };
+
+          gI = {
+            action = "implementation";
+            desc = "Go to implementation";
+          };
+
+          gy = {
+            action = "type_definition";
+            desc = "Go to type definition";
+          };
+
+          K = {
+            action = "hover";
+            desc = "LSP hover";
+          };
+        };
+      };
+    };
+
+    plugins.cmp = {
+      enable = true;
+      autoEnableSources = true;
+      settings = {
+        sources = [
+          { name = "nvim_lsp"; }
+          { name = "path"; }
+          { name = "buffer"; }
+        ];
+      };
+    };
+
+    extraPlugins = with pkgs.vimPlugins; [
+      {
+        plugin = vim-wakatime;
+        #idk, how make it declarative way :shrug:
+        #	config = '''';
+      }
+    ];
   };
+
+  #-------------------------------------------
   # Use the systemd-boot EFI boot loader.
   #boot.loader.systemd-boot.enable = true;
   boot.loader = {
@@ -42,6 +151,8 @@
 
   programs.bash.shellAliases = {
     sbr = "sudo sing-box run --config /etc/nixos/configt.json";
+    nrt = "sudo nixos-rebuild test --flake ~/Configurations/#nixos";
+    nrs = "sudo nixos-rebuild switch --flake ~/Configurations/#nixos";
   };
   time.timeZone = "Europe/Moscow";
   i18n = {
