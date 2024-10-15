@@ -345,11 +345,9 @@
                             expr = '(builtins.getFlake "/home/dancho/Configurations").nixosConfigurations.nixos.options',
                         },
                         home_manager = {
-                            expr = '(builtins.getFlake "/home/dancho/Configurations").homeConfigurations."dancho".options',
+                            expr = '(let flake = (builtins.getFlake "/home/dancho/Configurations"); in flake.inputs.home-manager.lib.homeManagerConfiguration {pkgs = flake.inputs.nixpkgs.legacyPackages.x86_64-linux; modules = [{home.stateVersion = "24.05";home.username="user";home.homeDirectory="/home/user";}];}).options',
                         },
-                        flake_parts = {
-                            expr = 'let flake = builtins.getFlake ("/home/dancho/Configurations"); in flake.debug.options // flake.currentSystem.options',
-                        },
+
                     },
                 },
             },
