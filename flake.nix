@@ -49,7 +49,7 @@
         system = "x86_64-linux";
         modules = [
           disko.nixosModules.disko
-          { disko.devices.disk.my-disk = "/dev/sda"; }
+          #{ disko.devices.disk.my-disk = "/dev/sda"; }
           ./server/configuration.nix
           ./server/hardware-configuration.nix
         ];

@@ -5,7 +5,7 @@
       my-disk = {
         type = "disk";
         # Change it on real machines! This only for VM.
-        device = lib.mkDefault "/dev/sda";
+        device = lib.mkDefault "/dev/vda";
         content = {
           type = "gpt";
           partitions = {

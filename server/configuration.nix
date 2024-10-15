@@ -53,6 +53,7 @@
     vim
     curl
     gitMinimal
+    htop
   ];
 
   nixpkgs.config.allowUnfree = true;
