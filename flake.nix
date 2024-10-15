@@ -26,38 +26,53 @@
       nixpkgs,
       home-manager,
       nixvim,
+      flake-parts,
       ...
     }:
-    {
-	#homeManagerModules = import ./gnomeExtensions;
-      nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = inputs;
-        modules = [
-          ./gnome/settings.nix
-          ./configuration.nix
-	  ./nixvim.nix
-          nixvim.nixosModules.nixvim
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.dancho = import ./home.nix;
-          }
-        ];
-      };
-      nixosConfigurations.cloud = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          disko.nixosModules.disko
-          #{ disko.devices.disk.my-disk = "/dev/sda"; }
-          ./server/configuration.nix
-          ./server/hardware-configuration.nix
-        ];
-      };
-      homeManagerConfigurations."dancho".inputs.home-manager.lib.homeManagerConfiguration = {
-        modules = [
-        ];
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      debug = true;
+      systems = [ "x86_64-linux" ];
+      perSystem = { config, ... }: { };
+      flake = {
+        nixosConfigurations."nixos" = inputs.nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = inputs;
+          modules = [
+            ./gnome/settings.nix
+            ./configuration.nix
+            ./nixvim.nix
+            #            nixvim.nixosModules.nixvim
+                        home-manager.nixosModules.home-manager
+                        {
+                          home-manager.useGlobalPkgs = true;
+                          home-manager.useUserPackages = true;
+                          home-manager.users.dancho = import ./home.nix;
+                        }
+          ];
+        };
+        nixosConfigurations.cloud = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            disko.nixosModules.disko
+            #{ disko.devices.disk.my-disk = "/dev/sda"; }
+            ./server/configuration.nix
+            ./server/hardware-configuration.nix
+          ];
+        };
+        homeConfigurations = {
+          "dancho" = inputs.home-manager.lib.homeManagerConfiguration {
+            pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+            modules = [
+              {
+                home.stateVersion = "24.05";
+                home.username = "user";
+                home.homeDirectory = "/home/user";
+              }
+            ];
+          };
+
+        };
       };
     };
+
 }
