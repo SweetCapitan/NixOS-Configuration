@@ -34,8 +34,8 @@
         modules = [
           ./gnome/settings.nix
           ./configuration.nix
-          ./nixvim.nix
-          nixvim.nixosModules.nixvim
+#          ./nixvim.nix
+#          nixvim.nixosModules.nixvim
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
