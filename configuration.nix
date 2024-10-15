@@ -62,20 +62,29 @@
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
-  # Set your time zone.
-  # time.timeZone = "Europe/Amsterdam";
+#    services.openssh = {
+#      enable = false;
+#      ports = [ 22 ];
+#      settings = {
+#        AllowUsers = [ "root" "dancho" ];
+#        PasswordAuthentication = true;
+#        UseDns = false;
+#        X11Forwarding = false;
+#        PermitRootLogin = "yes";
+#      };
+#    };
 
-  #  services.openssh = {
-  #    enable = true;
-  #    ports = [ 22 ];
-  #    settings = {
-  #      AllowUsers = [ "root" "dancho" ];
-  #      PasswordAuthentication = true;
-  #      UseDns = false;
-  #      X11Forwarding = false;
-  #      PermitRootLogin = "yes";
-  #    };
-  #  };
+    programs.ssh = {
+    extraConfig = ''
+        Host cloud-ru
+            HostName 45.151.31.62
+            User root
+            Port 22
+            ForwardAgent yes
+            IdentityFile ~/.ssh/cloud-nix-key
+    '';
+    };
+
   nix = {
     settings = {
       experimental-features = [
