@@ -18,7 +18,7 @@
       kubectl # TODO: home kubectl config
       gnome.gnome-tweaks
     ]
-    ++ (with pkgs.jetbrains; [ idea-ultimate ]);
+    ++ (with jetbrains; [ idea-ultimate ]);
   programs.wezterm = {
     enable = true;
     enableBashIntegration = true;
