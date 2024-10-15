@@ -14,6 +14,7 @@
   imports = [
     # Include the results of the hardware scan. 
     ./hardware-configuration.nix
+    ./nvim/neovim.nix
   ];
 
   #-------------------------------------------
@@ -34,12 +35,7 @@
     enable = true;
     trustedInterfaces = [ "sing-box-tun" ];
   };
-  programs.neovim = {
-	enable = true;
-	viAlias = true;
-	vimAlias = true;
-	defaultEditor = true;
-  };
+
   programs.bash.shellAliases = {
     sbr = "sudo sing-box run --config /etc/nixos/configt.json";
     nrt = "sudo nixos-rebuild test --flake ~/Configurations/#nixos";
@@ -62,28 +58,28 @@
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
-#    services.openssh = {
-#      enable = false;
-#      ports = [ 22 ];
-#      settings = {
-#        AllowUsers = [ "root" "dancho" ];
-#        PasswordAuthentication = true;
-#        UseDns = false;
-#        X11Forwarding = false;
-#        PermitRootLogin = "yes";
-#      };
-#    };
+  #    services.openssh = {
+  #      enable = false;
+  #      ports = [ 22 ];
+  #      settings = {
+  #        AllowUsers = [ "root" "dancho" ];
+  #        PasswordAuthentication = true;
+  #        UseDns = false;
+  #        X11Forwarding = false;
+  #        PermitRootLogin = "yes";
+  #      };
+  #    };
 
-    programs.ssh = {
+  programs.ssh = {
     extraConfig = ''
-        Host cloud-ru
-            HostName 45.151.31.62
-            User root
-            Port 22
-            ForwardAgent yes
-            IdentityFile ~/.ssh/cloud-nix-key
+      Host cloud-ru
+          HostName 45.151.31.62
+          User dancho
+          Port 22
+          ForwardAgent yes
+          IdentityFile ~/.ssh/cloud-nix-key
     '';
-    };
+  };
 
   nix = {
     settings = {
@@ -104,6 +100,7 @@
     sing-box # TODO: remove /usr/share/sing-box/geoip.db
     sing-geoip
     sing-geosite
+    nixd
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {
@@ -184,15 +181,15 @@
   #    xwayland.enable = true;
   #    nvidiaPatches = true;
   #  };
-    services.xserver = {
+  services.xserver = {
+    enable = true;
+    #videoDrivers = [ "nvidia" ];
+    displayManager.gdm = {
       enable = true;
-      #videoDrivers = [ "nvidia" ];
-      displayManager.gdm = {
-        enable = true;
-       # wayland = true;
-      };
-      desktopManager.gnome.enable = true;
+      # wayland = true;
     };
+    desktopManager.gnome.enable = true;
+  };
   nixpkgs.config.allowUnfree = true;
 
   #  hardware = {

@@ -20,6 +20,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disk-config.nix
+#    ../common/users/dancho.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -33,7 +34,7 @@
 
   time.timeZone = "Europe/Moscow";
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "cloud-ru"; # Define your hostname.
 
   nix = {
     settings = {
@@ -71,6 +72,21 @@
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
   ];
+
+  users.users.dancho.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
+  ];
+
+  users.users.dancho = {
+      hashedPasswordFile = "/etc/nixos/hashedPassword";
+      isNormalUser = true;
+      extraGroups = [
+        "wheel"
+        "input"
+        "networkmanager"
+      ]; # Enable ‘sudo’ for the user.
+      packages = with pkgs; [ ];
+    };
 
   #
   system.stateVersion = "23.11"; # Did you read the comment?

@@ -16,6 +16,7 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs_unstable";
     };
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
   outputs =
@@ -52,6 +53,10 @@
           #{ disko.devices.disk.my-disk = "/dev/sda"; }
           ./server/configuration.nix
           ./server/hardware-configuration.nix
+        ];
+      };
+      homeManagerConfigurations."dancho".inputs.home-manager.lib.homeManagerConfiguration = {
+        modules = [
         ];
       };
     };
