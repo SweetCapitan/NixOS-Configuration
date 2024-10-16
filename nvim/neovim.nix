@@ -37,8 +37,6 @@
           lualine-nvim
           bufferline-nvim
           lspsaga-nvim
-          # -- lsp_servers
-          pkgs.lua-language-server
         ];
       };
     };

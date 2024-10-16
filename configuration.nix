@@ -101,6 +101,7 @@
     sing-geoip
     sing-geosite
     nixd
+    lua-language-server
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {
