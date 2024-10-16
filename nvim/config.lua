@@ -77,15 +77,6 @@ require("lualine").setup(
     }
 )
 
--------------------
--- About mason --
--------------------
-
-require("mason").setup()
-require("mason-lspconfig").setup {
-  ensure_installed = { "lua_ls" }, -- "lua_ls" - это название Lua Language Server в mason
-}
-
 ----------------------
 -- About bufferline --
 ----------------------
@@ -108,7 +99,6 @@ require("bufferline").setup(
 ----------------------
 require("nvim-treesitter.configs").setup(
     {
-        ensure_installed = { "lua" },
         highlight = {
             enable = true
         },
@@ -403,30 +393,6 @@ nvim_lsp.nixd.setup(
         }
     }
 )
-nvim_lsp.lua_ls.setup({
-settings = {
-    Lua = {
-      runtime = {
-        -- Указываем версию Lua. Обычно используется 'LuaJIT' для Neovim
-        version = 'LuaJIT',
-        path = vim.split(package.path, ';'),
-      },
-      diagnostics = {
-        -- Разрешаем серверу распознавать глобальные переменные Neovim
-        globals = {'vim'},
-      },
-      workspace = {
-        -- Делаем серверу доступной библиотеку Neovim runtime
-        library = vim.api.nvim_get_runtime_file("", true),
-        -- Отключаем предупреждение о превышении максимального количества файлов
-        checkThirdParty = false,
-      },
-      telemetry = {
-        enable = false, -- Отключаем телеметрию для улучшения конфиденциальности
-      },
-    },
-  },
-})
 
 -------------------
 -- About lspsaga --

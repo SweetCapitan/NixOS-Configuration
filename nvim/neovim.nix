@@ -20,7 +20,7 @@
 
         packages.myPlugins.start = with pkgs.vimPlugins; [
           (nvim-treesitter.withPlugins (
-            parsers: builtins.attrValues { inherit (parsers) nix markdown markdown_inline; }
+            parsers: builtins.attrValues { inherit (parsers) nix markdown markdown_inline lua; }
           ))
           friendly-snippets
           luasnip
@@ -37,8 +37,8 @@
           lualine-nvim
           bufferline-nvim
           lspsaga-nvim
-          mason-nvim
-          mason-lspconfig-nvim
+          # -- lsp_servers
+          pkgs.lua-language-server
         ];
       };
     };
