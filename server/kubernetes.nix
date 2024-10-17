@@ -5,7 +5,7 @@
   ...
 }:
 let
-  kubeMasterIP = "10.1.1.2";
+  kubeMasterIP = "45.151.31.62";
   kubeMasterHostName = "api.kube";
   kubeMasterAPIServerPort = 6443;
 in
