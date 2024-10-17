@@ -2,31 +2,31 @@
 -- Basic options --
 -------------------
 local options = {
-    clipboard = "unnamedplus",
-    mouse = "a",
-    undofile = true,
-    ignorecase = true,
-    showmode = false,
-    showtabline = 2,
-    smartindent = true,
-    autoindent = true,
-    swapfile = false,
-    hidden = true, --default on
-    expandtab = true,
-    cmdheight = 1,
-    shiftwidth = 2, --insert 2 spaces for each indentation
-    tabstop = 2, --insert 2 spaces for a tab
-    cursorline = true, --Highlight the line where the cursor is located
-    cursorcolumn = false,
-    number = true,
-    numberwidth = 4,
-    relativenumber = true,
-    scrolloff = 8,
-    updatetime = 50 -- faster completion (4000ms default)
+  clipboard = "unnamedplus",
+  mouse = "a",
+  undofile = true,
+  ignorecase = true,
+  showmode = false,
+  showtabline = 2,
+  smartindent = true,
+  autoindent = true,
+  swapfile = false,
+  hidden = true, --default on
+  expandtab = true,
+  cmdheight = 1,
+  shiftwidth = 2,    --insert 2 spaces for each indentation
+  tabstop = 2,       --insert 2 spaces for a tab
+  cursorline = true, --Highlight the line where the cursor is located
+  cursorcolumn = false,
+  number = true,
+  numberwidth = 4,
+  relativenumber = true,
+  scrolloff = 8,
+  updatetime = 50 -- faster completion (4000ms default)
 }
 
 for k, v in pairs(options) do
-    vim.opt[k] = v
+  vim.opt[k] = v
 end
 
 ----------------
@@ -46,35 +46,35 @@ require("nord").set()
 -- About noice --
 -----------------
 require("noice").setup(
-    {
-        routes = {
-            {
-                filter = {
-                    event = "msg_show",
-                    any = {
-                        {find = "%d+L, %d+B"},
-                        {find = "; after #%d+"},
-                        {find = "; before #%d+"},
-                        {find = "%d fewer lines"},
-                        {find = "%d more lines"}
-                    }
-                },
-                opts = {skip = true}
-            }
-        }
+  {
+    routes = {
+      {
+        filter = {
+          event = "msg_show",
+          any = {
+            { find = "%d+L, %d+B" },
+            { find = "; after #%d+" },
+            { find = "; before #%d+" },
+            { find = "%d fewer lines" },
+            { find = "%d more lines" }
+          }
+        },
+        opts = { skip = true }
+      }
     }
+  }
 )
 
 -------------------
 -- About lualine --
 -------------------
 require("lualine").setup(
-    {
-        options = {
-            theme = "auto",
-            globalstatus = true
-        }
+  {
+    options = {
+      theme = "auto",
+      globalstatus = true
     }
+  }
 )
 
 ----------------------
@@ -83,29 +83,29 @@ require("lualine").setup(
 local highlights
 highlights =
     require("nord").bufferline.highlights(
-    {
+      {
         italic = true,
         bold = true
-    }
-)
+      }
+    )
 require("bufferline").setup(
-    {
-        highlights = highlights
-    }
+  {
+    highlights = highlights
+  }
 )
 
 ----------------------
 -- About treesitter --
 ----------------------
 require("nvim-treesitter.configs").setup(
-    {
-        highlight = {
-            enable = true
-        },
-        indent = {
-            enable = true
-        }
+  {
+    highlight = {
+      enable = true
+    },
+    indent = {
+      enable = true
     }
+  }
 )
 
 ---------------
@@ -113,137 +113,137 @@ require("nvim-treesitter.configs").setup(
 ---------------
 local cmp_status_ok, cmp = pcall(require, "cmp")
 if not cmp_status_ok then
-    return
+  return
 end
 local snip_status_ok, luasnip = pcall(require, "luasnip")
 if not snip_status_ok then
-    return
+  return
 end
 
 require("luasnip/loaders/from_vscode").lazy_load()
 
 local kind_icons = {
-    Text = "󰊄",
-    Method = "",
-    Function = "󰡱",
-    Constructor = "",
-    Field = "",
-    Variable = "󱀍",
-    Class = "",
-    Interface = "",
-    Module = "󰕳",
-    Property = "",
-    Unit = "",
-    Value = "",
-    Enum = "",
-    Keyword = "",
-    Snippet = "",
-    Color = "",
-    File = "",
-    Reference = "",
-    Folder = "",
-    EnumMember = "",
-    Constant = "",
-    Struct = "",
-    Event = "",
-    Operator = "",
-    TypeParameter = ""
+  Text = "󰊄",
+  Method = "",
+  Function = "󰡱",
+  Constructor = "",
+  Field = "",
+  Variable = "󱀍",
+  Class = "",
+  Interface = "",
+  Module = "󰕳",
+  Property = "",
+  Unit = "",
+  Value = "",
+  Enum = "",
+  Keyword = "",
+  Snippet = "",
+  Color = "",
+  File = "",
+  Reference = "",
+  Folder = "",
+  EnumMember = "",
+  Constant = "",
+  Struct = "",
+  Event = "",
+  Operator = "",
+  TypeParameter = ""
 }
 -- find more here: https://www.nerdfonts.com/cheat-sheet
 cmp.setup(
-    {
-        snippet = {
-            expand = function(args)
-                luasnip.lsp_expand(args.body) -- For `luasnip` users.
-            end
-        },
-        mapping = cmp.mapping.preset.insert(
-            {
-                ["<C-u>"] = cmp.mapping.scroll_docs(-4), -- Up
-                ["<C-d>"] = cmp.mapping.scroll_docs(4), -- Down
-                -- C-b (back) C-f (forward) for snippet placeholder navigation.
-                ["<C-Space>"] = cmp.mapping.complete(),
-                ["<CR>"] = cmp.mapping.confirm(
-                    {
-                        behavior = cmp.ConfirmBehavior.Replace,
-                        select = true
-                    }
-                ),
-                ["<Tab>"] = cmp.mapping(
-                    function(fallback)
-                        if cmp.visible() then
-                            cmp.select_next_item()
-                        elseif luasnip.expand_or_jumpable() then
-                            luasnip.expand_or_jump()
-                        else
-                            fallback()
-                        end
-                    end,
-                    {"i", "s"}
-                ),
-                ["<S-Tab>"] = cmp.mapping(
-                    function(fallback)
-                        if cmp.visible() then
-                            cmp.select_prev_item()
-                        elseif luasnip.jumpable(-1) then
-                            luasnip.jump(-1)
-                        else
-                            fallback()
-                        end
-                    end,
-                    {"i", "s"}
-                )
-            }
-        ),
-        formatting = {
-            fields = {"kind", "abbr", "menu"},
-            format = function(entry, vim_item)
-                vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
-                vim_item.menu =
-                    ({
-                    path = "[Path]",
-                    nvim_lua = "[NVIM_LUA]",
-                    nvim_lsp = "[LSP]",
-                    luasnip = "[Snippet]",
-                    buffer = "[Buffer]"
-                })[entry.source.name]
-                return vim_item
-            end
-        },
-        sources = {
-            {name = "path"},
-            {name = "nvim_lua"},
-            {name = "nvim_lsp"},
-            {name = "luasnip"},
-            {name = "buffer"}
-        },
-        confirm_opts = {
+  {
+    snippet = {
+      expand = function(args)
+        luasnip.lsp_expand(args.body) -- For `luasnip` users.
+      end
+    },
+    mapping = cmp.mapping.preset.insert(
+      {
+        ["<C-u>"] = cmp.mapping.scroll_docs(-4), -- Up
+        ["<C-d>"] = cmp.mapping.scroll_docs(4),  -- Down
+        -- C-b (back) C-f (forward) for snippet placeholder navigation.
+        ["<C-Space>"] = cmp.mapping.complete(),
+        ["<CR>"] = cmp.mapping.confirm(
+          {
             behavior = cmp.ConfirmBehavior.Replace,
-            select = false
-        },
-        window = {
-            completion = cmp.config.window.bordered(),
-            documentation = cmp.config.window.bordered()
-        },
-        experimental = {
-            ghost_text = false,
-            native_menu = false
-        }
+            select = true
+          }
+        ),
+        ["<Tab>"] = cmp.mapping(
+          function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
+            else
+              fallback()
+            end
+          end,
+          { "i", "s" }
+        ),
+        ["<S-Tab>"] = cmp.mapping(
+          function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end,
+          { "i", "s" }
+        )
+      }
+    ),
+    formatting = {
+      fields = { "kind", "abbr", "menu" },
+      format = function(entry, vim_item)
+        vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
+        vim_item.menu =
+            ({
+              path = "[Path]",
+              nvim_lua = "[NVIM_LUA]",
+              nvim_lsp = "[LSP]",
+              luasnip = "[Snippet]",
+              buffer = "[Buffer]"
+            })[entry.source.name]
+        return vim_item
+      end
+    },
+    sources = {
+      { name = "path" },
+      { name = "nvim_lua" },
+      { name = "nvim_lsp" },
+      { name = "luasnip" },
+      { name = "buffer" }
+    },
+    confirm_opts = {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = false
+    },
+    window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered()
+    },
+    experimental = {
+      ghost_text = false,
+      native_menu = false
     }
+  }
 )
 cmp.setup.cmdline(
-    ":",
-    {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources(
-            {
-                {name = "path"}
-            },
-            {
-                {name = "cmdline"}
-            }
-        )
-    }
+  ":",
+  {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources(
+      {
+        { name = "path" }
+      },
+      {
+        { name = "cmdline" }
+      }
+    )
+  }
 )
 
 -------------------
@@ -251,74 +251,74 @@ cmp.setup.cmdline(
 -------------------
 -- format(async)
 local async_formatting = function(bufnr)
-    bufnr = bufnr or vim.api.nvim_get_current_buf()
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
 
-    vim.lsp.buf_request(
-        bufnr,
-        "textDocument/formatting",
-        vim.lsp.util.make_formatting_params({}),
-        function(err, res, ctx)
-            if err then
-                local err_msg = type(err) == "string" and err or err.message
-                -- you can modify the log message / level (or ignore it completely)
-                vim.notify("formatting: " .. err_msg, vim.log.levels.WARN)
-                return
-            end
+  vim.lsp.buf_request(
+    bufnr,
+    "textDocument/formatting",
+    vim.lsp.util.make_formatting_params({}),
+    function(err, res, ctx)
+      if err then
+        local err_msg = type(err) == "string" and err or err.message
+        -- you can modify the log message / level (or ignore it completely)
+        vim.notify("formatting: " .. err_msg, vim.log.levels.WARN)
+        return
+      end
 
-            -- don't apply results if buffer is unloaded or has been modified
-            if not vim.api.nvim_buf_is_loaded(bufnr) or vim.api.nvim_buf_get_option(bufnr, "modified") then
-                return
-            end
+      -- don't apply results if buffer is unloaded or has been modified
+      if not vim.api.nvim_buf_is_loaded(bufnr) or vim.api.nvim_buf_get_option(bufnr, "modified") then
+        return
+      end
 
-            if res then
-                local client = vim.lsp.get_client_by_id(ctx.client_id)
-                vim.lsp.util.apply_text_edits(res, bufnr, client and client.offset_encoding or "utf-16")
-                vim.api.nvim_buf_call(
-                    bufnr,
-                    function()
-                        vim.cmd("silent noautocmd update")
-                    end
-                )
-            end
-        end
-    )
+      if res then
+        local client = vim.lsp.get_client_by_id(ctx.client_id)
+        vim.lsp.util.apply_text_edits(res, bufnr, client and client.offset_encoding or "utf-16")
+        vim.api.nvim_buf_call(
+          bufnr,
+          function()
+            vim.cmd("silent noautocmd update")
+          end
+        )
+      end
+    end
+  )
 end
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 local lsp_formatting = function(bufnr)
-    vim.lsp.buf.format(
-        {
-            filter = function(client)
-                -- apply whatever logic you want (in this example, we'll only use null-ls)
-                return client.name == "null-ls"
-            end,
-            bufnr = bufnr
-        }
-    )
+  vim.lsp.buf.format(
+    {
+      filter = function(client)
+        -- apply whatever logic you want (in this example, we'll only use null-ls)
+        return client.name == "null-ls"
+      end,
+      bufnr = bufnr
+    }
+  )
 end
 require("null-ls").setup(
-    {
-        sources = {
-            -- you must download code formatter by yourself!
-            require("null-ls").builtins.formatting.nixpkgs_fmt
-        },
-        debug = false,
-        on_attach = function(client, bufnr)
-            if client.supports_method("textDocument/formatting") then
-                vim.api.nvim_clear_autocmds({group = augroup, buffer = bufnr})
-                vim.api.nvim_create_autocmd(
-                    "BufWritePost",
-                    {
-                        group = augroup,
-                        buffer = bufnr,
-                        callback = function()
-                            async_formatting(bufnr)
-                            lsp_formatting(bufnr)
-                        end
-                    }
-                )
+  {
+    sources = {
+      -- you must download code formatter by yourself!
+      require("null-ls").builtins.formatting.nixpkgs_fmt
+    },
+    debug = false,
+    on_attach = function(client, bufnr)
+      if client.supports_method("textDocument/formatting") then
+        vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+        vim.api.nvim_create_autocmd(
+          "BufWritePost",
+          {
+            group = augroup,
+            buffer = bufnr,
+            callback = function()
+              async_formatting(bufnr)
+              lsp_formatting(bufnr)
             end
-        end
-    }
+          }
+        )
+      end
+    end
+  }
 )
 ---------------------
 -- About lspconfig --
@@ -330,119 +330,122 @@ local nvim_lsp = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.foldingRange = {
-    dynamicRegistration = false,
-    lineFoldingOnly = true
+  dynamicRegistration = false,
+  lineFoldingOnly = true
 }
 
 --Change diagnostic symbols in the sign column (gutter)
-local signs = {Error = " ", Warn = " ", Hint = " ", Info = " "}
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 for type, icon in pairs(signs) do
-    local hl = "DiagnosticSign" .. type
-    vim.fn.sign_define(hl, {text = icon, texthl = hl, numhl = hl})
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 vim.diagnostic.config(
-    {
-        virtual_text = false,
-        signs = true,
-        underline = true,
-        update_in_insert = true,
-        severity_sort = false
-    }
+  {
+    virtual_text = false,
+    signs = true,
+    underline = true,
+    update_in_insert = true,
+    severity_sort = false
+  }
 )
 
 local on_attach = function(bufnr)
-    vim.api.nvim_create_autocmd(
-        "CursorHold",
-        {
-            buffer = bufnr,
-            callback = function()
-                local opts = {
-                    focusable = false,
-                    close_events = {"BufLeave", "CursorMoved", "InsertEnter", "FocusLost"},
-                    border = "rounded",
-                    source = "always",
-                    prefix = " ",
-                    scope = "line"
-                }
-                vim.diagnostic.open_float(nil, opts)
-            end
+  vim.api.nvim_create_autocmd(
+    "CursorHold",
+    {
+      buffer = bufnr,
+      callback = function()
+        local opts = {
+          focusable = false,
+          close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+          border = "rounded",
+          source = "always",
+          prefix = " ",
+          scope = "line"
         }
-    )
+        vim.diagnostic.open_float(nil, opts)
+      end
+    }
+  )
 end
 nvim_lsp.nixd.setup(
-    {
-        on_attach = on_attach(),
-        capabilities = capabilities,
-        settings = {
-            nixd = {
-                nixpkgs = {
-                    expr = "import <nixpkgs> { }"
-                },
-                formatting = {
-                    command = {"nixfmt"}
-                },
-                options = {
-                    nixos = {
-                        expr = '(builtins.getFlake "/home/dancho/Configurations").nixosConfigurations.nixos.options'
-                    },
-                    home_manager = {
-                        expr = '(let flake = (builtins.getFlake "/home/dancho/Configurations"); in flake.inputs.home-manager.lib.homeManagerConfiguration {pkgs = flake.inputs.nixpkgs.legacyPackages.x86_64-linux; modules = [{home.stateVersion = "24.05";home.username="user";home.homeDirectory="/home/user";}];}).options'
-                    }
-                }
-            }
+  {
+    on_attach = on_attach(),
+    capabilities = capabilities,
+    settings = {
+      nixd = {
+        nixpkgs = {
+          expr = "import <nixpkgs> { }"
+        },
+        formatting = {
+          command = { "nixfmt" }
+        },
+        options = {
+          nixos = {
+            expr = '(builtins.getFlake "/home/dancho/Configurations").nixosConfigurations.nixos.options'
+          },
+          home_manager = {
+            expr =
+            '(let flake = (builtins.getFlake "/home/dancho/Configurations"); in flake.inputs.home-manager.lib.homeManagerConfiguration {pkgs = flake.inputs.nixpkgs.legacyPackages.x86_64-linux; modules = [{home.stateVersion = "24.05";home.username="user";home.homeDirectory="/home/user";}];}).options'
+          }
         }
+      }
     }
+  }
 )
 nvim_lsp.lua_ls.setup {
-                  on_init = function(client)
-                    if client.workspace_folders then
-                      local path = client.workspace_folders[1].name
-                      if vim.uv.fs_stat(path..'/.luarc.json') or vim.uv.fs_stat(path..'/.luarc.jsonc') then
-                        return
-                      end
-                    end
+  on_init = function(client)
+    if client.workspace_folders then
+      local path = client.workspace_folders[1].name
+      if vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc') then
+        return
+      end
+    end
 
-                    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-                      runtime = {
-                        -- Tell the language server which version of Lua you're using
-                        -- (most likely LuaJIT in the case of Neovim)
-                        version = 'LuaJIT'
-                      },
-                      -- Make the server aware of Neovim runtime files
-                      workspace = {
-                        checkThirdParty = false,
-                        library = {
-                          vim.env.VIMRUNTIME
-                          -- Depending on the usage, you might want to add additional paths here.
-                          -- "${3rd}/luv/library"
-                          -- "${3rd}/busted/library",
-                        }
-                        -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-                        -- library = vim.api.nvim_get_runtime_file("", true)
-                      }
-                    })
-                  end,
-                  settings = {
-                    Lua = {}
-                  }
-                }
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        -- Tell the language server which version of Lua you're using
+        -- (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT'
+      },
+      -- Make the server aware of Neovim runtime files
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME,
+          [vim.fn.expand('$VIMRUNTIME/lua/')] = true,
+          [vim.fn.expand('$VIMRUNTIME/lua/lsp')] = true,
+          -- Depending on the usage, you might want to add additional paths here.
+          -- "${3rd}/luv/library"
+          -- "${3rd}/busted/library",
+        }
+        -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+        -- library = vim.api.nvim_get_runtime_file("", true)
+      }
+    })
+  end,
+  settings = {
+    Lua = {}
+  }
+}
 
 -------------------
 -- About lspsaga --
 -------------------
 local colors, kind
-colors = {normal_bg = "#3b4252"}
+colors = { normal_bg = "#3b4252" }
 require("lspsaga").setup(
-    {
-        ui = {
-            colors = colors,
-            kind = kind,
-            border = "single"
-        },
-        outline = {
-            win_width = 25
-        }
+  {
+    ui = {
+      colors = colors,
+      kind = kind,
+      border = "single"
+    },
+    outline = {
+      win_width = 25
     }
+  }
 )
 vim.cmd([[ colorscheme nord ]])
 
@@ -452,70 +455,73 @@ local keymap = vim.keymap.set
 -- Find the symbol definition, implementation, reference.
 -- If there is no implementation, it will hide.
 -- When you use action in finder like open, vsplit, then you can use <C-t> to jump back.
-keymap("n", "gh", "<cmd>Lspsaga lsp_finder<CR>", {silent = true, desc = "Lsp finder"})
+keymap("n", "gh", "<cmd>Lspsaga lsp_finder<CR>", { silent = true, desc = "Lsp finder" })
 
 -- Code action
-keymap("n", "<leader>ca", "<cmd>Lspsaga code_action<CR>", {silent = true, desc = "Code action"})
-keymap("v", "<leader>ca", "<cmd>Lspsaga code_action<CR>", {silent = true, desc = "Code action"})
+keymap("n", "<leader>ca", "<cmd>Lspsaga code_action<CR>", { silent = true, desc = "Code action" })
+keymap("v", "<leader>ca", "<cmd>Lspsaga code_action<CR>", { silent = true, desc = "Code action" })
 
 -- Rename
-keymap("n", "gr", "<cmd>Lspsaga rename<CR>", {silent = true, desc = "Rename"})
+keymap("n", "gr", "<cmd>Lspsaga rename<CR>", { silent = true, desc = "Rename" })
 -- Rename word in whole project
-keymap("n", "gr", "<cmd>Lspsaga rename ++project<CR>", {silent = true, desc = "Rename in project"})
+keymap("n", "gr", "<cmd>Lspsaga rename ++project<CR>", { silent = true, desc = "Rename in project" })
 
 -- Peek definition
-keymap("n", "gD", "<cmd>Lspsaga peek_definition<CR>", {silent = true, desc = "Peek definition"})
+keymap("n", "gD", "<cmd>Lspsaga peek_definition<CR>", { silent = true, desc = "Peek definition" })
 
 -- Go to definition
-keymap("n", "gd", "<cmd>Lspsaga goto_definition<CR>", {silent = true, desc = "Go to definition"})
+keymap("n", "gd", "<cmd>Lspsaga goto_definition<CR>", { silent = true, desc = "Go to definition" })
 
 -- Show line diagnostics
-keymap("n", "<leader>sl", "<cmd>Lspsaga show_line_diagnostics<CR>", {silent = true, desc = "Show line diagnostics"})
+keymap("n", "<leader>sl", "<cmd>Lspsaga show_line_diagnostics<CR>", { silent = true, desc = "Show line diagnostics" })
 
 -- Show cursor diagnostics
-keymap("n", "<leader>sc", "<cmd>Lspsaga show_cursor_diagnostics<CR>", {silent = true, desc = "Show cursor diagnostic"})
+keymap("n", "<leader>sc", "<cmd>Lspsaga show_cursor_diagnostics<CR>", { silent = true, desc = "Show cursor diagnostic" })
 
 -- Show buffer diagnostics
-keymap("n", "<leader>sb", "<cmd>Lspsaga show_buf_diagnostics<CR>", {silent = true, desc = "Show buffer diagnostic"})
+keymap("n", "<leader>sb", "<cmd>Lspsaga show_buf_diagnostics<CR>", { silent = true, desc = "Show buffer diagnostic" })
 
 -- Diagnostic jump prev
-keymap("n", "[e", "<cmd>Lspsaga diagnostic_jump_prev<CR>", {silent = true, desc = "Diagnostic jump prev"})
+keymap("n", "[e", "<cmd>Lspsaga diagnostic_jump_prev<CR>", { silent = true, desc = "Diagnostic jump prev" })
 
 -- Diagnostic jump next
-keymap("n", "]e", "<cmd>Lspsaga diagnostic_jump_next<CR>", {silent = true, desc = "Diagnostic jump next"})
+keymap("n", "]e", "<cmd>Lspsaga diagnostic_jump_next<CR>", { silent = true, desc = "Diagnostic jump next" })
 
 -- Goto prev error
 keymap(
-    "n",
-    "[E",
-    function()
-        require("lspsaga.diagnostic"):goto_prev({severity = vim.diagnostic.severity.ERROR})
-    end,
-    {silent = true, desc = "Goto prev error"}
+  "n",
+  "[E",
+  function()
+    require("lspsaga.diagnostic"):goto_prev({ severity = vim.diagnostic.severity.ERROR })
+  end,
+  { silent = true, desc = "Goto prev error" }
 )
 
 -- Goto next error
 keymap(
-    "n",
-    "]E",
-    function()
-        require("lspsaga.diagnostic"):goto_next({severity = vim.diagnostic.severity.ERROR})
-    end,
-    {silent = true, desc = "Goto next error"}
+  "n",
+  "]E",
+  function()
+    require("lspsaga.diagnostic"):goto_next({ severity = vim.diagnostic.severity.ERROR })
+  end,
+  { silent = true, desc = "Goto next error" }
 )
 
 -- Toggle outline
-keymap("n", "ss", "<cmd>Lspsaga outline<CR>", {silent = true, desc = "Toggle outline"})
+keymap("n", "ss", "<cmd>Lspsaga outline<CR>", { silent = true, desc = "Toggle outline" })
 
 -- Hover doc
-keymap("n", "K", "<cmd>Lspsaga hover_doc ++keep<CR>", {silent = true, desc = "Hover doc"})
+keymap("n", "K", "<cmd>Lspsaga hover_doc ++keep<CR>", { silent = true, desc = "Hover doc" })
 
 -- Incoming calls
-keymap("n", "<Leader>ci", "<cmd>Lspsaga incoming_calls<CR>", {silent = true, desc = "Incoming calls"})
+keymap("n", "<Leader>ci", "<cmd>Lspsaga incoming_calls<CR>", { silent = true, desc = "Incoming calls" })
 
 -- Outgoing calls
-keymap("n", "<Leader>co", "<cmd>Lspsaga outgoing_calls<CR>", {silent = true, desc = "Outgoing calls"})
+keymap("n", "<Leader>co", "<cmd>Lspsaga outgoing_calls<CR>", { silent = true, desc = "Outgoing calls" })
 
 -- Float terminal
-keymap("n", "<A-d>", "<cmd>Lspsaga term_toggle<CR>", {silent = true, desc = "Float terminal"})
-keymap("t", "<A-d>", "<cmd>Lspsaga term_toggle<CR>", {silent = true, desc = "Float terminal"})
+keymap("n", "<A-d>", "<cmd>Lspsaga term_toggle<CR>", { silent = true, desc = "Float terminal" })
+keymap("t", "<A-d>", "<cmd>Lspsaga term_toggle<CR>", { silent = true, desc = "Float terminal" })
+keymap("n", "<leader>f", function()
+  vim.lsp.buf.format({ async = true })
+end, { silent = true, desc = "Format file via lsp" })

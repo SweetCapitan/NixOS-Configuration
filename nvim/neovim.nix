@@ -19,13 +19,24 @@
         '';
 
         packages.myPlugins.start = with pkgs.vimPlugins; [
+          nvim-treesitter
           (nvim-treesitter.withPlugins (
-            parsers: builtins.attrValues { inherit (parsers) nix markdown markdown_inline lua; }
+            parsers:
+            builtins.attrValues {
+              inherit (parsers)
+                nix
+                markdown
+                markdown_inline
+                lua
+                vim
+                ;
+            }
           ))
           friendly-snippets
           luasnip
           nvim-cmp
           cmp-nvim-lsp
+          cmp-nvim-lua
           cmp-buffer
           cmp_luasnip
           cmp-path

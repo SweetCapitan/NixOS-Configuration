@@ -28,8 +28,8 @@ config.window_decorations = "TITLE | RESIZE"
 config.font = wezterm.font("JetBrains Mono", {weight = "Medium", italic = false})
 config.font_size = 10.0
 
-config.initial_cols = 100
-config.initial_rows = 20
+config.initial_cols = 120
+config.initial_rows = 25
 config.window_close_confirmation = "NeverPrompt"
 
 local function get_current_working_dir(tab)

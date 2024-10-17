@@ -23,7 +23,7 @@
     enable = true;
     enableBashIntegration = true;
     extraConfig = ''
-    ${builtins.readFile ./wezterm/config.lua}
+      ${builtins.readFile ./wezterm/config.lua}
     '';
   };
   programs.git = {
