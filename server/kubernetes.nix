@@ -6,7 +6,7 @@
 }:
 let
   kubeMasterIP = "45.151.31.62";
-  kubeMasterHostName = "api.kube";
+  kubeMasterHostName = "kuber-api.sweetcapitan.ru";
   kubeMasterAPIServerPort = 6443;
 in
 {
@@ -29,6 +29,7 @@ in
     apiserver = {
       securePort = kubeMasterAPIServerPort;
       advertiseAddress = kubeMasterIP;
+      enable = true;
     };
 
     addons.dns.enable = true;
