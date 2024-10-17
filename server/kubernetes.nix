@@ -34,4 +34,7 @@ in
     addons.dns.enable = true;
     kubelet.extraOpts = "--fail-swap-on=false";
   };
+  systemd.services.etcd.preStart = ''${pkgs.writeShellScript "etcd-wait" ''
+    while [ ! -f /var/lib/kubernetes/secrets/etcd.pem ]; do sleep 1; done
+  ''}'';
 }
