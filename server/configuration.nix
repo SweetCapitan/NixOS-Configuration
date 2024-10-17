@@ -20,7 +20,8 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disk-config.nix
-#    ../common/users/dancho.nix
+    ./kubernetes.nix
+    #    ../common/users/dancho.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -78,15 +79,15 @@
   ];
 
   users.users.dancho = {
-      hashedPasswordFile = "/etc/nixos/hashedPassword";
-      isNormalUser = true;
-      extraGroups = [
-        "wheel"
-        "input"
-        "networkmanager"
-      ]; # Enable ‘sudo’ for the user.
-      packages = with pkgs; [ ];
-    };
+    hashedPasswordFile = "/etc/nixos/hashedPassword";
+    isNormalUser = true;
+    extraGroups = [
+      "wheel"
+      "input"
+      "networkmanager"
+    ]; # Enable ‘sudo’ for the user.
+    packages = with pkgs; [ ];
+  };
 
   #
   system.stateVersion = "23.11"; # Did you read the comment?
