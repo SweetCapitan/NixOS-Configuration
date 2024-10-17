@@ -78,6 +78,12 @@
           Port 22
           ForwardAgent yes
           IdentityFile ~/.ssh/cloud-nix-key
+      Host aeza-ru
+          HostName 
+          user root
+          Port 22
+          ForwardAgent yes
+          IdentityFile ~/.ssh/aeza-key
     '';
   };
 
