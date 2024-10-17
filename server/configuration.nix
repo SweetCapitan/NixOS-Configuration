@@ -32,7 +32,6 @@
       efiInstallAsRemovable = true;
     };
   };
-
   time.timeZone = "Europe/Moscow";
 
   networking.hostName = "cloud-ru"; # Define your hostname.

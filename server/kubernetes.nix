@@ -7,7 +7,7 @@
 let
   kubeMasterIP = "45.151.31.62";
   kubeMasterHostName = "kuber-api.sweetcapitan.ru";
-  kubeMasterAPIServerPort = 6443;
+  kubeMasterAPIServerPort = 6443; # TODO: deploy-rs or colmena
 in
 {
   networking.extraHosts = "${kubeMasterIP} ${kubeMasterHostName}";
@@ -26,7 +26,8 @@ in
       "master"
       "node"
     ];
-    masterAddress = kubeMasterHostName;
+    #masterAddress = kubeMasterHostName;
+    masterAddress = "localhost";
     apiserverAddress = "https://${kubeMasterHostName}:${toString kubeMasterAPIServerPort}";
     easyCerts = true;
     apiserver = {

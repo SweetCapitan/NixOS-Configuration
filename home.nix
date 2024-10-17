@@ -17,6 +17,7 @@
       htop
       kubectl # TODO: home kubectl config
       gnome.gnome-tweaks
+      obsidian
     ]
     ++ (with jetbrains; [ idea-ultimate ]);
   programs.wezterm = {
