@@ -102,6 +102,10 @@
     sing-geosite
     nixd
     lua-language-server
+
+    #FONTS
+    nerdfonts
+    jetbrains-mono
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {
