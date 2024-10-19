@@ -59,17 +59,20 @@
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
-  #    services.openssh = {
-  #      enable = false;
-  #      ports = [ 22 ];
-  #      settings = {
-  #        AllowUsers = [ "root" "dancho" ];
-  #        PasswordAuthentication = true;
-  #        UseDns = false;
-  #        X11Forwarding = false;
-  #        PermitRootLogin = "yes";
-  #      };
-  #    };
+  services.openssh = {
+    enable = true;
+    ports = [ 22 ];
+    settings = {
+      AllowUsers = [
+        "root"
+        "dancho"
+      ];
+      PasswordAuthentication = true;
+      UseDns = false;
+      X11Forwarding = false;
+      PermitRootLogin = "yes";
+    };
+  };
 
   programs.ssh = {
     extraConfig = ''
@@ -125,6 +128,9 @@
   #			'';
   #	};
   #};
+
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
 
   environment.gnome.excludePackages =
     (with pkgs; [
@@ -217,6 +223,7 @@
       "wheel"
       "input"
       "networkmanager"
+      "libvirtd"
     ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       #jetbrains.idea-ultimate
