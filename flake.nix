@@ -34,8 +34,8 @@
         modules = [
           ./gnome/settings.nix
           ./configuration.nix
-#          ./nixvim.nix
-#          nixvim.nixosModules.nixvim
+          #          ./nixvim.nix
+          #          nixvim.nixosModules.nixvim
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -52,6 +52,23 @@
           ./server/configuration.nix
           ./server/hardware-configuration.nix
         ];
+      };
+      colmena = {
+        meta = {
+          nixpkgs = import nixpkgs { system = "x86_64-linux"; };
+          specialArgs = {
+            inherit nixpkgs;
+          };
+        };
+        "cloud_colmena" = {name, nodes, ...}: {
+          deployment.tags = ["hosting" "roflanebalo"];
+          deployment.targetHost = "45.151.31.62";
+          deployment.targetUser = "root";
+          imports = [
+            ./server/configuration.nix
+          disko.nixosModules.disko
+          ];
+          };
       };
     };
 }
