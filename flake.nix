@@ -12,6 +12,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs_unstable";
@@ -25,6 +29,7 @@
       nixpkgs,
       home-manager,
       nixvim,
+      deploy-rs,
       ...
     }:
     {
@@ -53,6 +58,27 @@
           ./server/hardware-configuration.nix
         ];
       };
+      deploy.nodes.cloud_deployrs = {
+        hostname = "45.151.31.62";
+        profiles.system = {
+          user = "dancho";
+          remoteBuild = true;
+          interactiveSudo = true;
+          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.cloud;
+        };
+      };
+
+      deploy.nodes.cloud_deployrs2 = {
+        hostname = "45.151.31.62";
+        profiles.system = {
+          user = "dancho";
+          remoteBuild = true;
+          interactiveSudo = true;
+          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.cloud;
+        };
+      };
+
+      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
       colmena = {
         meta = {
           nixpkgs = import nixpkgs { system = "x86_64-linux"; };
@@ -60,14 +86,20 @@
             inherit nixpkgs;
           };
         };
-        "cloud_colmena" = {name, nodes, ...}: {
-          deployment.tags = ["hosting" "roflanebalo"];
-          deployment.targetHost = "45.151.31.62";
-          deployment.targetUser = "root";
-          imports = [
-            ./server/configuration.nix
-          disko.nixosModules.disko
-          ];
+        "cloud_colmena" =
+          { name, nodes, ... }:
+          {
+            deployment.tags = [
+              "hosting"
+              "roflanebalo"
+            ];
+            deployment.buildOnTarget = true;
+            deployment.targetHost = "45.151.31.62";
+            deployment.targetUser = "dancho";
+            imports = [
+              ./server/configuration.nix
+              disko.nixosModules.disko
+            ];
           };
       };
     };
