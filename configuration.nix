@@ -116,6 +116,7 @@
     #FONTS
     nerdfonts
     jetbrains-mono
+    lazygit
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {
