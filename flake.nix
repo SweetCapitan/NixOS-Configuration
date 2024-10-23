@@ -68,16 +68,6 @@
         };
       };
 
-      deploy.nodes.cloud_deployrs2 = {
-        hostname = "45.151.31.62";
-        profiles.system = {
-          user = "dancho";
-          remoteBuild = true;
-          interactiveSudo = true;
-          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.cloud;
-        };
-      };
-
       checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
       colmena = {
         meta = {
