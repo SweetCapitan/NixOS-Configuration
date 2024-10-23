@@ -58,6 +58,7 @@
           ./server/hardware-configuration.nix
         ];
       };
+      #Hey its changes!
       deploy.nodes.cloud_deployrs = {
         hostname = "45.151.31.62";
         profiles.system = {
