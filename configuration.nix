@@ -36,8 +36,8 @@
     enable = true;
     trustedInterfaces = [ "sing-box-tun" ];
   };
-
-  programs.bash.shellAliases = {
+  programs.kdeconnect.enable = true;
+ programs.bash.shellAliases = {
     sbr = "sudo sing-box run --config /etc/nixos/configt.json";
     nrt = "sudo nixos-rebuild test --flake ~/Configurations/#nixos";
     nrs = "sudo nixos-rebuild switch --flake ~/Configurations/#nixos";
