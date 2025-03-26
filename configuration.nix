@@ -12,7 +12,7 @@
 
 {
   imports = [
-    # Include the results of the hardware scan. 
+    # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./nvim/neovim.nix
     ./syncthings.nix
@@ -36,8 +36,11 @@
     enable = true;
     trustedInterfaces = [ "sing-box-tun" ];
   };
-  programs.kdeconnect.enable = true;
- programs.bash.shellAliases = {
+  programs.kdeconnect = {
+    enable = true;
+    package = pkgs.gnomeExtensions.gsconnect;
+  };
+  programs.bash.shellAliases = {
     sbr = "sudo sing-box run --config /etc/nixos/configt.json";
     nrt = "sudo nixos-rebuild test --flake ~/Configurations/#nixos";
     nrs = "sudo nixos-rebuild switch --flake ~/Configurations/#nixos";
