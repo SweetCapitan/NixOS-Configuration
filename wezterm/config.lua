@@ -31,18 +31,28 @@ config.font_size = 10.0
 config.initial_cols = 120
 config.initial_rows = 25
 config.window_close_confirmation = "NeverPrompt"
+config.enable_wayland = false
 
 local function get_current_working_dir(tab)
-    local current_dir = tab.active_pane.current_working_dir
-    local HOME_DIR = string.format("file://%s", os.getenv("HOME"))
+    local current_dir_url = tab.active_pane.current_working_dir
+    -- Extract the filesystem path from the URL object
+    local current_dir = current_dir_url.file_path
+    local HOME_DIR = os.getenv("HOME")
 
-    return current_dir == HOME_DIR and "." or string.gsub(current_dir, "(.*[/\\])(.*)", "%2")
+    -- Handle home directory specially
+    if current_dir == HOME_DIR then
+        return "."
+    else
+        -- Extract just the directory name using pattern matching
+        return current_dir:match("([^/]+)$") or current_dir
+    end
 end
 
 wezterm.on(
     "format-tab-title",
     function(tab, tabs, panes, config, hover, max_width)
-        local title = string.format(" %s  %s ~ %s  ", "❯", get_current_working_dir(tab))
+        local dir = get_current_working_dir(tab)
+        local title = string.format(" %s  %s  ", "❯", dir or "unknown")
 
         return {
             {Text = title}
