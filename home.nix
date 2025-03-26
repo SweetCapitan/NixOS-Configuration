@@ -29,6 +29,12 @@
   };
   programs.bash = {
     enable = true;
+    initExtra = ''
+            # Включаем Starship только в графической сессии
+      if [ -n "$DISPLAY" ] || [ -n "$WAYLAND_DISPLAY" ]; then
+        eval "$(${pkgs.starship}/bin/starship init bash)"
+      fi
+    '';
   };
   programs.git = {
     enable = true;
@@ -38,7 +44,7 @@
 
   programs.starship = {
     enable = true;
-    enableBashIntegration = true;
+    enableBashIntegration = false;
     #settings = pkgs.lib.importTOML ./gruvbox-rainbow.toml;
     settings = {
       "$schema" = "https://starship.rs/config-schema.json";
