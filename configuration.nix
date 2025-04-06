@@ -16,6 +16,7 @@
     ./hardware-configuration.nix
     ./nvim/neovim.nix
     ./syncthings.nix
+    ./sing-box-override.nix
   ];
 
   #-------------------------------------------
@@ -35,7 +36,16 @@
   networking.firewall = {
     enable = true;
     trustedInterfaces = [ "sing-box-tun" ];
+    logRefusedPackets = true;
+    logRefusedConnections = true;
+    extraCommands = ''
+      iptables -A INPUT -j LOG --log-prefix "FIREWALL INPUT: "
+      iptables -A FORWARD -j LOG --log-prefix "FIREWALL FORWARD: "
+    '';
   };
+  #boot.kernel.sysctl = {
+  #"net.ipv4.ip_forward" = 1;
+  #};
   programs.kdeconnect = {
     enable = true;
     package = pkgs.gnomeExtensions.gsconnect;
