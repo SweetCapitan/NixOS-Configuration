@@ -102,6 +102,7 @@
       allowedTCPPorts = [
         22
         80
+        7125
       ];
     };
   };
