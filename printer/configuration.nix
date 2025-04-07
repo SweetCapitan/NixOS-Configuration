@@ -118,7 +118,7 @@
   ];
 
   users.users.dancho = {
-    hashedPasswordFile = "/etc/nixos/hashedPassword";
+    passwordFile = "/etc/nixos/passwordFile";
     isNormalUser = true;
     extraGroups = [
       "wheel"
