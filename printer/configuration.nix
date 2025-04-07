@@ -56,6 +56,9 @@
     htop
   ];
 
+  security.polkit.enable = true;
+  services.dbus.enable = true;
+
   services.klipper = {
     enable = true;
     user = "root";
