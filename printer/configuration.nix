@@ -17,7 +17,6 @@
   #  ];
 
   imports = [
-    ../common/users/dancho.nix
     ../server/disk-config.nix
   ];
 
@@ -118,6 +117,15 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
   ];
 
+  users.users.dancho = {
+    hashedPasswordFile = "/etc/nixos/hashedPassword";
+    isNormalUser = true;
+    extraGroups = [
+      "wheel"
+      "input"
+      "networkmanager"
+    ]; # Enable ‘sudo’ for the user.
+  };
   #
   system.stateVersion = "24.11"; # Did you read the comment?
 
