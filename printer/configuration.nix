@@ -113,13 +113,13 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
   ];
 
-  users.users.dancho.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
-  ];
-
   users.users.dancho = {
-    passwordFile = "/etc/nixos/passwordFile";
+    passwordFile = /etc/nixos/passwordFile;
+    hashedPasswordFile = /etc/nixos/hashedPassword;
     isNormalUser = true;
+    openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
+    ];
     extraGroups = [
       "wheel"
       "input"
