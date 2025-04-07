@@ -98,11 +98,6 @@
 
   networking = {
     hostName = "printer";
-    interfaces.wls33.useDHCP = true;
-    wireless = {
-      interfaces = [ "wls33" ];
-      enable = true;
-    };
     firewall = {
       enable = true;
       allowedTCPPorts = [
