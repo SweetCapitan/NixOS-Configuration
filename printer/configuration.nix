@@ -18,6 +18,7 @@
 
   imports = [
     ../common/users/dancho.nix
+    ../server/disk-config.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
