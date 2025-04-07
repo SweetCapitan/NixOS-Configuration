@@ -62,8 +62,9 @@
         system = "x86_64-linux";
         modules = [
           disko.nixosModules.disko
-          { disko.devices.disk.my-disk = "/dev/sda"; }
+          #{ disko.devices.disk.my-disk = "/dev/sda"; }
           ./printer/configuration.nix
+          ./printer/hardware-configuration.nix
         ];
       };
       #Hey its changes!

@@ -61,6 +61,7 @@
     enable = true;
     user = "root";
     group = "root";
+    settings = {};
   };
 
   services.moonraker = {
