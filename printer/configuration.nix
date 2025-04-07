@@ -113,8 +113,10 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
   ];
 
+  users.mutableUsers = true;
+
   users.users.dancho = {
-    password = builtins.readFile "/etc/nixos/passwordFile";
+    password = "supersecret";
     isNormalUser = true;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
