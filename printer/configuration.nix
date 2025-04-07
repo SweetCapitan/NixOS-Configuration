@@ -114,8 +114,6 @@
   ];
 
   users.users.dancho = {
-    passwordFile = "/etc/nixos/passwordFile";
-    hashedPasswordFile = "/etc/nixos/hashedPassword";
     password = builtins.readFile "/etc/nixos/passwordFile";
     isNormalUser = true;
     openssh.authorizedKeys.keys = [
