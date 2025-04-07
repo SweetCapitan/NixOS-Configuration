@@ -30,8 +30,6 @@
   };
   time.timeZone = "Europe/Moscow";
 
-  networking.hostName = "printer"; # Define your hostname.
-
   nix = {
     settings = {
       experimental-features = [
@@ -41,6 +39,7 @@
       auto-optimise-store = true;
       trusted-users = [
         "root"
+        "dancho"
         "@wheel"
       ];
     };
@@ -57,16 +56,60 @@
     htop
   ];
 
+  services.klipper = {
+    enable = true;
+    user = "root";
+    group = "root";
+  };
+
+  services.moonraker = {
+    user = "root";
+    enable = true;
+    address = "0.0.0.0";
+    settings = {
+      octoprint_compat = { };
+      history = { };
+      authorization = {
+        force_logins = true;
+        cors_domains = [
+          "*.local"
+          "*.lan"
+          "*://app.fluidd.xyz"
+          "*://my.mainsail.xyz"
+        ];
+        trusted_clients = [
+          "10.0.0.0/8"
+          "127.0.0.0/8"
+          "169.254.0.0/16"
+          "172.16.0.0/12"
+          "192.168.1.0/24"
+          "FE80::/10"
+          "::1/128"
+        ];
+      };
+    };
+  };
+
+  services.mainsail.enable = true;
+
   nixpkgs.config.allowUnfree = true;
 
-  
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [
-      22
-      80
-    ];
+  networking = {
+    hostName = "printer";
+    interfaces.wls33.useDHCP = true;
+    wireless = {
+      interfaces = [ "wls33" ];
+      enable = true;
+    };
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [
+        22
+        80
+      ];
+    };
   };
+
   services.openssh.enable = true;
   services.sshd.enable = true;
   users.users.root.password = "supersecret";
