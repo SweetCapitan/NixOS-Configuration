@@ -58,6 +58,12 @@
           ./server/hardware-configuration.nix
         ];
       };
+      nixosConfigurations.printer = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./printer/configuration.nix
+        ];
+      };
       #Hey its changes!
       deploy.nodes.cloud_deployrs = {
         hostname = "45.151.31.62";

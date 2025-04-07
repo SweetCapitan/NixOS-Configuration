@@ -16,7 +16,9 @@
     ./hardware-configuration.nix
     ./nvim/neovim.nix
     ./syncthings.nix
+    #TODO: search reason for the problem in the sing-box after 1.9
     ./sing-box-override.nix
+    ./common/network/tele2_ttl_change.nix
   ];
 
   #-------------------------------------------
@@ -43,6 +45,8 @@
       iptables -A FORWARD -j LOG --log-prefix "FIREWALL FORWARD: "
     '';
   };
+
+  services.tele2TTLChanger.enable = false;
   #boot.kernel.sysctl = {
   #"net.ipv4.ip_forward" = 1;
   #};
@@ -170,14 +174,6 @@
       simple-scan
     ]);
 
-  systemd.services.tele2_ttl_changer = {
-    enable = true;
-    description = "Обход блокировки раздачи интернета еле 2 по ттл";
-    script = "sudo iptables -t mangle -A POSTROUTING -j TTL --ttl-set 65";
-    #serviceConfig = {
-    #ExecStart = ''${pkgs.bash}/bin/bash sudo iptables -t mangle -A POSTROUTING -j TTL --ttl-set 65''
-    #};
-  };
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
