@@ -209,15 +209,6 @@
   #    xwayland.enable = true;
   #    nvidiaPatches = true;
   #  };
-  services.xserver = {
-    enable = true;
-    #videoDrivers = [ "nvidia" ];
-    displayManager.gdm = {
-      enable = true;
-      # wayland = true;
-    };
-    desktopManager.gnome.enable = true;
-  };
   nixpkgs.config.allowUnfree = true;
 
   #  hardware = {
