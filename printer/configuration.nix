@@ -60,7 +60,7 @@
     enable = true;
     user = "root";
     group = "root";
-    configFile = "./printer.cfg";
+    configFile = ./printer.cfg;
   };
 
   services.moonraker = {
