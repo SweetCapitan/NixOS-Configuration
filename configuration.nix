@@ -134,6 +134,8 @@
     nerdfonts
     jetbrains-mono
     lazygit
+
+    spotify
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {
