@@ -19,6 +19,7 @@
   imports = [
     ../server/disk-config.nix
     ./avahi.nix
+    ./nats.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
