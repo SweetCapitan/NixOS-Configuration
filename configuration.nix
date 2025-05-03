@@ -42,10 +42,6 @@
     logRefusedPackets = true;
     logRefusedConnections = true;
     checkReversePath = "loose";
-    extraCommands = ''
-      iptables -A INPUT -j LOG --log-prefix "FIREWALL INPUT: "
-      iptables -A FORWARD -j LOG --log-prefix "FIREWALL FORWARD: "
-    '';
   };
 
   services.tele2TTLChanger.enable = false;
