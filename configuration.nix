@@ -21,6 +21,7 @@
     ./common/network/tele2_ttl_change.nix
     ./avahi.nix
     ./project_mayhem_service.nix
+    ./impermanence.nix
   ];
 
   #-------------------------------------------
