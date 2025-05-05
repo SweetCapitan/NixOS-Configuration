@@ -110,6 +110,7 @@
         7125
       ];
     };
+    interfaces.enp3s0.wakeOnLan.enable = true;
   };
 
   services.openssh.enable = true;
