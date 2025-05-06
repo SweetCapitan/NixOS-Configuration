@@ -138,6 +138,7 @@
 
     spotify
     wireshark
+    dconf-editor
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {
