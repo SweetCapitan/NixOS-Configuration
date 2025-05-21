@@ -43,7 +43,7 @@
     trustedInterfaces = [ "sing-box-tun" ];
     logRefusedPackets = true;
     logRefusedConnections = true;
-    checkReversePath = "loose";
+    checkReversePath = "loose";#todo: after update sing-box to 1.11 remove this
   };
 
   services.tele2TTLChanger.enable = false;
@@ -139,6 +139,7 @@
     spotify
     wireshark
     dconf-editor
+    orca-slicer
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {
