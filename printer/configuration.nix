@@ -113,6 +113,7 @@
   };
 
   services.openssh.enable = true;
+  services.nginx.clientMaxBodySize = "1000m";
   services.sshd.enable = true;
   users.users.root.password = "supersecret";
   users.users.root.openssh.authorizedKeys.keys = [
