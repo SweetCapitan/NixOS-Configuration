@@ -66,7 +66,7 @@
     user = "root";
     group = "root";
     #configFile = ./klipper/printer.cfg;
-    configDir = ./klipper;
+    mutableConfigFolder = ./klipper;
     mutableConfig = true;
   };
 
