@@ -66,6 +66,7 @@
     user = "root";
     group = "root";
     configFile = ./printer.cfg;
+    mutableConfig = true;
   };
 
   services.moonraker = {
