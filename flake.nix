@@ -20,6 +20,14 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs_unstable";
     };
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    impermanence = {
+      url = "github:nix-community/impermanence";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -30,6 +38,8 @@
       home-manager,
       nixvim,
       deploy-rs,
+      agenix,
+      impermanence,
       ...
     }:
     {
@@ -41,6 +51,8 @@
           ./configuration.nix
           #          ./nixvim.nix
           #          nixvim.nixosModules.nixvim
+          impermanence.nixosModules.impermanence
+          agenix.nixosModules.default
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;

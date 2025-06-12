@@ -14,23 +14,38 @@
         max_file_store = 1073741824;  # 1GB
       };
 
+
+      # TODO: agenix on printer.host
+      authorization = {
+        user = "mqtt_iot";
+        password = "supersecret";
+        timeout = 2;
+      };
+
       # MQTT configuration
       mqtt = {
         port = 1883;
       };
 
       # Cluster configuration
-      cluster = {
-        port = 6222;
-      };
+      # cluster = {
+      #   port = 6222;
+      #   name = "printer";
+      # };
     };
   };
 
   # Фаервол и подготовка директории остаются без изменений
   networking.firewall.allowedTCPPorts = [4222 8222 6222 1883];
   
-  systemd.services.nats.preStart = ''
-    mkdir -p /var/lib/nats/jetstream
-    chown -R nats:nats /var/lib/nats
-  '';
+  systemd.services.nats.serviceConfig = {
+    MemoryMax = "200M";
+    CPUQuota = "200%";
+    Restart = "on-failure";
+    RestartSec = "5s";
+  };
+
+  systemd.tmpfiles.rules = [ "d /var/lib/nats 0775 nats nats - -"
+    "d /var/lib/nats/jetstream 0755 nats nats - -" 
+  ];
 }

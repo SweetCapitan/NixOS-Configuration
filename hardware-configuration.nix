@@ -35,6 +35,13 @@
     { device = "/dev/disk/by-uuid/A6F6-9A37";
       fsType = "vfat";
     };
+  
+  fileSystems."/persistent" = {
+    device = "/dev/disk/by-uuid/7770c17c-fada-4c24-8023-f6b6fd399a68";
+    fsType = "btrfs";
+    options = [ "subvol=@nixos/@persistent" "compress=zstd" ];
+    neededForBoot = true;
+  };
 
   swapDevices = [ ];
 

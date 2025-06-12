@@ -110,8 +110,9 @@
         7125
       ];
     };
+    interfaces.enp3s0.wakeOnLan.enable = true;
   };
-
+  services.nginx.clientMaxBodySize = "1000m";
   services.openssh.enable = true;
   services.nginx.clientMaxBodySize = "1000m";
   services.sshd.enable = true;

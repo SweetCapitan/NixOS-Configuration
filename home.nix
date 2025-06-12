@@ -6,7 +6,10 @@
 }:
 
 {
-  imports = [ ./gnomeExtensions.nix ];
+  imports = [
+    ./gnomeExtensions.nix
+    ./gnomeExtensionsDconf.nix
+  ];
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = "dancho";
