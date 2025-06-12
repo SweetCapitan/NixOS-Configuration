@@ -73,6 +73,9 @@
     enable = true;
     address = "0.0.0.0";
     settings = {
+      file_manager = {
+         enable_object_processing = true;
+      };
       octoprint_compat = { };
       history = { };
       authorization = {
