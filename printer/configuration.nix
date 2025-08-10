@@ -66,6 +66,8 @@
     user = "root";
     group = "root";
     configFile = ./klipper/printer.cfg;
+    mutableConfigFolder = "/var/lib/moonraker/config";
+    mutableConfig = true;
   };
 
   services.moonraker = {
@@ -115,6 +117,9 @@
     };
     interfaces.enp3s0.wakeOnLan.enable = true;
   };
+  virtualisation.docker = {
+    enable = true;
+  };
   services.openssh.enable = true;
   services.nginx.clientMaxBodySize = "1000m";
   services.sshd.enable = true;
@@ -135,6 +140,7 @@
       "wheel"
       "input"
       "networkmanager"
+      "docker"
     ]; # Enable ‘sudo’ for the user.
   };
   #
