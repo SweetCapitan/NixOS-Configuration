@@ -113,6 +113,7 @@
         22
         80
         7125
+        8123
       ];
     };
     interfaces.enp3s0.wakeOnLan.enable = true;
