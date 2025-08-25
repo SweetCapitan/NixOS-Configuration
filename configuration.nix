@@ -147,6 +147,7 @@
     wireshark
     dconf-editor
     orca-slicer
+    podman-compose
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {
