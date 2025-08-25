@@ -29,12 +29,13 @@
   #boot.loader.systemd-boot.enable = true;
   boot.loader = {
     efi = {
-      canTouchEfiVariables = true;
+      #canTouchEfiVariables = true;
       efiSysMountPoint = "/boot/efi";
     };
     grub = {
       efiSupport = true;
       device = "nodev";
+      efiInstallAsRemovable = true;
       enable = true;
     };
   };
@@ -44,6 +45,12 @@
     logRefusedPackets = true;
     logRefusedConnections = true;
     checkReversePath = "loose";#todo: after update sing-box to 1.11 remove this
+  };
+
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+    defaultNetwork.settings.dns_enabled = true;
   };
 
   services.tele2TTLChanger.enable = false;
@@ -231,6 +238,7 @@
       "input"
       "networkmanager"
       "libvirtd"
+      "podman"
     ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       #jetbrains.idea-ultimate
