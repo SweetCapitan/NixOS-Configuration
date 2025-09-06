@@ -1,5 +1,5 @@
 diff --git a/main.py b/main.py
-index d3f4bab..94c017d 100755
+index d3f4bab..b5055b8 100755
 --- a/main.py
 +++ b/main.py
 @@ -4,15 +4,22 @@ import time
@@ -17,7 +17,7 @@ index d3f4bab..94c017d 100755
 +moonraker_url = os.getenv('MOONRAKER_URL', '127.0.0.1')
 +moonraker_key = os.getenv('MOONRAKER_KEY', 'XXXXXX')
 +
- class KlipperLCD ():
+ class KlipperLCD():
      def __init__(self):
 -        self.lcd = LCD("/dev/ttyAMA0", callback=self.lcd_callback)
 +        self.lcd = LCD(lcd_device, callback=self.lcd_callback)
@@ -27,7 +27,7 @@ index d3f4bab..94c017d 100755
          self.running = False
          self.wait_probe = False
          self.thumbnail_inprogress = False
-@@ -222,4 +229,4 @@ class KlipperLCD ():
+@@ -222,4 +229,5 @@ class KlipperLCD():
 
  if __name__ == "__main__":
      x = KlipperLCD()
