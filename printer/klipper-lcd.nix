@@ -112,13 +112,20 @@ in
     services.udev.extraRules = ''
       SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="${cfg.group}", MODE="0660"
       SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", GROUP="${cfg.group}", MODE="0660"
+      KERNEL=="ttyUSB0", GROUP="${cfg.group}", MODE="0660"
       KERNEL=="ttyAMA0", GROUP="${cfg.group}", MODE="0660"
     '';
 
     # Ensure the klippy socket directory exists and has correct permissions
-    system.activationScripts.klipper-lcd = ''
-      mkdir -p ${builtins.dirOf cfg.klippySock}
-      chown ${cfg.user}:${cfg.group} ${builtins.dirOf cfg.klippySock}
-    '';
+    system.activationScripts.klipper-lcd = let
+      sockDir = builtins.dirOf cfg.klippySock;
+    in {
+      text = ''
+        mkdir -p ${sockDir}
+        chown ${cfg.user}:${cfg.group} ${sockDir}
+      '';
+      deps = [];
+    };
+
   };
 }
