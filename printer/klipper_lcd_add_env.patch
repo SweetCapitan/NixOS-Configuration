@@ -1,5 +1,16 @@
+From 33cb2616e1024834a7bee40ba3ff404e2b4c1b07 Mon Sep 17 00:00:00 2001
+From: SweetCapitan <danil.duhanin@yandex.ru>
+Date: Sun, 7 Sep 2025 02:37:12 +0300
+Subject: [PATCH] Add env variables and fix SHORT_BUILD_VERSION for Moonraker
+ 0.8
+
+---
+ main.py    | 13 ++++++++++---
+ printer.py | 10 ++++++++--
+ 2 files changed, 18 insertions(+), 5 deletions(-)
+
 diff --git a/main.py b/main.py
-index d3f4bab..b5055b8 100755
+index d3f4bab..94c017d 100755
 --- a/main.py
 +++ b/main.py
 @@ -4,15 +4,22 @@ import time
@@ -8,16 +19,16 @@ index d3f4bab..b5055b8 100755
  from datetime import timedelta
 +import io
 +import os
-
+ 
  from printer import PrinterData
  from lcd import LCD, _printerData
-
+ 
 +lcd_device = os.getenv('LCD_DEVICE', '/dev/ttyAMA0')
 +klippy_sock = os.getenv('KLIPPY_SOCK', '/home/pi/printer_data/comms/klippy.sock')
 +moonraker_url = os.getenv('MOONRAKER_URL', '127.0.0.1')
 +moonraker_key = os.getenv('MOONRAKER_KEY', 'XXXXXX')
 +
- class KlipperLCD():
+ class KlipperLCD ():
      def __init__(self):
 -        self.lcd = LCD("/dev/ttyAMA0", callback=self.lcd_callback)
 +        self.lcd = LCD(lcd_device, callback=self.lcd_callback)
@@ -27,25 +38,39 @@ index d3f4bab..b5055b8 100755
          self.running = False
          self.wait_probe = False
          self.thumbnail_inprogress = False
-@@ -222,4 +229,5 @@ class KlipperLCD():
-
+@@ -222,4 +229,4 @@ class KlipperLCD ():
+ 
  if __name__ == "__main__":
      x = KlipperLCD()
 -    x.start()
+\ No newline at end of file
 +    x.start()
 diff --git a/printer.py b/printer.py
-index cfbf0bb..7909448 100644
+index cfbf0bb..8d9bdcf 100644
 --- a/printer.py
 +++ b/printer.py
-@@ -419,7 +419,13 @@ class PrinterData:
--               self.SHORT_BUILD_VERSION = self.getREST('/machine/update/status?refresh=false')['result']['version_info']['klipper']['version']
-+               resp = self.getREST('/printer/info')
-+               if 'result' in resp and 'software_version' in resp['result']:
-+                   full_version = resp['result']['software_version']
-+                   self.SHORT_BUILD_VERSION = '-'.join(full_version.split('-',2)[:2])
-+               else:
-+                   self.SHORT_BUILD_VERSION = "unknown"
+@@ -421,7 +421,13 @@ class PrinterData:
+ 		#alternative approach
+ 		#full_version = self.getREST('/printer/info')['result']['software_version']
+ 		#self.SHORT_BUILD_VERSION = '-'.join(full_version.split('-',2)[:2])
+-		self.SHORT_BUILD_VERSION = self.getREST('/machine/update/status?refresh=false')['result']['version_info']['klipper']['version']
++
++        resp = self.getREST('/printer/info')
++        if 'result' in resp and 'software_version' in resp['result']:
++            full_version = resp['result']['software_version']
++            self.SHORT_BUILD_VERSION = '-'.join(full_version.split('-',2)[:2])
++        else:
++            self.SHORT_BUILD_VERSION = "unknown"
+ 
+ 		data = self.getREST('/printer/objects/query?toolhead')['result']['status']
+ 		#print(json.dumps(data, indent=2))
 @@ -668,4 +674,4 @@ class PrinterData:
--               self.sendGCode('SET_GCODE_OFFSET Z=%s MOVE=1' % offset)
-+               self.sendGCode('SET_GCODE_OFFSET Z=%s MOVE=1' % offset)
+ 		self.setExtTemp(exttemp)
+ 
+ 	def setZOffset(self, offset):
+-		self.sendGCode('SET_GCODE_OFFSET Z=%s MOVE=1' % offset)
+\ No newline at end of file
++		self.sendGCode('SET_GCODE_OFFSET Z=%s MOVE=1' % offset)
+-- 
+2.47.2
 
