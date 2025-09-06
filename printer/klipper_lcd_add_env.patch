@@ -7,6 +7,7 @@ index d3f4bab..2323491 100755
  from threading import Thread
  from datetime import timedelta
 +import io
++import os
 
  from printer import PrinterData
  from lcd import LCD, _printerData
