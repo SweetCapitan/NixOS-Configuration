@@ -11,6 +11,8 @@ let
   
   klipperLCDPython = pkgs.python3.withPackages (ps: with ps; [
     pyserial
+    requests
+    setuptools
     # Add other Python dependencies if needed
   ]);
 in
