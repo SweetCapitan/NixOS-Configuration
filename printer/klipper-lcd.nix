@@ -51,15 +51,19 @@ in
 
   config = lib.mkIf cfg.enable {
     # Create user and group
-    users.users.${cfg.user} = {
-      isSystemUser = true;
-      group = cfg.group;
-      description = "KlipperLCD service user";
-      home = "/var/lib/klipper-lcd";
-      createHome = true;
+    users.users = lib.mkIf (cfg.user != "root") {
+      "${cfg.user}" = {
+        isSystemUser = true;
+        group = cfg.group;
+        description = "KlipperLCD service user";
+        home = "/var/lib/klipper-lcd";
+        createHome = true;
+      };
     };
     
-    users.groups.${cfg.group} = {};
+    users.groups = lib.mkIf (cfg.group != "root") {
+      "${cfg.group}" = {};
+    };
 
     # Systemd service
     systemd.services.klipper-lcd = {
