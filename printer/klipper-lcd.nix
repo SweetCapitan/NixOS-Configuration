@@ -106,8 +106,8 @@ in
 
     # Ensure the klippy socket directory exists and has correct permissions
     system.activationScripts.klipper-lcd = ''
-      mkdir -p ${lib.dirOf cfg.klippySock}
-      chown ${cfg.user}:${cfg.group} ${lib.dirOf cfg.klippySock}
+      mkdir -p ${builtins.dirOf cfg.klippySock}
+      chown ${cfg.user}:${cfg.group} ${builtins.dirOf cfg.klippySock}
     '';
   };
 }
