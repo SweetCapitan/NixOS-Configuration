@@ -2,16 +2,18 @@
 
 let
   cfg = config.services.klipper-lcd;
-  klipperLCDPatch = builtins.readFile ./klipper_lcd_add_env.patch;
-  klipperLCDRepo = pkgs.fetchFromGitHub {
+  klipperLCDRepo = let
+    originalSrc =  pkgs.fetchFromGitHub {
     owner = "joakimtoe";
     repo = "KlipperLCD";
     rev = "25b2f6c8295d4df9cb274a32f236e349640f6aee"; # or specific commit/tag
     sha256 = "sha256-DN2FD9buzYLxw3nxRzqvGnhc3R546eMfJPrFQX1Gg9k="; # Update this!
-    postFetch = ''
-    patch -p1 < ${klipperLCDPatch}
-    '';
   };
+    in pkgs.applyPatches {
+      name = "klipper-lcd-patched";
+      src = originalSrc;
+      patches = [builtins.readFile ./klipper_lcd_add_env.patch];
+    };
   
   klipperLCDPython = pkgs.python3.withPackages (ps: with ps; [
     pyserial
