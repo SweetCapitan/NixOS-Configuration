@@ -34,3 +34,27 @@ index d3f4bab..94c017d 100755
 -    x.start()
 \ No newline at end of file
 +    x.start()
+diff --git a/printer.py b/printer.py
+index cfbf0bb..7909448 100644
+--- a/printer.py
++++ b/printer.py
+@@ -419,9 +419,9 @@ class PrinterData:
+                self.update_variable()
+
+                #alternative approach
+-               #full_version = self.getREST('/printer/info')['result']['software_version']
+-               #self.SHORT_BUILD_VERSION = '-'.join(full_version.split('-',2)[:2])
+-               self.SHORT_BUILD_VERSION = self.getREST('/machine/update/status?refresh=false')['result']['version_info']['klipper']['version']
++               full_version = self.getREST('/printer/info')['result']['software_version']
++               self.SHORT_BUILD_VERSION = '-'.join(full_version.split('-',2)[:2])
++               #self.SHORT_BUILD_VERSION = self.getREST('/machine/update/status?refresh=false')['result']['version_info']['klipper']['version']
+
+                data = self.getREST('/printer/objects/query?toolhead')['result']['status']
+                #print(json.dumps(data, indent=2))
+@@ -668,4 +668,4 @@ class PrinterData:
+                self.setExtTemp(exttemp)
+
+        def setZOffset(self, offset):
+-               self.sendGCode('SET_GCODE_OFFSET Z=%s MOVE=1' % offset)
+\ No newline at end of file
++               self.sendGCode('SET_GCODE_OFFSET Z=%s MOVE=1' % offset)
