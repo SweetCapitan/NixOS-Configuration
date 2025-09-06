@@ -19,8 +19,18 @@
   imports = [
     ../server/disk-config.nix
     ./avahi.nix
+    ./klipper-lcd.nix
     #./nats.nix
   ];
+
+  services.klipper-lcd = {
+    enable = true;
+    user = "root";  # Change to "pi" if you want to use the pi user
+    group = "root"; # Change to "pi" if you want to use the pi user
+    device = "/dev/ttyUSB0";
+    klippySock = config.services.klipper.apiSocket;
+    moonrakerUrl = config.services.moonraker.address;
+  };
 
   # Use the systemd-boot EFI boot loader.
   #boot.loader.systemd-boot.enable = true;
