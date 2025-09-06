@@ -13,6 +13,7 @@ let
     pyserial
     requests
     setuptools
+    pillow
     # Add other Python dependencies if needed
   ]);
 in
