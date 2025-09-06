@@ -12,7 +12,7 @@ let
     in pkgs.applyPatches {
       name = "klipper-lcd-patched";
       src = originalSrc;
-      patches = [builtins.readFile ./klipper_lcd_add_env.patch];
+      patches = [./klipper_lcd_add_env.patch];
     };
   
   klipperLCDPython = pkgs.python3.withPackages (ps: with ps; [
