@@ -1,8 +1,8 @@
 diff --git a/main.py b/main.py
-index d3f4bab..2323491 100755
+index d3f4bab..94c017d 100755
 --- a/main.py
 +++ b/main.py
-@@ -4,15 +4,21 @@ import time
+@@ -4,15 +4,22 @@ import time
  import base64
  from threading import Thread
  from datetime import timedelta
@@ -27,7 +27,7 @@ index d3f4bab..2323491 100755
          self.running = False
          self.wait_probe = False
          self.thumbnail_inprogress = False
-@@ -222,4 +228,4 @@ class KlipperLCD ():
+@@ -222,4 +229,4 @@ class KlipperLCD ():
 
  if __name__ == "__main__":
      x = KlipperLCD()
