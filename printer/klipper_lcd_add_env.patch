@@ -1,7 +1,7 @@
 From 33cb2616e1024834a7bee40ba3ff404e2b4c1b07 Mon Sep 17 00:00:00 2001
 From: SweetCapitan <danil.duhanin@yandex.ru>
 Date: Sun, 7 Sep 2025 02:37:12 +0300
-Subject: [PATCH 1/4] Add env variables and fix SHORT_BUILD_VERSION for
+Subject: [PATCH 1/5] Add env variables and fix SHORT_BUILD_VERSION for
  Moonraker 0.8
 
 ---
@@ -78,7 +78,7 @@ index cfbf0bb..8d9bdcf 100644
 From 580c6e1aacd8d8c5ef00d025cd790cd737da5706 Mon Sep 17 00:00:00 2001
 From: SweetCapitan <danil.duhanin@yandex.ru>
 Date: Sun, 7 Sep 2025 02:44:07 +0300
-Subject: [PATCH 2/4] Add env variables and fix SHORT_BUILD_VERSION for
+Subject: [PATCH 2/5] Add env variables and fix SHORT_BUILD_VERSION for
  Moonraker 0.8
 
 ---
@@ -115,7 +115,7 @@ index 8d9bdcf..ea023a8 100644
 From 464bc877b6b05b5baef153c5dae4501a1953eade Mon Sep 17 00:00:00 2001
 From: SweetCapitan <danil.duhanin@yandex.ru>
 Date: Sun, 7 Sep 2025 02:50:23 +0300
-Subject: [PATCH 3/4] Add env variables and fix SHORT_BUILD_VERSION for
+Subject: [PATCH 3/5] Add env variables and fix SHORT_BUILD_VERSION for
  Moonraker 0.8
 
 ---
@@ -161,7 +161,7 @@ index ea023a8..2277e05 100644
 From 06fb3996dd735881dc14056669cddae95385a833 Mon Sep 17 00:00:00 2001
 From: SweetCapitan <danil.duhanin@yandex.ru>
 Date: Sun, 7 Sep 2025 03:06:15 +0300
-Subject: [PATCH 4/4] Add env variables and fix SHORT_BUILD_VERSION for
+Subject: [PATCH 4/5] Add env variables and fix SHORT_BUILD_VERSION for
  Moonraker 0.8
 
 ---
@@ -181,6 +181,58 @@ index 2277e05..7bbe1fc 100644
  		self.square_corner_velocity = toolhead['square_corner_velocity']
  
  	def get_gcode_store(self, count=100):
+-- 
+2.47.2
+
+
+From d0118f35a378f9a9ff9894c37a9ad718d550da81 Mon Sep 17 00:00:00 2001
+From: SweetCapitan <danil.duhanin@yandex.ru>
+Date: Sun, 7 Sep 2025 03:48:39 +0300
+Subject: [PATCH 5/5] Add env variables and fix SHORT_BUILD_VERSION for
+ Moonraker 0.8
+
+---
+ lcd.py | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/lcd.py b/lcd.py
+index ca31f69..ed41053 100644
+--- a/lcd.py
++++ b/lcd.py
+@@ -212,21 +212,29 @@ class LCD:
+         self.write("information.sversion.txt=\"%s\"" % fw)        
+ 
+     def write(self, data, eol=True, lf=False):
++    # Преобразуем всё в байты напрямую, отбрасывая символы > 255
+         dat = bytearray()
+-        if type(data) == str:
+-            dat.extend(map(ord, data))
++        if isinstance(data, str):
++            for c in data:
++                if ord(c) < 256:
++                    dat.append(ord(c))
++                    # символы >255 просто игнорируем
+         else:
+             dat.extend(data)
+ 
+         if lf:
+             dat.extend(dat[-1:])
+             dat.extend(dat[-1:])
+-            dat[len(dat)-2] = 10 #'\r'
+-            dat[len(dat)-3] = 13 #'\n'
++            dat[-2] = 10  # '\n'
++            dat[-3] = 13  # '\r'
++
+         self.ser.write(dat)
++
+         if eol:
+             self.ser.write(bytearray([0xFF, 0xFF, 0xFF]))
+ 
++
++
+     def clear_thumbnail(self):
+         self.write("printpause.cp0.close()")
+         self.write("printpause.cp0.aph=0")
 -- 
 2.47.2
 
