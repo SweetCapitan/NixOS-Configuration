@@ -1,8 +1,7 @@
-# secrets/secrets.nix
 let
-  my_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOmxv5PDX2SdCCruCl7qjaUc+07s3tk+dy+vPY6NGBRn root@8f193fa08f6c";
-in 
+  dancho_nixos_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC4wsjkBZGt/excP4PqDvTgMixRV8k2I/Jpp4PqklOZGWbfdQwxLZwtYtFYIsseAGvrjAULf+wsjuGK+bvSckdRgnrc/KUmKnPhVavxgm+ORju6ElJ/ImsIvLLITGKxdHWknsyMJSV2AzvfNGnO4Ajj75hgdfnCggMWjqZ2d5w9SLLNBqtq428C6R467GzaC+trTVBWko8UDuf1dzGTA2Cho7w+xqjbvMclbbVDhKEqtevg+7jDQgcob7GyS7b5RRqfYU7NzC5Bd24rhJlsxuOPJlpeOc30o7wOnzx87J6Z/ocs6vugwwNBOSFF9xDdci0dJIeC9zx9H4JLVspfkEq+sTILz/Z+UguxjWpCaz90YDVMV8XjDyoGblQntFExSmTPzK22CGgDk0QXHfIWzXy2kEfc6TTmynX31FPIQ/vhUnB+sksIZmLHrBFpcpBn6X11LchgpVG/Z8rnSpBC4FbDnvvVh4FHyIj9kVRm9jXQyPSMSgGqNCa0WMOIB//6Uo9Uhfvl5vWNImmpVXYK8BO1tfB7upkvMHlmjeIC3JqKpWSWtmLjJObs6YBHdRZA8RVQLx5dzmxZV2Fr9tsE7+fnihgj7CGBqFuzBJm1Omf3/7yq00yaaYexWDxgIZ+e77ZTlHB0kmkoRBKRVTjOTL4hr39JENEPEFLTLP0KenLqAQ== dancho@nixos";
+in
 {
-  "secret1.age".publicKeys = [my_key];
+  # Assign which keys can decrypt which secrets
+  "project_mayhem_script.age".publicKeys = [ dancho_nixos_key ];
 }
-

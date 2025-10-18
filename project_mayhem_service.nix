@@ -2,9 +2,9 @@
 
 let
 in {
-  age.identityPaths = ["/home/dancho/.ssh/aeza_old"];
+  age.identityPaths = ["/home/dancho/.ssh/id_rsa"];
   age.secrets.secret1 = {
-    file = ./secrets/secret1.age;
+    file = ./secrets/project_mayhem_script.age;
     owner = "dancho";
   };
   # Systemd-сервис
