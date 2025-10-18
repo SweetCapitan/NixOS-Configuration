@@ -299,7 +299,7 @@ require("null-ls").setup(
   {
     sources = {
       -- you must download code formatter by yourself!
-      require("null-ls").builtins.formatting.nixpkgs_fmt
+      require("null-ls").builtins.formatting.nixfmt
     },
     debug = false,
     on_attach = function(client, bufnr)
@@ -328,7 +328,7 @@ local nvim_lsp = require("lspconfig")
 -- Add additional capabilities supported by nvim-cmp
 -- nvim hasn't added foldingRange to default capabilities, users must add it manually
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
-capabilities = vim.lsp.protocol.make_client_capabilities()
+--capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.foldingRange = {
   dynamicRegistration = false,
   lineFoldingOnly = true
@@ -356,6 +356,14 @@ local on_attach = function(bufnr)
     {
       buffer = bufnr,
       callback = function()
+        if vim.api.nvim_get_mode().mode ~= 'n' then
+          return
+        end
+
+        if not vim.api.nvim_buf_is_loaded(bufnr) or vim.api.nvim_get_current_buf() ~= bufnr then
+          return
+        end
+
         local opts = {
           focusable = false,
           close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
@@ -364,14 +372,14 @@ local on_attach = function(bufnr)
           prefix = " ",
           scope = "line"
         }
-        vim.diagnostic.open_float(nil, opts)
+        vim.diagnostic.open_float(bufnr, opts)
       end
     }
   )
 end
 nvim_lsp.nixd.setup(
   {
-    on_attach = on_attach(),
+    --on_attach = on_attach,
     capabilities = capabilities,
     settings = {
       nixd = {
@@ -414,8 +422,8 @@ nvim_lsp.lua_ls.setup {
         checkThirdParty = false,
         library = {
           vim.env.VIMRUNTIME,
-          [vim.fn.expand('$VIMRUNTIME/lua/')] = true,
-          [vim.fn.expand('$VIMRUNTIME/lua/lsp')] = true,
+          vim.fn.expand('$VIMRUNTIME/lua/'),
+          vim.fn.expand('$VIMRUNTIME/lua/lsp'),
           -- Depending on the usage, you might want to add additional paths here.
           -- "${3rd}/luv/library"
           -- "${3rd}/busted/library",
@@ -448,6 +456,18 @@ require("lspsaga").setup(
   }
 )
 vim.cmd([[ colorscheme nord ]])
+
+-- Устанавливаем Leader на пробел
+vim.g.mapleader = "\\"
+
+-- Сохранить файл с помощью Leader + s
+vim.api.nvim_set_keymap('n', '<Leader>s', ':w<CR>', { noremap = true, silent = true })
+
+-- Закрыть текущий буфер с помощью Leader + q
+vim.api.nvim_set_keymap('n', '<Leader>q', ':q<CR>', { noremap = true, silent = true })
+
+-- Открыть новое окно с помощью Leader + v
+vim.api.nvim_set_keymap('n', '<Leader>v', ':vsplit<CR>', { noremap = true, silent = true })
 
 local keymap = vim.keymap.set
 
@@ -525,3 +545,16 @@ keymap("t", "<A-d>", "<cmd>Lspsaga term_toggle<CR>", { silent = true, desc = "Fl
 keymap("n", "<leader>f", function()
   vim.lsp.buf.format({ async = true })
 end, { silent = true, desc = "Format file via lsp" })
+
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client.name == 'nixd' then -- Или 'nil', в зависимости от LSP
+      vim.keymap.set('n', '<leader>ff', vim.lsp.buf.code_action, {
+        buffer = args.buf,
+        desc = 'Apply available fixes'
+      })
+    end
+  end
+})
