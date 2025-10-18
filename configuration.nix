@@ -148,6 +148,8 @@
     dconf-editor
     orca-slicer
     podman-compose
+
+    xclip
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {
