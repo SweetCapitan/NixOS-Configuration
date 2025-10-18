@@ -40,12 +40,13 @@
       deploy-rs,
       agenix,
       impermanence,
+      nixpkgs_unstable,
       ...
     }:
     {
       nixosConfigurations."nixos" = inputs.nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = inputs;
+        specialArgs = { inherit inputs; };
         modules = [
           ./gnome/settings.nix
           ./configuration.nix

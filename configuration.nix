@@ -44,7 +44,7 @@
     trustedInterfaces = [ "sing-box-tun" ];
     logRefusedPackets = true;
     logRefusedConnections = true;
-    checkReversePath = "loose";#todo: after update sing-box to 1.11 remove this
+    checkReversePath = "loose"; # todo: after update sing-box to 1.11 remove this
   };
 
   virtualisation.podman = {
@@ -188,7 +188,6 @@
       simple-scan
     ]);
 
-
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
@@ -231,6 +230,11 @@
   #  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
+  nixpkgs.overlays = [
+    (final: prev: {
+      firefox_new = inputs.nixpkgs_unstable.legacyPackages.${prev.system}.firefox;
+    })
+  ];
   users.users.dancho = {
     hashedPasswordFile = "/etc/nixos/hashedPassword";
     isNormalUser = true;
@@ -244,7 +248,7 @@
     packages = with pkgs; [
       #jetbrains.idea-ultimate
       home-manager
-      firefox
+      firefox_new
       #vim
       #     tree
     ];
