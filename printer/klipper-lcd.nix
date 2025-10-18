@@ -12,15 +12,15 @@ let
       };
 
       # Нормализуем все *.py файлы в LF
-      src-fixed = pkgs.runCommand "klipper-lcd-fixed" {} ''
-        cp -r ${originalSrc} $out
-        chmod -R +w $out
-        find $out -type f -name '*.py' -exec sed -i 's/\r$//' {} +
-      '';
+      #src-fixed = pkgs.runCommand "klipper-lcd-fixed" {} ''
+      # cp -r ${originalSrc} $out
+      # chmod -R +w $out
+      # find $out -type f -name '*.py' -exec sed -i 's/\r$//' {} +
+      #'';
     in
       pkgs.applyPatches {
         name = "klipper-lcd-patched";
-        src = src-fixed;
+        src = originalSrc;
         patches = [ ./klipper_lcd_add_env.patch ];
       };
 
