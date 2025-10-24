@@ -24,8 +24,8 @@
   ];
 
   services.klipper-lcd = {
-    enable = true;
-    user = "root";  # Change to "pi" if you want to use the pi user
+    enable = false;
+    user = "root"; # Change to "pi" if you want to use the pi user
     group = "root"; # Change to "pi" if you want to use the pi user
     device = "/dev/ttyUSB0";
     klippySock = config.services.klipper.apiSocket;
@@ -86,7 +86,7 @@
     address = "0.0.0.0";
     settings = {
       file_manager = {
-         enable_object_processing = true;
+        enable_object_processing = true;
       };
       octoprint_compat = { };
       history = { };
