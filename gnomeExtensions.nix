@@ -2,7 +2,7 @@
 	home.packages = with pkgs.gnomeExtensions; [
 		blur-my-shell
 		clipboard-history
-		control-blur-effect-on-lock-screen
+		# control-blur-effect-on-lock-screen # removed in 25.11
 		dash-to-dock
 		gsconnect
 		hide-top-bar

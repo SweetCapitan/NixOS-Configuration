@@ -19,7 +19,7 @@
     [
       htop
       kubectl # TODO: home kubectl config
-      gnome.gnome-tweaks
+      gnome-tweaks # moved to top-level in 25.11
       obsidian
     ]
     ++ (with jetbrains; [ idea-ultimate ]);

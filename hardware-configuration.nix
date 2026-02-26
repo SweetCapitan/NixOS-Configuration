@@ -23,6 +23,7 @@
     { device = "/dev/disk/by-uuid/7770c17c-fada-4c24-8023-f6b6fd399a68";
       fsType = "btrfs";
       options = [ "subvol=@nixos/@home" "compress=zstd" ];
+      neededForBoot = true;
     };
 
   fileSystems."/nix" =

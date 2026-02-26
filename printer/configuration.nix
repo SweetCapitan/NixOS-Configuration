@@ -24,10 +24,9 @@
   ];
 
   services.klipper-lcd = {
-    enable = false;
+    enable = true;
     user = "root"; # Change to "pi" if you want to use the pi user
     group = "root"; # Change to "pi" if you want to use the pi user
-    device = "/dev/ttyUSB0";
     klippySock = config.services.klipper.apiSocket;
     moonrakerUrl = config.services.moonraker.address;
   };
@@ -127,7 +126,14 @@
         6052
       ];
     };
-    interfaces.enp3s0.wakeOnLan.enable = true;
+    interfaces = {
+      enp3s0 = {
+        wakeOnLan = {
+          enable = true;
+          policy = [ "magic" ];
+        };
+      };
+    };
   };
   virtualisation.docker = {
     enable = true;

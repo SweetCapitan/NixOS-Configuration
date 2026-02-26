@@ -45,6 +45,7 @@
     logRefusedPackets = true;
     logRefusedConnections = true;
     checkReversePath = "loose"; # todo: after update sing-box to 1.11 remove this
+    allowedTCPPorts = [ 9 ];
   };
 
   virtualisation.podman = {
@@ -138,9 +139,8 @@
     nixd
     lua-language-server
 
-    #FONTS
-    nerdfonts
-    jetbrains-mono
+    #FONTS - removed nerdfonts in 25.11 (use specific fonts)
+    nerd-fonts.jetbrains-mono
     lazygit
 
     spotify
@@ -171,24 +171,24 @@
       gnome-photos
       gnome-tour
       gedit
-    ])
-    ++ (with pkgs.gnome; [
-      cheese # webcam tool
-      gnome-music
-      gnome-terminal
-      epiphany # web browser
-      geary # email reader
-      evince # document viewer
-      gnome-characters
-      totem # video player
-      tali # poker game
-      iagno # go game
-      hitori # sudoku game
-      atomix # puzzle game
-      gnome-weather # wheater app
-      gnome-contacts
-      simple-scan
+      cheese # webcam tool - moved to top-level in 25.11
+      gnome-music # moved to top-level in 25.11
+      gnome-terminal # moved to top-level in 25.11
+      epiphany # web browser - moved to top-level in 25.11
+      geary # email reader - moved to top-level in 25.11
+      evince # document viewer - moved to top-level in 25.11
+      gnome-characters # moved to top-level in 25.11
+      totem # video player - moved to top-level in 25.11
+      gnome-weather # moved to top-level in 25.11
+      gnome-contacts # moved to top-level in 25.11
+      simple-scan # moved to top-level in 25.11
+      tali # poker game - moved to top-level in 25.11
+      iagno # go game - moved to top-level in 25.11
+      hitori # sudoku game - moved to top-level in 25.11
+      atomix # puzzle game - moved to top-level in 25.11
     ]);
+    # Remaining games still in pkgs.gnome:
+    # (none currently - all moved)
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -237,6 +237,18 @@
       firefox_new = inputs.nixpkgs_unstable.legacyPackages.${prev.system}.firefox;
     })
   ];
+
+  networking = {
+    interfaces = {
+      enp7s0 = {
+        wakeOnLan = {
+          enable = true;
+          policy = [ "magic" ];
+        };
+      };
+    };
+  };
+
   users.users.dancho = {
     hashedPasswordFile = "/etc/nixos/hashedPassword";
     isNormalUser = true;
