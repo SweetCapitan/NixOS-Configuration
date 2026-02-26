@@ -15,9 +15,9 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./nvim/neovim.nix
-    ./syncthings.nix
+    # ./syncthings.nix # disabled
     #currently not needed :D
-    #./sing-box-override.nix
+    ./sing-box-override.nix
     ./common/network/tele2_ttl_change.nix
     ./avahi.nix
     ./project_mayhem_service.nix
@@ -150,6 +150,7 @@
     podman-compose
 
     xclip
+    opencode
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {
@@ -166,8 +167,9 @@
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
 
-  environment.gnome.excludePackages =
-    (with pkgs; [
+  environment.gnome.excludePackages = (
+    with pkgs;
+    [
       gnome-photos
       gnome-tour
       gedit
@@ -186,9 +188,10 @@
       iagno # go game - moved to top-level in 25.11
       hitori # sudoku game - moved to top-level in 25.11
       atomix # puzzle game - moved to top-level in 25.11
-    ]);
-    # Remaining games still in pkgs.gnome:
-    # (none currently - all moved)
+    ]
+  );
+  # Remaining games still in pkgs.gnome:
+  # (none currently - all moved)
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
