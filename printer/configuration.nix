@@ -138,6 +138,42 @@
   virtualisation.docker = {
     enable = true;
   };
+  # Lightweight desktop environment
+  # services.xserver = {
+  #   enable = true;
+  #   desktopManager = {
+  #     xterm.enable = false;
+  #     xfce.enable = true;
+  #   };
+  #   displayManager.lightdm.enable = true;
+  #   displayManager.autoLogin = {
+  #     enable = true;
+  #     user = "dancho";
+  #   };
+  #   videoDrivers = [ "intel" ];
+  #   deviceSection = ''
+  #     Option "AccelMethod" "uxa"
+  #     Option "TearFree" "true"
+  #   '';
+  #   config = ''
+  #     Section "Device"
+  #       Identifier "Intel Graphics"
+  #       Driver "intel"
+  #       Option "TearFree" "true"
+  #       Option "AccelMethod" "sna"
+  #     EndSection
+  #   '';
+  # };
+  # services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = ''
+  #   allow-debugging=true
+  # '';
+
+  # hardware.graphics = {
+  #   enable = true;
+  #   enable32Bit = true;
+  # };
+  # hardware.enableAllFirmware = true;
+  # services.displayManager.defaultSession = "xfce";
   services.openssh.enable = true;
   services.nginx.clientMaxBodySize = "1000m";
   services.sshd.enable = true;
