@@ -151,6 +151,8 @@
 
     xclip
     opencode
+    bun
+    crush
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {

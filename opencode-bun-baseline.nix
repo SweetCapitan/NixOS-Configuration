@@ -1,32 +1,45 @@
-# overlays/opencode-bun-baseline.nix
 final: prev:
 let
   bunBaseline = prev.stdenvNoCC.mkDerivation rec {
     pname = "bun-baseline";
-    version = "1.1.38";
+    version = "1.3.3";
 
     src = prev.fetchurl {
       url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64-baseline.zip";
-      # Run: nix-prefetch-url <url> to get the hash
-      hash = "sha256-QSAajF7nSp3Lsc4loRBPH5KYOLV6hFqnjZg3mwznzeI=";
+      hash = "sha256-KB5sutlp6y9e9XJMbLoB2kDNX+rW+CksUO1gvU26eK4=";
     };
 
-    nativeBuildInputs = [ prev.unzip ];
+    sourceRoot = "bun-linux-x64-baseline";
+    strictDeps = true;
 
-    unpackPhase = ''
-      unzip $src
-    '';
+    nativeBuildInputs = [
+      prev.unzip
+      prev.autoPatchelfHook # same as upstream
+    ];
+    buildInputs = [ prev.openssl ]; # same as upstream
+
+    dontConfigure = true;
+    dontBuild = true;
 
     installPhase = ''
-      mkdir -p $out/bin
-      install -Dm755 bun-linux-x64-baseline/bun $out/bin/bun
+      runHook preInstall
+      install -Dm755 ./bun $out/bin/bun
+      ln -s $out/bin/bun $out/bin/bunx
+      runHook postInstall
     '';
 
     meta.mainProgram = "bun";
   };
+
 in
 {
-  opencode = prev.opencode.override {
-    bun = bunBaseline;
-  };
+  bun = bunBaseline;
+
+  opencode = prev.opencode.overrideAttrs (old: {
+    node_modules = old.node_modules.overrideAttrs (oldMods: {
+      nativeBuildInputs = (builtins.filter (x: x != prev.bun) oldMods.nativeBuildInputs) ++ [
+        bunBaseline
+      ];
+    });
+  });
 }
