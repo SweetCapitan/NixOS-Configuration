@@ -49,6 +49,7 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./gnome/settings.nix
+          ./niri/system.nix
           ./configuration.nix
           #          ./nixvim.nix
           #          nixvim.nixosModules.nixvim

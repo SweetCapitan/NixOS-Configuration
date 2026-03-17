@@ -131,6 +131,8 @@
     };
   };
 
+  fonts.packages = [ pkgs.nerd-fonts.jetbrains-mono ];
+
   environment.systemPackages = with pkgs; [
     nixfmt-rfc-style
     sing-box # TODO: remove /usr/share/sing-box/geoip.db
@@ -140,7 +142,7 @@
     lua-language-server
 
     #FONTS - removed nerdfonts in 25.11 (use specific fonts)
-    nerd-fonts.jetbrains-mono
+    #nerd-fonts.jetbrains-mono
     lazygit
 
     spotify

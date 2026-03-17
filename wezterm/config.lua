@@ -31,7 +31,12 @@ config.font_size = 10.0
 config.initial_cols = 120
 config.initial_rows = 25
 config.window_close_confirmation = "NeverPrompt"
-config.enable_wayland = false
+
+local is_wayland = os.getenv('WAYLAND_DISPLAY') ~= nil
+local desktop = os.getenv('XDG_CURRENT_DESKTOP') or ''
+local is_gnome = desktop:lower():find('gnome') ~= nil
+
+config.enable_wayland = is_wayland and not is_gnome
 
 local function get_current_working_dir(tab)
     local current_dir_url = tab.active_pane.current_working_dir
