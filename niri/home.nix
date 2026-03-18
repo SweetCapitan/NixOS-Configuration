@@ -8,28 +8,52 @@
   config,
   pkgs,
   lib,
+  shellSelection ? "none",
+  inputs,
   ...
 }:
 
+let
+  useDefaultShell = shellSelection == "none";
+in
 {
   # ── Packages used by the niri session ────────────────────────────────────────
-  home.packages = with pkgs; [
-    waybar # panel (GNOME-bar replacement)
-    mako # notification daemon (replaces GNOME's built-in)
-    swww # wallpaper daemon
-    wlogout # logout / lock screen menu
-    fuzzel # app launcher (fast, Wayland-native)
-    gnome-control-center # settings app still works under niri
-    networkmanagerapplet # nm-applet for the tray
-    pavucontrol # volume control
-    cliphist # clipboard history (wl-clipboard based)
-    wl-clipboard
-    libnotify # notify-send helper
-    swaylock-effects # lockscreen with blur (matches GNOME blur ext)
-    grim # screenshot
-    slurp # area selection for screenshots
-    spotify
-  ];
+  home.packages =
+    with pkgs;
+    (lib.optionals (shellSelection == "dms") [
+      inputs.dms.packages.${pkgs.stdenv.hostPlatform.system}.default
+      pkgs.quickshell
+    ])
+    ++ (lib.optionals (shellSelection == "none") [
+      waybar # panel (GNOME-bar replacement)
+      mako # notification daemon (replaces GNOME's built-in)
+      xdg-desktop-portal-gnome # required for waybar
+    ])
+    ++ (lib.optionals (shellSelection == "noctalia") [
+      inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+      inputs.noctalia-qs.packages.${pkgs.stdenv.hostPlatform.system}.default
+    ])
+    ++ [
+      swww # wallpaper daemon
+      wlogout # logout / lock screen menu
+      fuzzel # app launcher (fast, Wayland-native)
+      gnome-control-center # settings app still works under niri
+      networkmanagerapplet # nm-applet for the tray
+      pavucontrol # volume control
+      cliphist # clipboard history (wl-clipboard based)
+      wl-clipboard
+      libnotify # notify-send helper
+      swaylock-effects # lockscreen with blur (matches GNOME blur ext)
+      grim # screenshot
+      slurp # area selection for screenshots
+      spotify
+    ];
+
+  home.sessionVariables = lib.mkIf (shellSelection == "noctalia") {
+    XDG_CURRENT_DESKTOP = "Noctalia";
+    QT_QPA_PLATFORM = "wayland";
+    XDG_SESSION_TYPE = "wayland";
+  };
 
   xdg.desktopEntries.spotify = {
     name = "Spotify";
@@ -137,8 +161,19 @@
     }
 
     // ── Startup ───────────────────────────────────────────────────────────────
-    spawn-at-startup "waybar"
-    spawn-at-startup "mako"
+    ${
+      if shellSelection == "dms" then
+        ''spawn-at-startup "dms" "run"''
+      else if shellSelection == "noctalia" then
+        ''spawn-at-startup "qs" "-p" "${
+          inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+        }/share/noctalia-shell"''
+      else
+        ''
+          spawn-at-startup "xdg-desktop-portal"
+              spawn-at-startup "waybar"
+              spawn-at-startup "mako"''
+    }
     spawn-at-startup "swww-daemon"
     spawn-at-startup "nm-applet" "--indicator"
     spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
@@ -279,7 +314,7 @@
 
   # ── Waybar (GNOME-style top panel) ────────────────────────────────────────────
   programs.waybar = {
-    enable = true;
+    enable = useDefaultShell;
     package = pkgs.waybar;
 
     settings = [
@@ -459,7 +494,7 @@
 
   # ── Mako (notifications, replaces GNOME's built-in) ──────────────────────────
   services.mako = {
-    enable = true;
+    enable = useDefaultShell;
     package = pkgs.mako;
     settings = {
       # Gruvbox-dark colours

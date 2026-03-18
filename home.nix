@@ -2,15 +2,33 @@
   config,
   pkgs,
   lib,
+  shellSelection ? "none",
+  inputs,
   ...
 }:
+
+let
+  niriModule = import ./niri/home.nix {
+    inherit
+      config
+      pkgs
+      lib
+      shellSelection
+      inputs
+      ;
+  };
+in
 
 {
   imports = [
     ./gnomeExtensions.nix
     ./gnomeExtensionsDconf.nix
-    ./niri/home.nix
-  ];
+  ]
+  ++ [ niriModule ]
+  ++ (lib.optionals (shellSelection == "dms") [ inputs.dms.homeModules.dank-material-shell ])
+  ++ (lib.optionals (shellSelection == "noctalia") [ inputs.noctalia.homeModules.default ]);
+
+  # programs.dank-material-shell is enabled via inputs.dms.homeModules.dank-material-shell
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = "dancho";

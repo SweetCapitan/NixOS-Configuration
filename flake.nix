@@ -1,6 +1,9 @@
 {
   description = "dancho/sweetcapitan's flake for several machenes working with Awesome NixOS";
 
+  # Shell selection: "dms", "noctalia", or "none" (default)
+  # This determines which desktop shell to use (DankMaterialShell or Noctalia Shell)
+  # When set to "none", uses default waybar + mako setup
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-25.11";
     nixpkgs_unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -28,6 +31,19 @@
       url = "github:nix-community/impermanence";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    dms = {
+      url = "github:AvengeMedia/DankMaterialShell/stable";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    noctalia-qs = {
+      url = "github:noctalia-dev/noctalia-qs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.noctalia-qs.follows = "noctalia-qs";
+    };
   };
 
   outputs =
@@ -41,8 +57,14 @@
       agenix,
       impermanence,
       nixpkgs_unstable,
+      dms,
+      noctalia-qs,
+      noctalia,
       ...
     }:
+    let
+      shellSelection = "dms"; # Options: "dms", "noctalia", "none"
+    in
     {
       nixosConfigurations."nixos" = inputs.nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -59,6 +81,10 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = {
+              inherit inputs;
+              shellSelection = shellSelection;
+            };
             home-manager.users.dancho = import ./home.nix;
           }
         ];
