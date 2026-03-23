@@ -239,9 +239,6 @@
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   nixpkgs.overlays = [
-    (final: prev: {
-      firefox_new = inputs.nixpkgs_unstable.legacyPackages.${prev.system}.firefox;
-    })
     (import ./opencode-bun-baseline.nix inputs.nixpkgs_unstable)
   ];
 
@@ -269,7 +266,7 @@
     packages = with pkgs; [
       #jetbrains.idea-ultimate
       home-manager
-      firefox_new
+      firefox
       #vim
       #     tree
     ];
