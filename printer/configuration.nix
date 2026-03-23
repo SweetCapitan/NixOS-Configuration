@@ -21,6 +21,7 @@
     ./avahi.nix
     ./klipper-lcd.nix
     #./nats.nix
+    ../common/docker/alias.nix
   ];
 
   services.klipper-lcd = {
