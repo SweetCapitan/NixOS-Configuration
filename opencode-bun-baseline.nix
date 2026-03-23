@@ -1,4 +1,4 @@
-final: prev:
+nixpkgs_unstable: final: prev:
 let
   bunBaseline = prev.stdenvNoCC.mkDerivation rec {
     pname = "bun-baseline";
@@ -30,16 +30,12 @@ let
 
     meta.mainProgram = "bun";
   };
-
+  opencodeUnstable = nixpkgs_unstable.legacyPackages.${prev.system}.opencode;
 in
 {
   bun = bunBaseline;
 
-  opencode = prev.opencode.overrideAttrs (old: {
-    node_modules = old.node_modules.overrideAttrs (oldMods: {
-      nativeBuildInputs = (builtins.filter (x: x != prev.bun) oldMods.nativeBuildInputs) ++ [
-        bunBaseline
-      ];
-    });
-  });
+  opencode = opencodeUnstable.override {
+    bun = bunBaseline;
+  };
 }

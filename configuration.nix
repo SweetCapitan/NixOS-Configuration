@@ -242,7 +242,7 @@
     (final: prev: {
       firefox_new = inputs.nixpkgs_unstable.legacyPackages.${prev.system}.firefox;
     })
-    (import ./opencode-bun-baseline.nix)
+    (import ./opencode-bun-baseline.nix inputs.nixpkgs_unstable)
   ];
 
   networking = {
