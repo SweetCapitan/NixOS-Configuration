@@ -17,7 +17,6 @@
     ./nvim/neovim.nix
     # ./syncthings.nix # disabled
     #currently not needed :D
-    ./sing-box-override.nix
     ./common/network/tele2_ttl_change.nix
     ./avahi.nix
     ./project_mayhem_service.nix
@@ -243,6 +242,7 @@
     (final: prev: {
       firefox_new = inputs.nixpkgs_unstable.legacyPackages.${prev.system}.firefox;
     })
+    (import ./opencode-bun-baseline.nix)
   ];
 
   networking = {
