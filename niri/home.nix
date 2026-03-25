@@ -17,12 +17,23 @@ let
   useDefaultShell = shellSelection == "none";
 in
 {
+
+  programs.dank-material-shell = {
+    enable = true;
+    systemd = {
+      enable = true;
+      restartIfChanged = true;
+    };
+    enableSystemMonitoring = true;
+    enableDynamicTheming = true;
+    dgop.package = inputs.dgop.packages.${pkgs.system}.default;
+  };
   # ── Packages used by the niri session ────────────────────────────────────────
   home.packages =
     with pkgs;
     (lib.optionals (shellSelection == "dms") [
-      inputs.dms.packages.${pkgs.stdenv.hostPlatform.system}.default
-      pkgs.quickshell
+      #inputs.dms.packages.${pkgs.stdenv.hostPlatform.system}.default
+      #pkgs.quickshell
     ])
     ++ (lib.optionals (shellSelection == "none") [
       waybar # panel (GNOME-bar replacement)
@@ -46,7 +57,6 @@ in
       swaylock-effects # lockscreen with blur (matches GNOME blur ext)
       grim # screenshot
       slurp # area selection for screenshots
-      spotify
     ];
 
   home.sessionVariables = lib.mkIf (shellSelection == "noctalia") {
@@ -163,7 +173,8 @@ in
     // ── Startup ───────────────────────────────────────────────────────────────
     ${
       if shellSelection == "dms" then
-        ''spawn-at-startup "dms" "run"''
+        ""
+      #  ''spawn-at-startup "dms" "run"''
       else if shellSelection == "noctalia" then
         ''spawn-at-startup "qs" "-p" "${
           inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default

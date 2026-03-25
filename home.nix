@@ -25,7 +25,9 @@ in
     ./gnomeExtensionsDconf.nix
   ]
   ++ [ niriModule ]
-  ++ (lib.optionals (shellSelection == "dms") [ inputs.dms.homeModules.dank-material-shell ])
+  ++ (lib.optionals (shellSelection == "dms") [
+    inputs.dms.homeModules.dank-material-shell
+  ])
   ++ (lib.optionals (shellSelection == "noctalia") [ inputs.noctalia.homeModules.default ]);
 
   # programs.dank-material-shell is enabled via inputs.dms.homeModules.dank-material-shell
