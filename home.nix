@@ -64,6 +64,11 @@ in
     enable = true;
     enableBashIntegration = true;
     systemd.enable = true;
+    settings = {
+      theme = "dark:dankcolors,light:dankcolors";
+      #theme = "dark:JetBrains Darcula,light:Material";
+
+    };
   };
   programs.git = {
     enable = true;
