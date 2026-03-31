@@ -21,6 +21,7 @@
     ./avahi.nix
     ./project_mayhem_service.nix
     ./impermanence.nix
+    ./valent.nix
   ];
 
   #-------------------------------------------
@@ -53,6 +54,7 @@
     defaultNetwork.settings.dns_enabled = true;
   };
 
+  services.flatpak.enable = true;
   services.tele2TTLChanger.enable = false;
   #boot.kernel.sysctl = {
   #"net.ipv4.ip_forward" = 1;
@@ -154,6 +156,8 @@
     opencode
     bun
     crush
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+    valent
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {

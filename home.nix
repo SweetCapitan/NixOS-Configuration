@@ -60,6 +60,11 @@ in
       fi
     '';
   };
+  programs.ghostty = {
+    enable = true;
+    enableBashIntegration = true;
+    systemd.enable = true;
+  };
   programs.git = {
     enable = true;
     userName = "SweetCapitan";
