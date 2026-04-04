@@ -1,9 +1,6 @@
 {
   description = "dancho/sweetcapitan's flake for several machenes working with Awesome NixOS";
 
-  # Shell selection: "dms", "noctalia", or "none" (default)
-  # This determines which desktop shell to use (DankMaterialShell or Noctalia Shell)
-  # When set to "none", uses default waybar + mako setup
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-25.11";
     nixpkgs_unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -43,15 +40,6 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    noctalia-qs = {
-      url = "github:noctalia-dev/noctalia-qs";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.noctalia-qs.follows = "noctalia-qs";
-    };
   };
 
   outputs =
@@ -67,13 +55,8 @@
       nixpkgs_unstable,
       dms,
       dgop,
-      noctalia-qs,
-      noctalia,
       ...
     }:
-    let
-      shellSelection = "dms"; # Options: "dms", "noctalia", "none"
-    in
     {
       nixosConfigurations."nixos" = inputs.nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -82,18 +65,13 @@
           ./gnome/settings.nix
           ./niri/system.nix
           ./configuration.nix
-          #          ./nixvim.nix
-          #          nixvim.nixosModules.nixvim
           impermanence.nixosModules.impermanence
           agenix.nixosModules.default
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = {
-              inherit inputs;
-              shellSelection = shellSelection;
-            };
+            home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.users.dancho = import ./home.nix;
           }
         ];

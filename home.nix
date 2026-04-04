@@ -2,7 +2,6 @@
   config,
   pkgs,
   lib,
-  shellSelection ? "none",
   inputs,
   ...
 }:
@@ -13,7 +12,6 @@ let
       config
       pkgs
       lib
-      shellSelection
       inputs
       ;
   };
@@ -23,12 +21,9 @@ in
   imports = [
     ./gnomeExtensions.nix
     ./gnomeExtensionsDconf.nix
-  ]
-  ++ [ niriModule ]
-  ++ (lib.optionals (shellSelection == "dms") [
+    niriModule
     inputs.dms.homeModules.dank-material-shell
-  ])
-  ++ (lib.optionals (shellSelection == "noctalia") [ inputs.noctalia.homeModules.default ]);
+  ];
 
   # programs.dank-material-shell is enabled via inputs.dms.homeModules.dank-material-shell
   # Home Manager needs a bit of information about you and the

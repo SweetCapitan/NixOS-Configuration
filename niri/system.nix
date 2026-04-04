@@ -8,11 +8,12 @@
 { pkgs, ... }:
 
 {
-  # ── Niri compositor ─────────────────────────────────────────────────────────
   programs.niri = {
     enable = true;
     package = pkgs.niri;
   };
+
+  systemd.user.services.niri-flake-polkit.enable = false;
 
   programs.xwayland.enable = true;
 
