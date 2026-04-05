@@ -19,7 +19,7 @@
     };
     enableSystemMonitoring = true;
     enableDynamicTheming = true;
-    dgop.package = inputs.dgop.packages.${pkgs.system}.default;
+    dgop.package = inputs.dgop.packages.${pkgs.stdenv.hostPlatform.system}.default;
 
     # Note: enableKeybinds requires niri-flake module, using nixpkgs niri instead
     # niri keybinds must be configured manually in niri config
@@ -27,13 +27,14 @@
 
   xdg.configFile."niri/keyboard.kdl".text = ''
     input {
-      keyboard {
-        xkb {
-          layout "us,ru"
-          options "grp:alt_shift_toggle"
+        keyboard {
+          xkb {
+            layout "us,ru"
+            options "grp:alt_shift_toggle"
+          }
+          track-layout "window"
         }
-      }
-    }
+      }  
   '';
 
   home.packages = with pkgs; [

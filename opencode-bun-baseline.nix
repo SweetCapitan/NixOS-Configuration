@@ -30,7 +30,7 @@ let
 
     meta.mainProgram = "bun";
   };
-  opencodeUnstable = nixpkgs_unstable.legacyPackages.${prev.system}.opencode;
+  opencodeUnstable = nixpkgs_unstable.legacyPackages.${prev.stdenv.hostPlatform.system}.opencode;
 in
 {
   bun = bunBaseline;

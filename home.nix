@@ -38,7 +38,7 @@ in
       gnome-tweaks # moved to top-level in 25.11
       obsidian
     ]
-    ++ (with jetbrains; [ idea-ultimate ]);
+    ++ (with jetbrains; [ idea ]);
   programs.wezterm = {
     enable = true;
     enableBashIntegration = true;
@@ -68,8 +68,12 @@ in
   };
   programs.git = {
     enable = true;
-    userName = "SweetCapitan";
-    userEmail = "danil.duhanin@yandex.ru";
+    settings = {
+      user = {
+        name = "SweetCapitan";
+        email = "danil.duhanin@yandex.ru";
+      };
+    };
   };
 
   programs.starship = {
