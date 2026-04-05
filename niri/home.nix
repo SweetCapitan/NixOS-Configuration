@@ -25,6 +25,17 @@
     # niri keybinds must be configured manually in niri config
   };
 
+  xdg.configFile."niri/keyboard.kdl".text = ''
+    input {
+      keyboard {
+        xkb {
+          layout "us,ru"
+          options "grp:alt_shift_toggle"
+        }
+      }
+    }
+  '';
+
   home.packages = with pkgs; [
     swww
     wlogout

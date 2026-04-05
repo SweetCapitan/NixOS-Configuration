@@ -61,6 +61,7 @@ in
     systemd.enable = true;
     settings = {
       theme = "dark:dankcolors,light:dankcolors";
+      shell-integration-features = "ssh-terminfo,ssh-env";
       #theme = "dark:JetBrains Darcula,light:Material";
 
     };
