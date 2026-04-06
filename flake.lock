@@ -281,6 +281,22 @@
         "type": "github"
       }
     },
+    "nixpkgs_unstable_small": {
+      "locked": {
+        "lastModified": 1775371993,
+        "narHash": "sha256-shlcgEOzW6rl7zmZeYBMP9EpF3O/cTL7/HpWlyqearw=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "ff2af6f7ebc6c123603d5689aeea6461290f46b5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable-small",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixvim": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -336,6 +352,7 @@
         "impermanence": "impermanence",
         "nixpkgs": "nixpkgs",
         "nixpkgs_unstable": "nixpkgs_unstable",
+        "nixpkgs_unstable_small": "nixpkgs_unstable_small",
         "nixvim": "nixvim",
         "zen-browser": "zen-browser"
       }

@@ -23,12 +23,12 @@
     enable = true;
     extraPortals = [
       pkgs.xdg-desktop-portal-gnome
-      pkgs.xdg-desktop-portal-gtk
+      # pkgs.xdg-desktop-portal-gtk
     ];
     config.niri = {
       default = [
         "gnome"
-        "gtk"
+        # "gtk"
       ];
       "org.freedesktop.impl.portal.FileChooser" = [ "gnome" ];
       "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];

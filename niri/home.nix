@@ -11,6 +11,11 @@
 }:
 
 {
+
+  systemd.user.services.xdg-desktop-portal-gtk = {
+    Service.Environment = [ "GDK_BACKEND=wayland" ];
+  };
+
   programs.dank-material-shell = {
     enable = true;
     systemd = {

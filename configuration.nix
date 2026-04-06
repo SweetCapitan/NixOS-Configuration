@@ -39,6 +39,16 @@
       enable = true;
     };
   };
+
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.graphics.enable = true;
+  hardware.nvidia = {
+    open = false;
+    nvidiaSettings = true;
+    modesetting.enable = true;
+    package = pkgs.linuxPackages.nvidiaPackages.stable;
+  };
+
   networking.firewall = {
     enable = true;
     trustedInterfaces = [ "sing-box-tun" ];
@@ -54,15 +64,11 @@
     defaultNetwork.settings.dns_enabled = true;
   };
 
-  services.flatpak.enable = true;
+  services.flatpak.enable = false;
   services.tele2TTLChanger.enable = false;
   #boot.kernel.sysctl = {
   #"net.ipv4.ip_forward" = 1;
   #};
-  programs.kdeconnect = {
-    enable = true;
-    package = pkgs.gnomeExtensions.gsconnect;
-  };
   programs.bash.shellAliases = {
     sbr = "sudo sing-box run --config /etc/nixos/configt.json";
     nrt = "sudo nixos-rebuild test --flake ~/Configurations/#nixos";
@@ -100,23 +106,6 @@
     };
   };
 
-  programs.ssh = {
-    extraConfig = ''
-      Host cloud-ru
-          HostName 45.151.31.62
-          User dancho
-          Port 22
-          ForwardAgent yes
-          IdentityFile ~/.ssh/cloud-nix-key
-      Host aeza-ru
-          HostName 5.42.78.198
-          User root
-          Port 22
-          ForwardAgent yes
-          IdentityFile ~/.ssh/aeza-key
-    '';
-  };
-
   nix = {
     settings = {
       experimental-features = [
@@ -124,6 +113,12 @@
         "flakes"
       ];
       auto-optimise-store = true;
+      substituters = [
+        "https://cache.nixos-cuda.org"
+      ];
+      trusted-public-keys = [
+        "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
+      ];
     };
     gc = {
       automatic = true;
@@ -158,6 +153,9 @@
     crush
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     valent
+
+    cudatoolkit
+    llama-cpp
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {
@@ -229,11 +227,6 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # programs.hyprland = {
-  #    enable = true;
-  #    xwayland.enable = true;
-  #    nvidiaPatches = true;
-  #  };
   nixpkgs.config.allowUnfree = true;
 
   #  hardware = {
@@ -244,6 +237,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   nixpkgs.overlays = [
     (import ./opencode-bun-baseline.nix inputs.nixpkgs_unstable)
+    (import ./llama-cuda-overlay.nix inputs.nixpkgs_unstable_small)
   ];
 
   networking = {
