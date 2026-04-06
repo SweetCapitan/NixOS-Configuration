@@ -11,24 +11,6 @@
 }:
 
 {
-
-  systemd.user.services.xdg-desktop-portal-gtk = lib.mkForce {
-    Unit = {
-      Description = "Portal service (GTK/GNOME implementation)";
-      PartOf = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
-    };
-    Service = {
-      Type = "dbus";
-      BusName = "org.freedesktop.impl.portal.desktop.gtk";
-      ExecStart = "${pkgs.xdg-desktop-portal-gtk}/libexec/xdg-desktop-portal-gtk";
-      Environment = [ "GDK_BACKEND=wayland" ];
-    };
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
-    };
-  };
-
   programs.dank-material-shell = {
     enable = true;
     systemd = {
