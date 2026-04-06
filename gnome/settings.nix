@@ -13,5 +13,5 @@
   #  excludePackages = [ pkgs.xterm ];
   # };
   services.desktopManager.gnome.enable = true;
-  services.displayManager.gdm.enable = true;
+  services.displayManager.gdm.enable = false;
 }

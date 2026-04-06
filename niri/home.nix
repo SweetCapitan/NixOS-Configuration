@@ -12,8 +12,21 @@
 
 {
 
-  systemd.user.services.xdg-desktop-portal-gtk = {
-    Service.Environment = [ "GDK_BACKEND=wayland" ];
+  systemd.user.services.xdg-desktop-portal-gtk = lib.mkForce {
+    Unit = {
+      Description = "Portal service (GTK/GNOME implementation)";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "dbus";
+      BusName = "org.freedesktop.impl.portal.desktop.gtk";
+      ExecStart = "${pkgs.xdg-desktop-portal-gtk}/libexec/xdg-desktop-portal-gtk";
+      Environment = [ "GDK_BACKEND=wayland" ];
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
   };
 
   programs.dank-material-shell = {
@@ -29,6 +42,8 @@
     # Note: enableKeybinds requires niri-flake module, using nixpkgs niri instead
     # niri keybinds must be configured manually in niri config
   };
+
+  programs.dsearch.enable = true;
 
   xdg.configFile."niri/keyboard.kdl".text = ''
     input {

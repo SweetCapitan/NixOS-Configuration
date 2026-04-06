@@ -17,6 +17,11 @@
 
   programs.xwayland.enable = true;
 
+  programs.dank-material-shell.greeter = {
+    enable = true;
+    compositor.name = "niri";
+  };
+
   # ── XDG portals ─────────────────────────────────────────────────────────────
   # Re-use GNOME's portal implementations for file picker, screenshots, etc.
   xdg.portal = {

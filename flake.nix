@@ -41,6 +41,10 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    danksearch = {
+      url = "github:AvengeMedia/danksearch";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -66,6 +70,7 @@
           ./gnome/settings.nix
           ./niri/system.nix
           ./configuration.nix
+          inputs.dms.nixosModules.greeter
           impermanence.nixosModules.impermanence
           agenix.nixosModules.default
           home-manager.nixosModules.home-manager

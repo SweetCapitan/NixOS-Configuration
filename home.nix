@@ -23,6 +23,7 @@ in
     ./gnomeExtensionsDconf.nix
     niriModule
     inputs.dms.homeModules.dank-material-shell
+    inputs.danksearch.homeModules.dsearch
   ];
 
   # programs.dank-material-shell is enabled via inputs.dms.homeModules.dank-material-shell

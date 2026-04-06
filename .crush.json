@@ -1,0 +1,14 @@
+{
+  "mcp": {
+    "nixos": {
+      "type": "stdio",
+      "command": "docker",
+      "args": ["run", "--rm", "-i", "ghcr.io/utensils/mcp-nixos"]
+    }
+  },
+  "lsp": {
+    "nix": {
+      "command": "nixd"
+    }
+  }
+}
