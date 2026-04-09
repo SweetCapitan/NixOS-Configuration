@@ -9,7 +9,11 @@
   inputs,
   ...
 }:
-
+let
+  unstable = import inputs.nixpkgs_unstable_small {
+    system = pkgs.stdenv.hostPlatform.system;
+  };
+in
 {
   imports = [
     # Include the results of the hardware scan.
@@ -27,6 +31,9 @@
   #-------------------------------------------
   # Use the systemd-boot EFI boot loader.
   #boot.loader.systemd-boot.enable = true;
+  boot.kernelParams = [ "mitigations=off" ];
+
+  boot.kernelPackages = pkgs.linuxPackages_zen;
   boot.loader = {
     efi = {
       #canTouchEfiVariables = true;
@@ -41,13 +48,24 @@
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.graphics.enable = true;
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+    extraPackages = with pkgs; [
+      # Это добавит libvulkan_nvidia.so и правильный ICD
+      nvidia-vaapi-driver
+      vulkan-loader
+      vulkan-validation-layers
+      vulkan-tools # даст vulkaninfo
+    ];
+  };
   hardware.nvidia = {
     open = false;
     nvidiaSettings = true;
     modesetting.enable = true;
-    package = pkgs.linuxPackages.nvidiaPackages.stable;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
+  hardware.nvidia-container-toolkit.enable = true;
 
   networking.firewall = {
     enable = true;
@@ -156,6 +174,8 @@
 
     cudatoolkit
     llama-cpp
+    nvtopPackages.nvidia
+    # unstable.llama-cpp-vulkan
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {
@@ -228,7 +248,11 @@
   # services.xserver.libinput.enable = true;
 
   nixpkgs.config.allowUnfree = true;
-
+  # nixpkgs.config.cudaSupport = true;
+  # nixpkgs.config.cudaCapabilities = [ "6.1" ];
+  # nixpkgs.config.allowUnsupportedSystem = false;
+  # nixpkgs.config.cudaForwardCompat = false;
+  # nixpkgs.config.cudaPackages = "cudaPackages_12_9";
   #  hardware = {
   #    opengl.enable = true;
   #    nvidia.modesetting.enable = true;
