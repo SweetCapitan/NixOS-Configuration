@@ -30,6 +30,7 @@
     group = "root"; # Change to "pi" if you want to use the pi user
     klippySock = config.services.klipper.apiSocket;
     moonrakerUrl = config.services.moonraker.address;
+    device = "/dev/serial/by-path/pci-0000:00:1d.1-usb-0:1:1.0-port0";
   };
 
   # Use the systemd-boot EFI boot loader.
@@ -83,6 +84,7 @@
   services.moonraker = {
     user = "root";
     enable = true;
+    allowSystemControl = true;
     address = "0.0.0.0";
     settings = {
       file_manager = {
@@ -116,6 +118,17 @@
   nixpkgs.config.allowUnfree = true;
 
   networking = {
+    wireless = {
+      enable = true;
+      networks = {
+        "RT-GPON-C920" = {
+          psk = "AaPNa2gt";
+          priority = 100;
+        };
+      };
+      interfaces = [ "wls33" ];
+    };
+
     hostName = "printer";
     firewall = {
       enable = true;

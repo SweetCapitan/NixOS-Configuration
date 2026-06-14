@@ -4,6 +4,9 @@ let
     system = prev.stdenv.hostPlatform.system;
     config.allowUnfree = true;
     config.cudaSupport = true;
+    config.blasSupport = true;
+    config.rocmSupport = false;
+    config.metalSupport = false;
     config.cudaCapabilities = [ "6.1" ];
     config.allowUnsupportedSystem = true;
     config.cudaForwardCompat = false;
@@ -27,9 +30,14 @@ in
       (old: {
         cmakeFlags = (builtins.filter (f: builtins.match ".*GGML_NATIVE.*" f == null) old.cmakeFlags) ++ [
           "-DGGML_NATIVE=ON"
-          "-DGGML_BACKEND_DL=ON"
-          "-DGGML_CPU_ALL_VARIANTS=ON"
+          # "-DGGML_BACKEND_DL=ON"
+          # "-DGGML_CPU_ALL_VARIANTS=ON"
           "-DGGML_LTO=ON"
         ];
+        # Disable Nix's march=native stripping
+        preConfigure = ''
+          export NIX_ENFORCE_NO_NATIVE=0
+          ${old.preConfigure or ""}
+        '';
       });
 }

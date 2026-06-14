@@ -9,11 +9,13 @@
   inputs,
   ...
 }:
-let
-  unstable = import inputs.nixpkgs_unstable_small {
-    system = pkgs.stdenv.hostPlatform.system;
-  };
-in
+# let
+#   llama-docker =
+#     (import ./llama-image.nix {
+#       inherit pkgs;
+#       llama-pkg = pkgs.llama-cpp;
+#     }).dockerImage;
+# in
 {
   imports = [
     # Include the results of the hardware scan.
@@ -27,6 +29,20 @@ in
     ./impermanence.nix
     ./valent.nix
   ];
+
+  # systemd.user.services.load-llama-image = {
+  #   description = "Load llama-server image into user podman";
+  #   wantedBy = [ "default.target" ];
+  #   script = ''
+  #     if ! ${pkgs.podman}/bin/podman image exists localhost/llama-server:latest; then
+  #       ${pkgs.podman}/bin/podman load -i ${llama-docker}
+  #     fi
+  #   '';
+  #   serviceConfig = {
+  #     Type = "oneshot";
+  #     RemainAfterExit = true;
+  #   };
+  # };
 
   #-------------------------------------------
   # Use the systemd-boot EFI boot loader.
@@ -74,6 +90,19 @@ in
     logRefusedConnections = true;
     checkReversePath = "loose"; # todo: after update sing-box to 1.11 remove this
     allowedTCPPorts = [ 9 ];
+    # for valent
+    allowedTCPPortRanges = [
+      {
+        from = 1714;
+        to = 1764;
+      }
+    ];
+    allowedUDPPortRanges = [
+      {
+        from = 1714;
+        to = 1764;
+      }
+    ];
   };
 
   virtualisation.podman = {
@@ -147,6 +176,8 @@ in
 
   fonts.packages = [ pkgs.nerd-fonts.jetbrains-mono ];
 
+  environment.variables.BROWSER = "zen";
+
   environment.systemPackages = with pkgs; [
     nixfmt-rfc-style
     sing-box # TODO: remove /usr/share/sing-box/geoip.db
@@ -180,10 +211,10 @@ in
   #programs.nixvim.enable = true;
   #programs.neovim = {
   #	enable = true;
-  #	viAlias = true;
-  #	vimAlias = true;
+  #	vialias = true;
+  #	vimalias = true;
   #	configure = {
-  #		customRC = ''
+  #		customrc = ''
   #			set equalprg=nixfmt\
   #			'';
   #	};
@@ -260,7 +291,8 @@ in
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   nixpkgs.overlays = [
-    (import ./opencode-bun-baseline.nix inputs.nixpkgs_unstable)
+    (import ./bun-baseline.nix)
+    (import ./opencode-unstable.nix inputs.nixpkgs_unstable)
     (import ./llama-cuda-overlay.nix inputs.nixpkgs_unstable_small)
   ];
 

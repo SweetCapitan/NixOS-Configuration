@@ -111,6 +111,7 @@ in
           "LCD_DEVICE=${cfg.device}"
           "KLIPPY_SOCK=${cfg.klippySock}"
           "MOONRAKER_URL=${cfg.moonrakerUrl}"
+          #TODO: LED_NAME
         ];
         # Log to journalctl instead of /tmp
         StandardOutput = "journal";
@@ -129,15 +130,16 @@ in
     ];
 
     # udev rules for serial device access
-    services.udev.extraRules = ''
-      # Создаем стабильную символьную ссылку для CH340/CH341 устройства
-      SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", SYMLINK+="ttyKlipperLCD", GROUP="${cfg.group}", MODE="0660"
-      SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", GROUP="${cfg.group}", MODE="0660"
-      KERNEL=="ttyAMA0", GROUP="${cfg.group}", MODE="0660"
-
-      # Убираем правило для ttyUSB0, так как оно нестабильно
-      # KERNEL=="ttyUSB0", GROUP="${cfg.group}", MODE="0660"
-    '';
+    # TODO: Instead aliash use uniq id
+    # services.udev.extraRules = ''
+    #   # Создаем стабильную символьную ссылку для CH340/CH341 устройства
+    #   SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", SYMLINK+="ttyKlipperLCD", GROUP="${cfg.group}", MODE="0660"
+    #   SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", GROUP="${cfg.group}", MODE="0660"
+    #   KERNEL=="ttyAMA0", GROUP="${cfg.group}", MODE="0660"
+    #
+    #   # Убираем правило для ttyUSB0, так как оно нестабильно
+    #   # KERNEL=="ttyUSB0", GROUP="${cfg.group}", MODE="0660"
+    # '';
 
     # Ensure the klippy socket directory exists and has correct permissions
     system.activationScripts.klipper-lcd =

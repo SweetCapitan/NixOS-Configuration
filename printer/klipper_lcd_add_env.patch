@@ -1,8 +1,8 @@
-From 33cb2616e1024834a7bee40ba3ff404e2b4c1b07 Mon Sep 17 00:00:00 2001
+From 55106a81b8e84275ba7ba28d15eb6be7ce2719d0 Mon Sep 17 00:00:00 2001
 From: SweetCapitan <danil.duhanin@yandex.ru>
 Date: Sun, 7 Sep 2025 02:37:12 +0300
-Subject: [PATCH 1/5] Add env variables and fix SHORT_BUILD_VERSION for
- Moonraker 0.8
+Subject: [PATCH 1/6] feat: add environment variables for LCD device and
+ Moonraker config
 
 ---
  main.py    | 13 ++++++++++---
@@ -72,14 +72,12 @@ index cfbf0bb..8d9bdcf 100644
 \ No newline at end of file
 +		self.sendGCode('SET_GCODE_OFFSET Z=%s MOVE=1' % offset)
 -- 
-2.47.2
+2.51.2
 
-
-From 580c6e1aacd8d8c5ef00d025cd790cd737da5706 Mon Sep 17 00:00:00 2001
+From 8bd69aa3e91a7a0f7693c2e349f5fbdf3f6ff4dc Mon Sep 17 00:00:00 2001
 From: SweetCapitan <danil.duhanin@yandex.ru>
 Date: Sun, 7 Sep 2025 02:44:07 +0300
-Subject: [PATCH 2/5] Add env variables and fix SHORT_BUILD_VERSION for
- Moonraker 0.8
+Subject: [PATCH 2/6] fix: correct indentation inconsistency in printer.py
 
 ---
  printer.py | 5 ++---
@@ -109,14 +107,12 @@ index 8d9bdcf..ea023a8 100644
  		toolhead = data['toolhead']
  		volume = toolhead['axis_maximum'] #[x,y,z,w]
 -- 
-2.47.2
+2.51.2
 
-
-From 464bc877b6b05b5baef153c5dae4501a1953eade Mon Sep 17 00:00:00 2001
+From c1692c5338f879a7ad8e30bd4ad2dbee6b467282 Mon Sep 17 00:00:00 2001
 From: SweetCapitan <danil.duhanin@yandex.ru>
 Date: Sun, 7 Sep 2025 02:50:23 +0300
-Subject: [PATCH 3/5] Add env variables and fix SHORT_BUILD_VERSION for
- Moonraker 0.8
+Subject: [PATCH 3/6] refactor: standardize indentation to tabs in printer.py
 
 ---
  printer.py | 16 ++++++++--------
@@ -155,14 +151,12 @@ index ea023a8..2277e05 100644
  		toolhead = data['toolhead']
  		volume = toolhead['axis_maximum'] #[x,y,z,w]
 -- 
-2.47.2
+2.51.2
 
-
-From 06fb3996dd735881dc14056669cddae95385a833 Mon Sep 17 00:00:00 2001
+From d4a7da334e142a06647efc87530a08b4e058fba4 Mon Sep 17 00:00:00 2001
 From: SweetCapitan <danil.duhanin@yandex.ru>
 Date: Sun, 7 Sep 2025 03:06:15 +0300
-Subject: [PATCH 4/5] Add env variables and fix SHORT_BUILD_VERSION for
- Moonraker 0.8
+Subject: [PATCH 4/6] fix: use max_accel value for max_accel_to_decel fallback
 
 ---
  printer.py | 2 +-
@@ -182,14 +176,13 @@ index 2277e05..7bbe1fc 100644
  
  	def get_gcode_store(self, count=100):
 -- 
-2.47.2
+2.51.2
 
-
-From d0118f35a378f9a9ff9894c37a9ad718d550da81 Mon Sep 17 00:00:00 2001
+From a0ce23ee2398979a8e63519d88eab8b70a367aed Mon Sep 17 00:00:00 2001
 From: SweetCapitan <danil.duhanin@yandex.ru>
 Date: Sun, 7 Sep 2025 03:48:39 +0300
-Subject: [PATCH 5/5] Add env variables and fix SHORT_BUILD_VERSION for
- Moonraker 0.8
+Subject: [PATCH 5/6] fix: filter non-ASCII chars in LCD write and correct
+ CR/LF order
 
 ---
  lcd.py | 16 ++++++++++++----
@@ -234,5 +227,206 @@ index ca31f69..ed41053 100644
          self.write("printpause.cp0.close()")
          self.write("printpause.cp0.aph=0")
 -- 
-2.47.2
+2.51.2
+
+From d4c1e332c818e05e74c8f7a76da134721af3e7a2 Mon Sep 17 00:00:00 2001
+From: SweetCapitan <danil.duhanin@yandex.ru>
+Date: Sun, 14 Jun 2026 01:10:13 +0300
+Subject: [PATCH 6/6] fix: make LED toggle work and make LED name configurable
+
+- Use correct LED name from LED_NAME env var (default 'LED_Light') instead of
+  hardcoded 'top_LEDs'
+- Pass actual float power (0.00-1.00) to SET_LED instead of hardcoded 0.5
+- Toggle handler in lcd.py now sends 0.0/1.0 instead of magic 0/128 values
+- Set the corresponding status_led2 flag on the HMI for each toggle state
+---
+ lcd.py     |  4 ++--
+ main.py    |  3 ++-
+ printer.py | 11 +++++------
+ 3 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/lcd.py b/lcd.py
+index ed41053..046ca13 100644
+--- a/lcd.py
++++ b/lcd.py
+@@ -899,11 +899,11 @@ class LCD:
+             if self.light == True:
+                 self.light = False
+                 self.write("status_led2=0")
+-                self.callback(self.evt.LIGHT, 0)
++                self.callback(self.evt.LIGHT, 0.0)
+             else:
+                 self.light = True
+                 self.write("status_led2=1")
+-                self.callback(self.evt.LIGHT, 128)
++                self.callback(self.evt.LIGHT, 1.0)
+ 
+         elif data[0] == 0x09: # Bed mesh leveling
+             # Wait for heaters?
+diff --git a/main.py b/main.py
+index 94c017d..61ae543 100755
+--- a/main.py
++++ b/main.py
+@@ -14,12 +14,13 @@ lcd_device = os.getenv('LCD_DEVICE', '/dev/ttyAMA0')
+ klippy_sock = os.getenv('KLIPPY_SOCK', '/home/pi/printer_data/comms/klippy.sock')
+ moonraker_url = os.getenv('MOONRAKER_URL', '127.0.0.1')
+ moonraker_key = os.getenv('MOONRAKER_KEY', 'XXXXXX')
++led_name = os.getenv('LED_NAME', 'LED_Light')
+ 
+ class KlipperLCD ():
+     def __init__(self):
+         self.lcd = LCD(lcd_device, callback=self.lcd_callback)
+         self.lcd.start()
+-        self.printer = PrinterData(moonraker_key, URL=moonraker_url, klippy_sock=klippy_sock, callback=self.printer_callback)
++        self.printer = PrinterData(moonraker_key, URL=moonraker_url, klippy_sock=klippy_sock, callback=self.printer_callback, led_name=led_name)
+         self.running = False
+         self.wait_probe = False
+         self.thumbnail_inprogress = False
+diff --git a/printer.py b/printer.py
+index 7bbe1fc..68c31b2 100644
+--- a/printer.py
++++ b/printer.py
+@@ -230,9 +230,10 @@ class PrinterData:
+ 	SHORT_BUILD_VERSION = "1.00"
+ 	CORP_WEBSITE_E = "https://www.klipper3d.org/"
+ 
+-	def __init__(self, API_Key, URL='127.0.0.1', klippy_sock='/home/pi/printer_data/comms/klippy.sock', callback=None):
++	def __init__(self, API_Key, URL='127.0.0.1', klippy_sock='/home/pi/printer_data/comms/klippy.sock', callback=None, led_name='LED_Light'):
+ 		self.response_callback = callback
+ 		self.klippy_sock      = klippy_sock
++		self.led_name         = led_name
+ 		self.BABY_Z_VAR       = 0
+ 		self.print_speed      = 100
+ 		self.flow_percentage  = 100
+@@ -612,11 +613,9 @@ class PrinterData:
+ 		self.sendGCode('M221 S%d' % fl)
+ 
+ 	def set_led(self, led):
+-		self.led_percentage = led
+-		if(led > 0):
+-			self.sendGCode('SET_LED LED=top_LEDs WHITE=0.5 SYNC=0 TRANSMIT=1')
+-		else:
+-			self.sendGCode('SET_LED LED=top_LEDs WHITE=0 SYNC=0 TRANSMIT=1')
++		power = max(0.0, min(1.0, float(led)))
++		self.led_percentage = power
++		self.sendGCode('SET_LED LED=%s WHITE=%.2f SYNC=0 TRANSMIT=1' % (self.led_name, power))
+ 
+ 	def set_fan(self, fan):
+ 		self.fan_percentage = fan
+-- 
+2.51.2
+
+From a7243a17c9e24c7ac31542c2ee7a48113ef5848b Mon Sep 17 00:00:00 2001
+From: SweetCapitan <danil.duhanin@yandex.ru>
+Date: Sun, 14 Jun 2026 13:41:59 +0300
+Subject: [PATCH 7/9] fix: handle SerialException and generic exceptions in LCD
+ read loop
+
+- Wrap serial read in try/except to prevent thread crash on errors
+- Catch serial.SerialException for hardware-level failures with TODO for retry logic
+- Catch generic Exception as safety net to log unexpected errors
+---
+ lcd.py | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/lcd.py b/lcd.py
+index 046ca13..10892e7 100644
+--- a/lcd.py
++++ b/lcd.py
+@@ -430,6 +430,7 @@ class LCD:
+ 
+     def run(self):
+         while self.running:
++            try:
+                 incomingByte = self.ser.read(1)
+                 #
+                 if self.rx_state == RX_STATE_IDLE:
+@@ -470,6 +471,11 @@ class LCD:
+                         self.rx_buf.clear()
+                         self.rx_data_cnt = 0
+                         self.rx_state = RX_STATE_IDLE
++            except serial.SerialException as e:
++                print(f"Serial read failed :{e}")
++                # TODO: retry logic
++            except Exception as e:
++                print(f"Unexpected error: {e}")
+ 
+     def _handle_command(self, cmd, dat):
+         if cmd == CMD_WRITEVAR: #0x82
+-- 
+2.51.2
+
+From af88a3c573dfbdec40d396648b65187d18a09e4d Mon Sep 17 00:00:00 2001
+From: SweetCapitan <danil.duhanin@yandex.ru>
+Date: Sun, 14 Jun 2026 13:54:32 +0300
+Subject: [PATCH 8/9] feat: add optional sorting by modified date to GetFiles
+
+- Add sort_by_modified and descending parameters to GetFiles method
+- Return empty list on REST exception instead of None (avoids iteration errors)
+- Use list comprehension for building names list
+---
+ printer.py | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/printer.py b/printer.py
+index 68c31b2..8ff5b12 100644
+--- a/printer.py
++++ b/printer.py
+@@ -471,15 +471,22 @@ class PrinterData:
+ 					macros.append(macro)
+ 		return macros	
+ 
+-	def GetFiles(self, refresh=False):
++	def GetFiles(self, refresh=False, sort_by_modified=False, descending=True):
+ 		if not self.files or refresh:
+ 			try:
+ 				self.files = self.getREST('/server/files/list')["result"]
+ 			except:
+ 				print("Exception 418")
+-		names = []
+-		for fl in self.files:
+-			names.append(fl["path"])
++				return []
++
++		if sort_by_modified and self.files:
++			self.files = sorted(
++				self.files,
++				key=lambda f: f["modified"],
++				reverse=descending
++			)
++
++		names = [fl["path"] for fl in self.files]
+ 		return names
+ 
+ 	def update_variable(self):
+-- 
+2.51.2
+
+From e392b9d1ffb399ea26752d151706a44e7ebc9d12 Mon Sep 17 00:00:00 2001
+From: SweetCapitan <danil.duhanin@yandex.ru>
+Date: Sun, 14 Jun 2026 13:54:50 +0300
+Subject: [PATCH 9/9] feat: sort file list by modified date in FILES event
+ handler
+
+Pass sort_by_modified=True to GetFiles so the LCD displays files
+ordered by most recently modified first.
+---
+ main.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/main.py b/main.py
+index 61ae543..9b6d095 100755
+--- a/main.py
++++ b/main.py
+@@ -162,7 +162,7 @@ class KlipperLCD ():
+         elif evt == self.lcd.evt.BED:
+             self.printer.setBedTemp(data)
+         elif evt == self.lcd.evt.FILES:
+-            files = self.printer.GetFiles(True)
++            files = self.printer.GetFiles(refresh=True, sort_by_modified=True)
+             return files
+         elif evt == self.lcd.evt.PRINT_START:
+             self.printer.openAndPrintFile(data)
+-- 
+2.51.2
 
