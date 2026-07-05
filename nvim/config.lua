@@ -32,9 +32,9 @@ end
 ----------------
 -- nord theme --
 ----------------
-vim.g.nord_contrast = false
+vim.g.nord_contrast = true
 vim.g.nord_borders = true
-vim.g.nord_disable_background = false
+vim.g.nord_disable_background = true
 vim.g.nord_italic = true
 vim.g.nord_uniform_diff_background = true
 vim.g.nord_enable_sidebar_background = true
@@ -64,6 +64,47 @@ require("noice").setup(
     }
   }
 )
+
+require("Comment").setup()
+
+require("which-key").setup({
+  delay = 500,
+  icons = {
+    mapping = true
+  },
+  spec = {
+    { "<leader>s",  desc = "Save file" },
+    { "<leader>q",  desc = "Quit" },
+    { "<leader>v",  desc = "Vertical split" },
+    { "<leader>ca", desc = "Code action" },
+    { "<leader>ci", desc = "Incoming calls" },
+    { "<leader>co", desc = "Outgoing calls" },
+    { "<leader>f",  desc = "Format file" },
+    { "<leader>ff", desc = "Apply fixes" },
+    { "<leader>p",  desc = "Find files" },
+    { "<leader>g",  desc = "Live grep" },
+    { "<leader>b",  desc = "Buffers" },
+    { "<leader>r",  desc = "Recent files" },
+    { "<leader>fw", desc = "Find word under cursor" },
+    { "<leader>fs", desc = "Workspace symbols" },
+    { "<leader>ls", desc = "Document symbols" },
+    -- groups
+    { "<leader>s",  group = "diagnostics" },
+    { "<leader>sl", desc = "Show line diagnostics" },
+    { "<leader>sc", desc = "Show cursor diagnostics" },
+    { "<leader>sb", desc = "Show buffer diagnostics" },
+  },
+})
+
+require("fzf-lua").setup({
+  winopts = {
+    height = 0.85,
+    width = 0.80,
+    preview = {
+      layout = "vertical",
+    }
+  }
+})
 
 -------------------
 -- About lualine --
@@ -299,7 +340,12 @@ require("null-ls").setup(
   {
     sources = {
       -- you must download code formatter by yourself!
-      require("null-ls").builtins.formatting.nixfmt
+      require("null-ls").builtins.formatting.nixfmt,
+      require("null-ls").builtins.formatting.black,
+      require("null-ls").builtins.formatting.isort,
+    -- or use ruff instead:
+    -- require("null-ls").builtins.diagnostics.ruff,
+    -- require("null-ls").builtins.formatting.ruff_format,
     },
     debug = false,
     on_attach = function(client, bufnr)
@@ -402,6 +448,18 @@ nvim_lsp.nixd.setup(
     }
   }
 )
+nvim_lsp.pyright.setup {
+  capabilities = capabilities,
+  settings = {
+    python = {
+      analysis = {
+        typeCheckingMode = "basic",
+        autoSearchPaths = true,
+        useLibraryCodeForTypes = true
+      }
+    }
+  }
+}
 nvim_lsp.lua_ls.setup {
   on_init = function(client)
     if client.workspace_folders then
@@ -545,6 +603,20 @@ keymap("t", "<A-d>", "<cmd>Lspsaga term_toggle<CR>", { silent = true, desc = "Fl
 keymap("n", "<leader>f", function()
   vim.lsp.buf.format({ async = true })
 end, { silent = true, desc = "Format file via lsp" })
+
+keymap("n", "<leader>p", "<cmd>FzfLua files<CR>", { silent = true, desc = "Find files" })
+-- Поиск по содержимому (grep)
+keymap("n", "<leader>g", "<cmd>FzfLua live_grep<CR>", { silent = true, desc = "Live grep" })
+-- Поиск по открытым буферам
+keymap("n", "<leader>b", "<cmd>FzfLua buffers<CR>", { silent = true, desc = "Buffers" })
+-- Поиск по истории
+keymap("n", "<leader>r", "<cmd>FzfLua oldfiles<CR>", { silent = true, desc = "Recent files" })
+-- Поиск слова под курсором
+keymap("n", "<leader>fw", "<cmd>FzfLua grep_cword<CR>", { silent = true, desc = "Find word under cursor" })
+-- Поиск символов во всём проекте (функции, классы и т.д.)
+keymap("n", "<leader>fs", "<cmd>FzfLua lsp_workspace_symbols<CR>", { silent = true, desc = "Workspace symbols" })
+-- Поиск символов только в текущем файле
+keymap("n", "<leader>ls", "<cmd>FzfLua lsp_document_symbols<CR>", { silent = true, desc = "Document symbols" })
 
 
 vim.api.nvim_create_autocmd('LspAttach', {

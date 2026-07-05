@@ -30,7 +30,7 @@
     ./valent.nix
   ];
 
-  # systemd.user.services.load-llama-image = {
+  # spyrightystemd.user.services.load-llama-image = {
   #   description = "Load llama-server image into user podman";
   #   wantedBy = [ "default.target" ];
   #   script = ''
@@ -198,6 +198,7 @@
 
     xclip
     opencode
+    pi-coding-agent
     bun
     crush
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -207,6 +208,12 @@
     llama-cpp
     nvtopPackages.nvidia
     # unstable.llama-cpp-vulkan
+    pyright
+    ruff
+    isort
+    fzf
+    fd
+    ripgrep
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {
@@ -222,7 +229,6 @@
 
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
-
   environment.gnome.excludePackages = (
     with pkgs;
     [
@@ -294,6 +300,7 @@
     (import ./bun-baseline.nix)
     (import ./opencode-unstable.nix inputs.nixpkgs_unstable)
     (import ./llama-cuda-overlay.nix inputs.nixpkgs_unstable_small)
+    inputs.pi.overlays.default
   ];
 
   networking = {

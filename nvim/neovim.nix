@@ -20,6 +20,9 @@
 
         packages.myPlugins.start = with pkgs.vimPlugins; [
           nvim-treesitter
+          fzf-lua
+          which-key-nvim
+          comment-nvim
           (nvim-treesitter.withPlugins (
             parsers:
             builtins.attrValues {
@@ -29,6 +32,7 @@
                 markdown_inline
                 lua
                 vim
+                python
                 ;
             }
           ))

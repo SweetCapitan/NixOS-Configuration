@@ -1,18 +1,94 @@
 {
   "$schema": "https://opencode.ai",
+  "provider": {
+    "llama.cpp": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "llama-server (local)",
+      "options": {
+        "baseURL": "http://127.0.0.1:8080/v1"
+      },
+      "models": {
+        "RJ000/Mellum2-12B-A2.5B-Thinking-GGUF:Q4_K_M": {
+          "name": "Mellum2-12B-A2",
+          "limit": {
+            "context": 128000,
+            "output": 32768
+          }
+        },
+        "unsloth/Qwen3.5-4B-MTP-GGUF:Q4_K_M": {
+          "name": "Qwen3-4B",
+          "limit": {
+            "context": 60000,
+            "output": 32768
+          }
+        },
+        "target.gguf": {
+          "name": "Qwen3-4B-Dflash",
+          "limit": {
+            "context": 32000,
+            "output": 32768
+          }
+        },
+        "unsloth/LFM2.5-8B-A1B-GGUF:UD-IQ2_XXS": {
+          "name": "LFM2",
+          "limit": {
+            "context": 128000,
+            "output": 32768
+          }
+        }
+      }
+    }
+  },
   "mcp": {
     "nixos": {
       "type": "local",
-      "command": ["docker", "run", "--rm", "-i", "ghcr.io/utensils/mcp-nixos"]
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "-i",
+        "ghcr.io/utensils/mcp-nixos"
+      ]
     },
-    "open-pencil": {
+    "idea-mcp": {
       "type": "local",
-      "command": ["/run/current-system/sw/bin/bun", "x", "@open-pencil/mcp"]
+      "environment": {
+        "IJ_MCP_SERVER_PORT": "64342"
+      },
+      "command": [
+        "/nix/store/ma1ychmfgr1279v7cz1l1xx4bc48ld1s-jetbrains-jdk-jcef-21.0.9-b1163.86/lib/openjdk/bin/java",
+        "-classpath",
+        "/nix/store/ld3x4y8shybjmbi7kn0mbsnjka20x46p-idea-2025.3.1/idea/plugins/mcpserver/lib/mcpserver-frontend.jar:/nix/store/ld3x4y8shybjmbi7kn0mbsnjka20x46p-idea-2025.3.1/idea/lib/util-8.jar:/nix/store/ld3x4y8shybjmbi7kn0mbsnjka20x46p-idea-2025.3.1/idea/lib/module-intellij.libraries.ktor.client.cio.jar:/nix/store/ld3x4y8shybjmbi7kn0mbsnjka20x46p-idea-2025.3.1/idea/lib/module-intellij.libraries.ktor.client.jar:/nix/store/ld3x4y8shybjmbi7kn0mbsnjka20x46p-idea-2025.3.1/idea/lib/module-intellij.libraries.ktor.network.tls.jar:/nix/store/ld3x4y8shybjmbi7kn0mbsnjka20x46p-idea-2025.3.1/idea/lib/module-intellij.libraries.ktor.io.jar:/nix/store/ld3x4y8shybjmbi7kn0mbsnjka20x46p-idea-2025.3.1/idea/lib/module-intellij.libraries.ktor.utils.jar:/nix/store/ld3x4y8shybjmbi7kn0mbsnjka20x46p-idea-2025.3.1/idea/lib/module-intellij.libraries.kotlinx.io.jar:/nix/store/ld3x4y8shybjmbi7kn0mbsnjka20x46p-idea-2025.3.1/idea/lib/module-intellij.libraries.kotlinx.serialization.core.jar:/nix/store/ld3x4y8shybjmbi7kn0mbsnjka20x46p-idea-2025.3.1/idea/lib/module-intellij.libraries.kotlinx.serialization.json.jar",
+        "com.intellij.mcpserver.stdio.McpStdioRunnerKt"
+      ]
+    },
+    "idea-indexes-mcp": {
+      "type": "remote",
+      "url": "http://127.0.0.1:29170/index-mcp/streamable-http",
+      "enabled": true
+    },
+    "searxng": {
+      "type": "local",
+      "command": [
+        "podman",
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "SEARXNG_URL",
+        "docker.io/isokoliuk/mcp-searxng:latest"
+      ],
+      "enabled": true,
+      "environment": {
+        "SEARXNG_URL": "http://host.containers.internal:8888"
+      }
     }
   },
   "lsp": {
     "nixd": {
-      "command": ["nixd"]
+      "command": [
+        "nixd"
+      ]
     }
   }
 }

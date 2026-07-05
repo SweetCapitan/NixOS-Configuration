@@ -20,7 +20,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disk-config.nix
-    ./kubernetes.nix
+    # ./kubernetes.nix
     #    ../common/users/dancho.nix
   ];
 
@@ -43,7 +43,10 @@
         "flakes"
       ];
       auto-optimise-store = true;
-      trusted-users = ["root" "@wheel"];
+      trusted-users = [
+        "root"
+        "@wheel"
+      ];
     };
     gc = {
       automatic = true;
@@ -59,17 +62,30 @@
   ];
 
   nixpkgs.config.allowUnfree = true;
-  
+  virtualisation.diskSize = 10240;
+
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [
       22
       80
+      6443
     ];
+    allowedUDPPorts = [ ];
   };
-  services.openssh.enable = true;
+  services.k3s = {
+    enable = true;
+    role = "server";
+  };
   services.sshd.enable = true;
   users.users.root.password = "supersecret";
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = true;
+      PermitRootLogin = "yes";
+    };
+  };
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
   ];
