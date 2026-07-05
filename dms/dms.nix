@@ -39,17 +39,33 @@
           sha256 = "sha256-iWfw7WF6EiLUnsQgsyJWGuacU09eyZZRdMBbRp7E/DA=";
         };
       };
-      PhoneConnect = {
-        src = pkgs.fetchFromGitHub {
-          owner = "AvengeMedia";
-          repo = "dms-plugins";
-          rev = "f4583449f12920e0a2f16808b00a860c27f0173d";
-          sparseCheckout = [
-            "DankKDEConnect"
-          ];
-          hash = "sha256-Cf14fRSn/M8VfAhfqqpoV5yUDI/V41/ev5dyoR6dWKU=";
-        };
+      DankKDEConnect = {
+        src = pkgs.runCommand "DankKDEConnect-source" { } ''
+          mkdir -p $out
+          # Копируем содержимое конкретной подпапки из скачанного репозитория в корень
+          cp -rT ${
+            pkgs.fetchFromGitHub {
+              owner = "AvengeMedia";
+              repo = "dms-plugins";
+              rev = "master";
+              hash = "sha256-QkQPqP7Wmo5DLRyKNSY5NuOau4LSaSfz3DYdHDLxluA=";
+            }
+          }/DankKDEConnect $out/
+        '';
       };
+
+      # PhoneConnect = {
+      #   src = pkgs.fetchFromGitHub {
+      #     owner = "AvengeMedia";
+      #     repo = "dms-plugins";
+      #     rev = "f4583449f12920e0a2f16808b00a860c27f0173d";
+      #     sparseCheckout = [
+      #       "dms-plugins/DankKDEConnect"
+      #     ];
+      #     rootDir = "dms-plugins/DankKDEConnect";
+      #     hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      #   };
+      # };
     };
   };
   services.displayManager.dms-greeter = {
