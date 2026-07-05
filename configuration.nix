@@ -49,7 +49,7 @@
   #boot.loader.systemd-boot.enable = true;
   boot.kernelParams = [ "mitigations=off" ];
 
-  boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelPackages = pkgs.linuxPackages_6_12; #setup later lts version or 6.18.
   boot.loader = {
     efi = {
       #canTouchEfiVariables = true;
@@ -79,7 +79,7 @@
     open = false;
     nvidiaSettings = true;
     modesetting.enable = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
   };
   hardware.nvidia-container-toolkit.enable = true;
 
