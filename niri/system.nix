@@ -33,7 +33,6 @@
     xdgOpenUsePortal = true;
   };
 
-  # в system.nix, после portal блока:
   systemd.user.services.xdg-desktop-portal-gtk = {
     serviceConfig = {
       Environment = "GDK_BACKEND=wayland";

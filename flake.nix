@@ -45,6 +45,10 @@
       url = "github:AvengeMedia/danksearch";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    dms-plugin-registry = {
+      url = "github:AvengeMedia/dms-plugin-registry";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     pi = {
       url = "github:lukasl-dev/pi.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -72,7 +76,7 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./gnome/settings.nix
-          ./niri/system.nix
+          # ./niri/system.nix
           ./configuration.nix
           inputs.dms.nixosModules.greeter
           impermanence.nixosModules.impermanence

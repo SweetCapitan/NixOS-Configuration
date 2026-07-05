@@ -7,7 +7,7 @@
 }:
 
 let
-  niriModule = import ./niri/home.nix {
+  niriModule = import ./dms/home.nix {
     inherit
       config
       pkgs
@@ -23,8 +23,8 @@ in
     ./gnomeExtensionsDconf.nix
     ./nvim/neovim.nix
     niriModule
-    inputs.dms.homeModules.dank-material-shell
-    inputs.danksearch.homeModules.dsearch
+    # inputs.dms.homeModules.dank-material-shell
+    # inputs.danksearch.homeModules.dsearch
   ];
 
   # programs.dank-material-shell is enabled via inputs.dms.homeModules.dank-material-shell
@@ -64,6 +64,7 @@ in
     settings = {
       theme = "dark:dankcolors,light:dankcolors";
       shell-integration-features = "ssh-terminfo,ssh-env";
+      window-decoration = "none";
       #theme = "dark:JetBrains Darcula,light:Material";
 
     };
