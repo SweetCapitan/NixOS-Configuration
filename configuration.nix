@@ -325,14 +325,9 @@
       "podman"
     ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
-      #jetbrains.idea-ultimate
       home-manager
-      firefox
-      #vim
-      #     tree
     ];
   };
 
   system.stateVersion = "23.11"; # Did you read the comment?
-
 }
