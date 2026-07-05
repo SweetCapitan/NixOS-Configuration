@@ -138,16 +138,37 @@ require("bufferline").setup(
 ----------------------
 -- About treesitter --
 ----------------------
-require("nvim-treesitter.configs").setup(
-  {
-    highlight = {
-      enable = true
-    },
-    indent = {
-      enable = true
-    }
-  }
-)
+
+-- Настройка нового nvim-treesitter под NixOS
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  callback = function(event)
+    local ft = vim.bo[event.buf].ft
+
+    -- Проверяем, есть ли у Neovim скомпилированный парсер для этого языка (из Nix)
+    local lang = vim.treesitter.language.get_lang(ft) or ft
+    local has_parser = pcall(vim.treesitter.query.get, lang, "highlights")
+
+    if has_parser then
+      -- 1. Включаем нативную подсветку синтаксиса
+      pcall(vim.treesitter.start, event.buf)
+
+      -- 2. Включаем умные отступы из nvim-treesitter (вместо старого `indent = { enable = true }`)
+      local ts_ok, _ = pcall(require, 'nvim-treesitter')
+      if ts_ok then
+        vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      end
+
+      -- 3. Опционально: Включаем фолдинг (сворачивание кода) на базе Treesitter
+      -- vim.wo.foldmethod = 'expr'
+      -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    end
+  end,
+})
+
+-- require('nvim-treesitter.configs').setup({
+--   highlight = { enable = true },
+--   indent    = { enable = true },
+-- })
 
 ---------------
 -- About cmp --
@@ -336,40 +357,40 @@ local lsp_formatting = function(bufnr)
     }
   )
 end
-require("null-ls").setup(
-  {
-    sources = {
-      -- you must download code formatter by yourself!
-      require("null-ls").builtins.formatting.nixfmt,
-      require("null-ls").builtins.formatting.black,
-      require("null-ls").builtins.formatting.isort,
-    -- or use ruff instead:
-    -- require("null-ls").builtins.diagnostics.ruff,
-    -- require("null-ls").builtins.formatting.ruff_format,
-    },
-    debug = false,
-    on_attach = function(client, bufnr)
-      if client.supports_method("textDocument/formatting") then
-        vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-        vim.api.nvim_create_autocmd(
-          "BufWritePost",
-          {
-            group = augroup,
-            buffer = bufnr,
-            callback = function()
-              async_formatting(bufnr)
-              lsp_formatting(bufnr)
-            end
-          }
-        )
-      end
-    end
-  }
-)
 ---------------------
 -- About lspconfig --
+local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+
+require("null-ls").setup({
+  sources = {
+    require("null-ls").builtins.formatting.nixfmt,
+    require("null-ls").builtins.formatting.black,
+    require("null-ls").builtins.formatting.isort,
+  },
+  debug = false,
+  on_attach = function(client, bufnr)
+    -- ИСПРАВЛЕНО: заменили точку на двоеточие
+    if client:supports_method("textDocument/formatting") then
+      vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+      vim.api.nvim_create_autocmd("BufWritePre", { -- BufWritePre лучше, чтобы файл сохранялся уже красивым
+        group = augroup,
+        buffer = bufnr,
+        callback = function()
+          -- Современный нативный способ асинхронного форматирования при сохранении
+          vim.lsp.buf.format({ 
+            bufnr = bufnr,
+            filter = function(c) 
+              -- Форматируем только через none-ls (null-ls), чтобы не было конфликтов с другими LSP
+              return c.name == "null-ls" 
+            end 
+          })
+        end,
+      })
+    end
+  end,
+})
 ---------------------
-local nvim_lsp = require("lspconfig")
+-- local nvim_lsp = require("lspconfig")
 
 -- Add additional capabilities supported by nvim-cmp
 -- nvim hasn't added foldingRange to default capabilities, users must add it manually
@@ -423,7 +444,7 @@ local on_attach = function(bufnr)
     }
   )
 end
-nvim_lsp.nixd.setup(
+vim.lsp.config.nixd =
   {
     --on_attach = on_attach,
     capabilities = capabilities,
@@ -447,8 +468,9 @@ nvim_lsp.nixd.setup(
       }
     }
   }
-)
-nvim_lsp.pyright.setup {
+vim.lsp.enable("nixd")
+
+vim.lsp.config.pyright = {
   capabilities = capabilities,
   settings = {
     python = {
@@ -460,7 +482,8 @@ nvim_lsp.pyright.setup {
     }
   }
 }
-nvim_lsp.lua_ls.setup {
+vim.lsp.enable("pyright")
+vim.lsp.config.lua_ls = {
   on_init = function(client)
     if client.workspace_folders then
       local path = client.workspace_folders[1].name
@@ -495,6 +518,7 @@ nvim_lsp.lua_ls.setup {
     Lua = {}
   }
 }
+vim.lsp.enable("lua_ls")
 
 -------------------
 -- About lspsaga --

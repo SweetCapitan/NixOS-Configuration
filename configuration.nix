@@ -1,7 +1,3 @@
-#Edt this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
 {
   config,
   lib,
@@ -20,7 +16,7 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ./nvim/neovim.nix
+    # ./nvim/neovim.nix
     # ./syncthings.nix # disabled
     #currently not needed :D
     ./common/network/tele2_ttl_change.nix
@@ -49,7 +45,7 @@
   #boot.loader.systemd-boot.enable = true;
   boot.kernelParams = [ "mitigations=off" ];
 
-  boot.kernelPackages = pkgs.linuxPackages_6_12; #setup later lts version or 6.18.
+  boot.kernelPackages = pkgs.linuxPackages_6_12; # setup later lts version or 6.18.
   boot.loader = {
     efi = {
       #canTouchEfiVariables = true;
@@ -214,6 +210,7 @@
     fzf
     fd
     ripgrep
+    tree-sitter
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {

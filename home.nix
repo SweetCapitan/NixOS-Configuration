@@ -21,6 +21,7 @@ in
   imports = [
     ./gnomeExtensions.nix
     ./gnomeExtensionsDconf.nix
+    ./nvim/neovim.nix
     niriModule
     inputs.dms.homeModules.dank-material-shell
     inputs.danksearch.homeModules.dsearch
