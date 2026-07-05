@@ -65,6 +65,7 @@ in
       theme = "dark:dankcolors,light:dankcolors";
       shell-integration-features = "ssh-terminfo,ssh-env";
       window-decoration = "none";
+      window-theme = "ghostty";
       #theme = "dark:JetBrains Darcula,light:Material";
 
     };
