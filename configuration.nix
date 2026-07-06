@@ -215,47 +215,9 @@
     cups-pk-helper
     edac-utils # sudo edac-util -v
   ];
-  #programs.nixvim.enable = true;
-  #programs.neovim = {
-  #	enable = true;
-  #	vialias = true;
-  #	vimalias = true;
-  #	configure = {
-  #		customrc = ''
-  #			set equalprg=nixfmt\
-  #			'';
-  #	};
-  #};
 
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
-  environment.gnome.excludePackages = (
-    with pkgs;
-    [
-      gnome-photos
-      gnome-tour
-      gedit
-      cheese # webcam tool - moved to top-level in 25.11
-      gnome-music # moved to top-level in 25.11
-      gnome-terminal # moved to top-level in 25.11
-      epiphany # web browser - moved to top-level in 25.11
-      geary # email reader - moved to top-level in 25.11
-      evince # document viewer - moved to top-level in 25.11
-      gnome-characters # moved to top-level in 25.11
-      totem # video player - moved to top-level in 25.11
-      gnome-weather # moved to top-level in 25.11
-      gnome-contacts # moved to top-level in 25.11
-      simple-scan # moved to top-level in 25.11
-      tali # poker game - moved to top-level in 25.11
-      iagno # go game - moved to top-level in 25.11
-      hitori # sudoku game - moved to top-level in 25.11
-      atomix # puzzle game - moved to top-level in 25.11
-    ]
-  );
-  # Remaining games still in pkgs.gnome:
-  # (none currently - all moved)
-
-  # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 

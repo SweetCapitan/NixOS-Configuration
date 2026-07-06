@@ -75,8 +75,6 @@
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
         modules = [
-          ./gnome/settings.nix
-          # ./niri/system.nix
           ./configuration.nix
           inputs.dms.nixosModules.greeter
           impermanence.nixosModules.impermanence
