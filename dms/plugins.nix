@@ -7,10 +7,10 @@
       rev = "v1.2.0";
       sha256 = "sha256-VoJCaygWnKpv0s0pqTOmzZnPM922qPDMHk4EPcgVnaU=";
     };
-    # settings = {
-    #   enabled = true;
-    #   dockerBinary = "podman";
-    # };
+    settings = {
+      enabled = true;
+      dockerBinary = "podman";
+    };
   };
   ActivateLinux = {
     src = pkgs.fetchFromGitHub {
@@ -18,6 +18,9 @@
       repo = "dms-activate-linux";
       rev = "34f359aedcac9d27ff5df51d43cc41031ea00f80";
       sha256 = "sha256-iWfw7WF6EiLUnsQgsyJWGuacU09eyZZRdMBbRp7E/DA=";
+    };
+    settings = {
+      enabled = true;
     };
   };
   DankKDEConnect = {
@@ -32,9 +35,10 @@
         }
       }/DankKDEConnect $out/
     '';
-    # settings = {
-    #   enabled = true;
-    # };
+    settings = {
+      enabled = true;
+      selectedDeviceId = "4bc00011_17ea_4b2d_aa95_6a03c0b54803";
+    };
   };
-  # lyricsOnPanel.enabled = true;
+  lyricsOnPanel.enable = true;
 }

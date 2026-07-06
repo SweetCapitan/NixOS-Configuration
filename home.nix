@@ -7,7 +7,7 @@
 }:
 
 let
-  niriModule = import ./dms/home.nix {
+  dmsHomeModule = import ./dms/homeModules.nix {
     inherit
       config
       pkgs
@@ -22,7 +22,7 @@ in
     ./gnomeExtensions.nix
     ./gnomeExtensionsDconf.nix
     ./nvim/neovim.nix
-    niriModule
+    dmsHomeModule
     # inputs.dms.homeModules.dank-material-shell
     # inputs.danksearch.homeModules.dsearch
   ];
