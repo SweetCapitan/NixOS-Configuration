@@ -212,6 +212,7 @@
     fd
     ripgrep
     tree-sitter
+    cups-pk-helper
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {

@@ -29,5 +29,6 @@
     compositor = {
       name = "niri";
     };
+    configHome = "/home/dancho";
   };
 }

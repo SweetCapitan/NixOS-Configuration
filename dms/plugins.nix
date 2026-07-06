@@ -7,6 +7,10 @@
       rev = "v1.2.0";
       sha256 = "sha256-VoJCaygWnKpv0s0pqTOmzZnPM922qPDMHk4EPcgVnaU=";
     };
+    # settings = {
+    #   enabled = true;
+    #   dockerBinary = "podman";
+    # };
   };
   ActivateLinux = {
     src = pkgs.fetchFromGitHub {
@@ -28,5 +32,9 @@
         }
       }/DankKDEConnect $out/
     '';
+    # settings = {
+    #   enabled = true;
+    # };
   };
+  # lyricsOnPanel.enabled = true;
 }
