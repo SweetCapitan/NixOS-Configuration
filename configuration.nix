@@ -24,7 +24,7 @@
     ./project_mayhem_service.nix
     ./impermanence.nix
     ./valent.nix
-    ./dms/dms.nix
+    # ./dms/dms.nix
   ];
 
   # spyrightystemd.user.services.load-llama-image = {
@@ -213,6 +213,7 @@
     ripgrep
     tree-sitter
     cups-pk-helper
+    edac-utils # sudo edac-util -v
   ];
   #programs.nixvim.enable = true;
   #programs.neovim = {
