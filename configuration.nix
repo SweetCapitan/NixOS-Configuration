@@ -27,7 +27,7 @@
     ./dms/nixosModules.nix
   ];
 
-  # spyrightystemd.user.services.load-llama-image = {
+  # systemd.user.services.load-llama-image = {
   #   description = "Load llama-server image into user podman";
   #   wantedBy = [ "default.target" ];
   #   script = ''
@@ -41,9 +41,6 @@
   #   };
   # };
 
-  #-------------------------------------------
-  # Use the systemd-boot EFI boot loader.
-  #boot.loader.systemd-boot.enable = true;
   boot.kernelParams = [ "mitigations=off" ];
 
   boot.kernelPackages = pkgs.linuxPackages_6_12; # setup later lts version or 6.18.
@@ -65,11 +62,9 @@
     enable = true;
     enable32Bit = true;
     extraPackages = with pkgs; [
-      # Это добавит libvulkan_nvidia.so и правильный ICD
       nvidia-vaapi-driver
       vulkan-loader
       vulkan-validation-layers
-      vulkan-tools # даст vulkaninfo
     ];
   };
   hardware.nvidia = {
@@ -127,14 +122,6 @@
     ];
   };
 
-  #boot.loader.grub.enable = true;
-  #boot.loader.efi.canTouchEfiVariables = true;
-
-  # networking.hostName = "nixos"; # Define your hostname.
-  # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
-
   services.openssh = {
     enable = true;
     ports = [ 22 ];
@@ -157,12 +144,13 @@
         "flakes"
       ];
       auto-optimise-store = true;
-      substituters = [
-        "https://cache.nixos-cuda.org"
-      ];
-      trusted-public-keys = [
-        "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
-      ];
+      # Disabled because not work without proxy
+      # substituters = [
+      #   "https://cache.nixos-cuda.org"
+      # ];
+      # trusted-public-keys = [
+      #   "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
+      # ];
     };
     gc = {
       automatic = true;
@@ -175,89 +163,19 @@
 
   environment.variables.BROWSER = "zen";
 
-  environment.systemPackages = with pkgs; [
-    nixfmt-rfc-style
-    sing-box # TODO: remove /usr/share/sing-box/geoip.db
-    sing-geoip
-    sing-geosite
-    nixd
-    lua-language-server
-
-    #FONTS - removed nerdfonts in 25.11 (use specific fonts)
-    #nerd-fonts.jetbrains-mono
-    lazygit
-
-    spotify
-    wireshark
-    dconf-editor
-    orca-slicer
-    podman-compose
-
-    xclip
-    opencode
-    pi-coding-agent
-    bun
-    crush
-    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
-    valent
-
-    cudatoolkit
-    llama-cpp
-    nvtopPackages.nvidia
-    # unstable.llama-cpp-vulkan
-    pyright
-    ruff
-    isort
-    fzf
-    fd
-    ripgrep
-    tree-sitter
-    cups-pk-helper
-    edac-utils # sudo edac-util -v
-  ];
-
+  environment.systemPackages = import ./systemPackages.nix {
+    inherit pkgs inputs;
+  };
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
-  # };
-
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
-
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-  # Enable sound.
-  # sound.enable = true;
-  # hardware.pulseaudio.enable = true;
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
   nixpkgs.config.allowUnfree = true;
-  # nixpkgs.config.cudaSupport = true;
-  # nixpkgs.config.cudaCapabilities = [ "6.1" ];
-  # nixpkgs.config.allowUnsupportedSystem = false;
-  # nixpkgs.config.cudaForwardCompat = false;
-  # nixpkgs.config.cudaPackages = "cudaPackages_12_9";
-  #  hardware = {
-  #    opengl.enable = true;
-  #    nvidia.modesetting.enable = true;
-  #  };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   nixpkgs.overlays = [
     (import ./bun-baseline.nix)
     (import ./opencode-unstable.nix inputs.nixpkgs_unstable)
