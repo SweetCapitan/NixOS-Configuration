@@ -66,6 +66,8 @@ in
       shell-integration-features = "ssh-terminfo,ssh-env";
       window-decoration = "none";
       window-theme = "ghostty";
+      background-opacity = 0.4;
+      background-blur = 10;
       #theme = "dark:JetBrains Darcula,light:Material";
 
     };
