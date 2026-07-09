@@ -10,7 +10,6 @@
 
   spotify
   wireshark
-  dconf-editor
   orca-slicer
   podman-compose
 

@@ -7,7 +7,7 @@
 }:
 {
   imports = [
-    inputs.dms-plugin-registry.nixosModules.default
+    inputs.dms-plugin-registry.homeModules.default
     inputs.dms.homeModules.dank-material-shell
   ];
   programs.dank-material-shell = {
@@ -16,13 +16,14 @@
       enable = true;
       restartIfChanged = true;
     };
+    managePluginSettings = true;
     enableSystemMonitoring = true; # System monitoring widgets (dgop)
     enableVPN = true; # VPN management widget
     enableDynamicTheming = true; # Wallpaper-based theming (matugen)
     enableAudioWavelength = true; # Audio visualizer (cava)
     enableCalendarEvents = true; # Calendar integration (khal)
     enableClipboardPaste = true;
-    plugins = import ./plugins.nix { inherit pkgs; };
+    plugins = import ./plugins.nix { inherit pkgs lib; };
     quickshell.package = pkgs.quickshell;
   };
   xdg.configFile."DankMaterialShell/settings.json".source =
