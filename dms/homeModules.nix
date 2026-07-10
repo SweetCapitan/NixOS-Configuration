@@ -26,6 +26,15 @@
     plugins = import ./plugins.nix { inherit pkgs lib; };
     quickshell.package = pkgs.quickshell;
   };
+  qt = {
+    enable = true;
+    platformTheme.name = "qt6ct";
+  };
+  home.sessionVariables = {
+    QT_QPA_PLATFORMTHEME = "qt6ct";
+    QT_SELECT = "6";
+  };
+
   xdg.configFile."DankMaterialShell/settings.json".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/Configurations/dms/settings.json";
   xdg.configFile."niri/keyboard.kdl".text = ''
@@ -40,12 +49,16 @@
       }  
   '';
   xdg.configFile."niri/blur.kdl".text = ''
-      window-rule {
+    window-rule {
       opacity 0.95
       background-effect {
         blur true
       }
     }
   '';
-
+  xdg.configFile."niri/floating.kdl".text = ''
+    window-rule {
+        open-floating false
+    }
+  '';
 }

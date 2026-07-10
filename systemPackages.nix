@@ -7,6 +7,9 @@
   lua-language-server
 
   lazygit
+  nautilus
+  gparted
+  baobab
 
   spotify
   wireshark
@@ -17,9 +20,10 @@
   opencode
   pi-coding-agent
   bun
-  crush
   inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
   valent
+
+  papirus-icon-theme
 
   cudatoolkit
   llama-cpp

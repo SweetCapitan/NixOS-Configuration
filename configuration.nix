@@ -103,6 +103,12 @@
     defaultNetwork.settings.dns_enabled = true;
   };
 
+  services.gvfs.enable = true;
+  services.udisks2.enable = true;
+  environment.sessionVariables = {
+    GIO_EXTRA_MODULES = [ "${pkgs.gvfs}/lib/gio/modules" ];
+  };
+
   services.flatpak.enable = false;
   services.tele2TTLChanger.enable = false;
   #boot.kernel.sysctl = {
@@ -181,6 +187,11 @@
     (import ./opencode-unstable.nix inputs.nixpkgs_unstable)
     (import ./llama-cuda-overlay.nix inputs.nixpkgs_unstable_small)
     inputs.pi.overlays.default
+    (final: prev: {
+      papirus-icon-theme = prev.papirus-icon-theme.override {
+        color = "adwaita";
+      };
+    })
   ];
 
   networking = {

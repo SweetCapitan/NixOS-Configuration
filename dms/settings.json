@@ -240,7 +240,7 @@
   "useAutoLocation": true,
   "weatherEnabled": true,
   "networkPreference": "auto",
-  "iconTheme": "System Default",
+  "iconTheme": "Papirus-Dark",
   "cursorSettings": {
     "theme": "System Default",
     "size": 24,

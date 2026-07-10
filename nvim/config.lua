@@ -377,12 +377,12 @@ require("null-ls").setup({
         buffer = bufnr,
         callback = function()
           -- Современный нативный способ асинхронного форматирования при сохранении
-          vim.lsp.buf.format({ 
+          vim.lsp.buf.format({
             bufnr = bufnr,
-            filter = function(c) 
+            filter = function(c)
               -- Форматируем только через none-ls (null-ls), чтобы не было конфликтов с другими LSP
-              return c.name == "null-ls" 
-            end 
+              return c.name == "null-ls"
+            end
           })
         end,
       })
@@ -445,29 +445,43 @@ local on_attach = function(bufnr)
   )
 end
 vim.lsp.config.nixd =
-  {
-    --on_attach = on_attach,
-    capabilities = capabilities,
-    settings = {
-      nixd = {
-        nixpkgs = {
-          expr = "import <nixpkgs> { }"
+{
+  --on_attach = on_attach,
+  capabilities = capabilities,
+  settings = {
+    nixd = {
+      nixpkgs = {
+        expr = "import <nixpkgs> { }"
+      },
+      formatting = {
+        command = { "nixfmt" }
+      },
+      options = {
+        nixos = {
+          expr = '(builtins.getFlake "/home/dancho/Configurations").nixosConfigurations.nixos.options'
         },
-        formatting = {
-          command = { "nixfmt" }
-        },
-        options = {
-          nixos = {
-            expr = '(builtins.getFlake "/home/dancho/Configurations").nixosConfigurations.nixos.options'
-          },
-          home_manager = {
-            expr =
-            '(let flake = (builtins.getFlake "/home/dancho/Configurations"); in flake.inputs.home-manager.lib.homeManagerConfiguration {pkgs = flake.inputs.nixpkgs.legacyPackages.x86_64-linux; modules = [{home.stateVersion = "24.05";home.username="user";home.homeDirectory="/home/user";}];}).options'
-          }
+        home_manager = {
+          expr = [[
+          (let
+            flake = (builtins.getFlake "/home/dancho/Configurations");
+          in flake.inputs.home-manager.lib.homeManagerConfiguration {
+            pkgs = flake.inputs.nixpkgs.legacyPackages.x86_64-linux;
+            modules = [
+              {
+                home.stateVersion = "24.05";
+                home.username = "user";
+                home.homeDirectory = "/home/user";
+              }
+              # Подключаем модуль из инпута dms вашего флейка
+              flake.inputs.dms.homeModules.dank-material-shell
+            ];
+          }).options
+        ]]
         }
       }
     }
   }
+}
 vim.lsp.enable("nixd")
 
 vim.lsp.config.pyright = {
