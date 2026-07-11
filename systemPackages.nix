@@ -23,7 +23,6 @@
   inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
   valent
 
-  papirus-icon-theme
   papirus-folders
   gtk3
 

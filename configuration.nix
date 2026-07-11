@@ -187,11 +187,6 @@
     (import ./opencode-unstable.nix inputs.nixpkgs_unstable)
     (import ./llama-cuda-overlay.nix inputs.nixpkgs_unstable_small)
     inputs.pi.overlays.default
-    (final: prev: {
-      papirus-icon-theme = prev.papirus-icon-theme.override {
-        color = "adwaita";
-      };
-    })
   ];
 
   networking = {
