@@ -32,15 +32,15 @@ end
 ----------------
 -- nord theme --
 ----------------
-vim.g.nord_contrast = true
-vim.g.nord_borders = true
-vim.g.nord_disable_background = true
-vim.g.nord_italic = true
-vim.g.nord_uniform_diff_background = true
-vim.g.nord_enable_sidebar_background = true
-vim.g.nord_bold = true
-vim.g.nord_cursorline_transparent = false
-require("nord").set()
+-- vim.g.nord_contrast = true
+-- vim.g.nord_borders = true
+-- vim.g.nord_disable_background = true
+-- vim.g.nord_italic = true
+-- vim.g.nord_uniform_diff_background = true
+-- vim.g.nord_enable_sidebar_background = true
+-- vim.g.nord_bold = true
+-- vim.g.nord_cursorline_transparent = false
+-- require("nord").set()
 
 -----------------
 -- About noice --
@@ -106,13 +106,17 @@ require("fzf-lua").setup({
   }
 })
 
+-- vim.cmd([[ colorscheme nord ]])
+vim.cmd.colorscheme("dms")
+
+
 -------------------
 -- About lualine --
 -------------------
 require("lualine").setup(
   {
     options = {
-      theme = "auto",
+      theme = "dms",
       globalstatus = true
     }
   }
@@ -121,19 +125,19 @@ require("lualine").setup(
 ----------------------
 -- About bufferline --
 ----------------------
-local highlights
-highlights =
-    require("nord").bufferline.highlights(
-      {
-        italic = true,
-        bold = true
-      }
-    )
-require("bufferline").setup(
-  {
-    highlights = highlights
-  }
-)
+-- local highlights
+-- highlights =
+--     require("nord").bufferline.highlights(
+--       {
+--         italic = true,
+--         bold = true
+--       }
+--     )
+-- require("bufferline").setup(
+--   {
+--     highlights = highlights
+--   }
+-- )
 
 ----------------------
 -- About treesitter --
@@ -551,7 +555,6 @@ require("lspsaga").setup(
     }
   }
 )
-vim.cmd([[ colorscheme nord ]])
 
 -- Устанавливаем Leader на пробел
 vim.g.mapleader = "\\"
@@ -668,3 +671,37 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
   end
 })
+
+if not vim.g.dms_theme_watcher then
+  vim.g.dms_theme_watcher = true
+
+  local watcher = vim.uv.new_fs_event()
+  local timer = vim.uv.new_timer()
+
+  local theme_file = vim.fn.stdpath("config") .. "/colors/dms.lua"
+
+  local function reload_theme()
+    timer:stop()
+
+    timer:start(
+      200,
+      0,
+      vim.schedule_wrap(function()
+        if vim.g.colors_name == "dms" then
+          local base46 = require("base46")
+
+          base46.theme_tables["dms"] = nil
+
+          vim.cmd("colorscheme dms")
+
+          vim.notify(
+            "DMS theme reloaded",
+            vim.log.levels.INFO
+          )
+        end
+      end)
+    )
+  end
+
+  watcher:start(theme_file, {}, reload_theme)
+end

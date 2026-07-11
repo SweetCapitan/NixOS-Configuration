@@ -24,6 +24,8 @@
   valent
 
   papirus-icon-theme
+  papirus-folders
+  gtk3
 
   cudatoolkit
   llama-cpp

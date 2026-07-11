@@ -10,7 +10,7 @@
       }
     }
   },
-  "matugenScheme": "scheme-expressive",
+  "matugenScheme": "scheme-monochrome",
   "runUserMatugenTemplates": true,
   "matugenTargetMonitor": "",
   "popupTransparency": 0.4,
@@ -240,7 +240,7 @@
   "useAutoLocation": true,
   "weatherEnabled": true,
   "networkPreference": "auto",
-  "iconTheme": "Papirus-Dark",
+  "iconTheme": "Papirus-Dynamic",
   "cursorSettings": {
     "theme": "System Default",
     "size": 24,

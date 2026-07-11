@@ -9,6 +9,7 @@
   imports = [
     inputs.dms-plugin-registry.homeModules.default
     inputs.dms.homeModules.dank-material-shell
+    ./papirus-matugen.nix
   ];
   programs.dank-material-shell = {
     enable = true;

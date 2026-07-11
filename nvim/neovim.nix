@@ -1,10 +1,18 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
+
+  # xdg.configFile."nvim/colors/dms.lua".text = ''
+  #   ${builtins.readFile ./colors/dms.lua}
+  # '';
+
   programs.neovim =
     let
       luaRc = ''
         ${builtins.readFile ./config.lua}
       '';
+      base46-avengemedia = import ./base46-avengemedia.nix {
+          inherit pkgs lib;
+        };
     in
     {
       enable = true;
@@ -13,6 +21,7 @@
       defaultEditor = true;
       initLua = luaRc;
       plugins = with pkgs.vimPlugins; [
+        base46-avengemedia
         nvim-treesitter
         fzf-lua
         which-key-nvim
