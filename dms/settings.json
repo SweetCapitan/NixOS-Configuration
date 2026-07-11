@@ -10,7 +10,7 @@
       }
     }
   },
-  "matugenScheme": "scheme-monochrome",
+  "matugenScheme": "scheme-content",
   "runUserMatugenTemplates": true,
   "matugenTargetMonitor": "",
   "popupTransparency": 0.4,
@@ -242,7 +242,7 @@
   "networkPreference": "auto",
   "iconTheme": "Papirus-Dynamic",
   "cursorSettings": {
-    "theme": "System Default",
+    "theme": "Bibata-Modern-Ice",
     "size": 24,
     "niri": {
       "hideWhenTyping": false,

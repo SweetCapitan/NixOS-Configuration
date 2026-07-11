@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
 {
   modulesPath,
   config,
@@ -22,6 +18,7 @@
     ./klipper-lcd.nix
     #./nats.nix
     ../common/docker/alias.nix
+    ./kamp.nix
   ];
 
   services.klipper-lcd = {
@@ -76,6 +73,7 @@
     enable = true;
     user = "root";
     group = "root";
+    package = import ./klipper-virtual-pins.nix { inherit pkgs lib; };
     configFile = ./klipper/printer.cfg;
     mutableConfigFolder = "/var/lib/moonraker/config";
     mutableConfig = true;
@@ -122,7 +120,7 @@
       enable = true;
       networks = {
         "RT-GPON-C920" = {
-          psk = "AaPNa2gt";
+          psk = "AaPNa2gt"; # TODO: change pass and move it into secrets
           priority = 100;
         };
       };
@@ -152,64 +150,39 @@
   virtualisation.docker = {
     enable = true;
   };
-  # Lightweight desktop environment
-  # services.xserver = {
-  #   enable = true;
-  #   desktopManager = {
-  #     xterm.enable = false;
-  #     xfce.enable = true;
-  #   };
-  #   displayManager.lightdm.enable = true;
-  #   displayManager.autoLogin = {
-  #     enable = true;
-  #     user = "dancho";
-  #   };
-  #   videoDrivers = [ "intel" ];
-  #   deviceSection = ''
-  #     Option "AccelMethod" "uxa"
-  #     Option "TearFree" "true"
-  #   '';
-  #   config = ''
-  #     Section "Device"
-  #       Identifier "Intel Graphics"
-  #       Driver "intel"
-  #       Option "TearFree" "true"
-  #       Option "AccelMethod" "sna"
-  #     EndSection
-  #   '';
-  # };
-  # services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = ''
-  #   allow-debugging=true
-  # '';
 
-  # hardware.graphics = {
-  #   enable = true;
-  #   enable32Bit = true;
-  # };
-  # hardware.enableAllFirmware = true;
-  # services.displayManager.defaultSession = "xfce";
   services.openssh.enable = true;
   services.nginx.clientMaxBodySize = "1000m";
   services.sshd.enable = true;
-  users.users.root.password = "supersecret";
-  users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
-  ];
-
-  users.mutableUsers = true;
-
-  users.users.dancho = {
-    password = "supersecret";
-    isNormalUser = true;
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
-    ];
-    extraGroups = [
-      "wheel"
-      "input"
-      "networkmanager"
-      "docker"
-    ]; # Enable ‘sudo’ for the user.
+  users = {
+    mutableUsers = true;
+    users.dancho = {
+      extraGroups = [
+        "wheel"
+        "input"
+        "networkmanager"
+        "docker"
+      ];
+      isNormalUser = true;
+      openssh = {
+        authorizedKeys = {
+          keys = [
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
+          ];
+        };
+      };
+      password = "supersecret";
+    };
+    users.root = {
+      openssh = {
+        authorizedKeys = {
+          keys = [
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWborpkRUFYHwNbhJZ6SDwgG7bY+bHJwXlkBTKTk3Ho dancho@nixos"
+          ];
+        };
+      };
+      password = "supersecret";
+    };
   };
   #
   system.stateVersion = "24.11"; # Did you read the comment?

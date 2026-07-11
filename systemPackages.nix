@@ -23,11 +23,13 @@
   inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
   valent
 
+  bibata-cursors
   papirus-folders
   gtk3
 
   cudatoolkit
   llama-cpp
+  mcporter
   nvtopPackages.nvidia
   # unstable.llama-cpp-vulkan
   pyright
