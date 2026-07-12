@@ -62,4 +62,7 @@
         open-floating false
     }
   '';
+  xdg.configFile."niri/xwayland-satellite.kdl".text = ''
+    xwayland-satellite {}
+  '';
 }

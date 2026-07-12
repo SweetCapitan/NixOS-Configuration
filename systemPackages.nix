@@ -11,6 +11,8 @@
   gparted
   baobab
 
+  xwayland-satellite
+
   spotify
   wireshark
   orca-slicer

@@ -57,6 +57,7 @@
     };
   };
 
+  programs.xwayland.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.graphics = {
     enable = true;
