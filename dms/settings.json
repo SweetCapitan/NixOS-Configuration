@@ -10,7 +10,7 @@
       }
     }
   },
-  "matugenScheme": "scheme-content",
+  "matugenScheme": "scheme-monochrome",
   "matugenContrast": 0,
   "runUserMatugenTemplates": true,
   "matugenTargetMonitor": "",

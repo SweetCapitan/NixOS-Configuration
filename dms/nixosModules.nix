@@ -18,5 +18,6 @@
   environment.systemPackages = with pkgs; [
     qt6Packages.qt6ct
     kdePackages.qt6ct
+    libsForQt5.qt5ct
   ];
 }

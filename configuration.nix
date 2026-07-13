@@ -68,6 +68,19 @@
       vulkan-validation-layers
     ];
   };
+
+  fileSystems."/mnt/games" = {
+    device = "/dev/disk/by-uuid/3C2438202437DB98";
+    fsType = "ntfs3";
+    options = [
+      "uid=1000"
+      "gid=1000"
+      "fmask=0022"
+      "dmask=0011"
+      "nofail"
+    ];
+  };
+
   programs.gamemode.enable = true;
   hardware.nvidia = {
     open = false;
@@ -153,25 +166,28 @@
       ];
       auto-optimise-store = true;
       substituters = [
+        # Disabled because not work without proxy
+        #   "https://cache.nixos-cuda.org"
         "https://cache.nixos.org"
       ];
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        #   "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
       ];
 
-      # Disabled because not work without proxy
-      # substituters = [
-      #   "https://cache.nixos-cuda.org"
-      # ];
-      # trusted-public-keys = [
-      #   "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
-      # ];
     };
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 30d";
-    };
+    # disabled because we use nh clean
+    # gc = {
+    #   automatic = true;
+    #   dates = "weekly";
+    #   options = "--delete-older-than 30d";
+    # };
+  };
+
+  programs.nh.clean = {
+    enable = true;
+    extraArgs = "--keep 5 --keep-since 3d --optimise";
+    dates = "weekly";
   };
 
   fonts.packages = [ pkgs.nerd-fonts.jetbrains-mono ];

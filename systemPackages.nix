@@ -15,6 +15,7 @@
   jdk25
   gnome-text-editor
   lutris
+  nh
 
   spotify
   wireshark
@@ -31,6 +32,8 @@
   bibata-cursors
   papirus-folders
   gtk3
+  gtk4
+  gtk2
 
   cudatoolkit
   llama-cpp
