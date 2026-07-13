@@ -35,6 +35,14 @@
     QT_QPA_PLATFORMTHEME = "qt6ct";
     QT_SELECT = "6";
   };
+  home.file = {
+    ".icons/Bibata-Modern-Ice".source = "${pkgs.bibata-cursors}/share/icons/Bibata-Modern-Ice";
+
+    ".icons/default/index.theme".text = ''
+      [Icon Theme]
+      Inherits=Bibata-Modern-Ice
+    '';
+  };
 
   xdg.configFile."DankMaterialShell/settings.json".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/Configurations/dms/settings.json";

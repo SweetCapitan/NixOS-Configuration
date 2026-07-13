@@ -12,6 +12,9 @@
   baobab
 
   xwayland-satellite
+  jdk25
+  gnome-text-editor
+  lutris
 
   spotify
   wireshark

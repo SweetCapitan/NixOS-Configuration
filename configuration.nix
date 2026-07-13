@@ -68,6 +68,7 @@
       vulkan-validation-layers
     ];
   };
+  programs.gamemode.enable = true;
   hardware.nvidia = {
     open = false;
     nvidiaSettings = true;
@@ -151,6 +152,13 @@
         "flakes"
       ];
       auto-optimise-store = true;
+      substituters = [
+        "https://cache.nixos.org"
+      ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      ];
+
       # Disabled because not work without proxy
       # substituters = [
       #   "https://cache.nixos-cuda.org"
