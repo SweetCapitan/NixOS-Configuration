@@ -342,10 +342,10 @@
     }
   ],
   "networkPreference": "auto",
-  "iconThemeDark": "System Default",
+  "iconThemeDark": "Papirus-Dynamic",
   "iconThemeLight": "System Default",
   "iconThemePerMode": false,
-  "lastAppliedIconTheme": "",
+  "lastAppliedIconTheme": "Papirus-Dynamic",
   "cursorSettings": {
     "theme": "Bibata-Modern-Ice",
     "size": 24,

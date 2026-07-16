@@ -16,7 +16,7 @@
   security.polkit.enable = true;
   # fix gparted
   environment.systemPackages = with pkgs; [
-    qt6Packages.qt6ct
+    # qt6Packages.qt6ct
     kdePackages.qt6ct
     libsForQt5.qt5ct
   ];

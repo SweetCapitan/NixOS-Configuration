@@ -34,6 +34,7 @@
   home.sessionVariables = {
     QT_QPA_PLATFORMTHEME = "qt6ct";
     QT_SELECT = "6";
+    QT_STYLE_OVERRIDE = "qt6ct-style";
   };
   home.file = {
     ".icons/Bibata-Modern-Ice".source = "${pkgs.bibata-cursors}/share/icons/Bibata-Modern-Ice";
