@@ -43,6 +43,12 @@
 
   boot.kernelParams = [ "mitigations=off" ];
 
+  environment.etc."gtk-3.0/settings.ini".text = ''
+    [Settings]
+    gtk-theme-name=adw-gtk3
+    gtk-application-prefer-dark-theme=0
+  '';
+
   boot.kernelPackages = pkgs.linuxPackages_6_12; # setup later lts version or 6.18.
   boot.loader = {
     efi = {
@@ -194,8 +200,21 @@
 
   environment.variables.BROWSER = "zen";
 
-  environment.systemPackages = import ./systemPackages.nix {
-    inherit pkgs inputs;
+  environment.systemPackages =
+    let
+      unstable = import inputs.nixpkgs_unstable {
+        system = pkgs.stdenv.hostPlatform.system;
+        config = {
+          allowUnfree = true;
+        };
+      };
+    in
+    import ./systemPackages.nix {
+      inherit pkgs inputs unstable;
+    };
+  programs.wireshark = {
+    enable = true;
+    package = pkgs.wireshark-qt;
   };
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
@@ -234,6 +253,7 @@
       "networkmanager"
       "libvirtd"
       "podman"
+      "wireshark"
     ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       home-manager
