@@ -65,7 +65,34 @@ require("noice").setup(
   }
 )
 
-require("Comment").setup()
+require("neo-tree").setup({
+  window = { width = 30 },
+  filesystem = {
+    filtered_items = { visible = true },
+    follow_current_file = { enabled = true },
+  }
+})
+
+-- Настройка горячей клавиши Alt + 1
+vim.keymap.set('n', '<A-1>', ':Neotree toggle left<CR>', { silent = true })
+
+
+vim.filetype.add({
+  extension = {
+    zig = 'zig',
+    zon = 'zig',     -- .zon файлы используют тот же синтаксис комментирования
+  },
+})
+
+-- 2. Инициализируем Comment.nvim с хуком под стандарты Zig
+require('Comment').setup({
+  pre_hook = function(ctx)
+    -- Если это файл Zig, принудительно задаем только строчные комментарии
+    if vim.bo.filetype == 'zig' then
+      return ctx.ctype == require('Comment.utils').ctype.linewise and '// %s' or nil
+    end
+  end,
+})
 
 require("which-key").setup({
   delay = 500,
@@ -311,6 +338,43 @@ cmp.setup.cmdline(
     )
   }
 )
+
+-----------------
+-- LSP Support --
+-----------------
+-- Настраиваем параметры ZLS через новый встроенный механизм ядра Neovim
+vim.lsp.config('zls', {
+  cmd = { "zls" },
+  settings = {
+    zls = {
+      enable_autofix = true,
+      enable_snippets = true,
+      warn_style = true,
+      -- 1. Включаем поддержку подсказок со стороны сервера ZLS
+      enable_inlay_hints = true,
+      inlay_hints_show_variable_type_hints = true,
+      inlay_hints_show_parameter_name_hints = true,
+    },
+  },
+  -- 2. Включаем отображение подсказок в Neovim при подключении сервера к буферу
+  on_attach = function(client, bufnr)
+    if client.supports_method("textDocument/inlayHint") then
+      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+    end
+  end,
+})
+
+-- Активируем ZLS
+vim.lsp.enable('zls')
+
+-- Автокоманда для форматирования
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = { "*.zig", "*.zon" },
+  callback = function(ev)
+    vim.lsp.buf.format({ bufnr = ev.buf, async = false })
+  end,
+})
+
 
 -------------------
 -- About none-ls --
