@@ -10,7 +10,7 @@
       }
     }
   },
-  "matugenScheme": "scheme-monochrome",
+  "matugenScheme": "scheme-expressive",
   "matugenContrast": 0,
   "runUserMatugenTemplates": true,
   "matugenTargetMonitor": "",
@@ -117,7 +117,7 @@
   "controlCenterShowIdleInhibitorIcon": false,
   "controlCenterShowDoNotDisturbIcon": false,
   "showPrivacyButton": true,
-  "privacyShowMicIcon": false,
+  "privacyShowMicIcon": true,
   "privacyShowCameraIcon": false,
   "privacyShowScreenShareIcon": false,
   "controlCenterWidgets": [
@@ -298,7 +298,8 @@
   "rememberLastQuery": false,
   "rememberLastMode": true,
   "spotlightSectionViewModes": {
-    "files": "list"
+    "files": "list",
+    "apps": "list"
   },
   "appDrawerSectionViewModes": {
     "apps": "list"
@@ -490,7 +491,7 @@
   "dockBorderOpacity": 1,
   "dockBorderThickness": 1,
   "dockIsolateDisplays": false,
-  "dockLauncherEnabled": false,
+  "dockLauncherEnabled": true,
   "dockLauncherLogoMode": "apps",
   "dockLauncherLogoCustomPath": "",
   "dockLauncherLogoColorOverride": "",
@@ -500,7 +501,7 @@
   "dockMaxVisibleApps": 0,
   "dockMaxVisibleRunningApps": 0,
   "dockShowOverflowBadge": true,
-  "dockShowTrash": false,
+  "dockShowTrash": true,
   "dockTrashFileManager": "default",
   "dockTrashCustomCommand": "",
   "notificationOverlayEnabled": false,

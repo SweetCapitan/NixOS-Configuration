@@ -27,6 +27,16 @@
     plugins = import ./plugins.nix { inherit pkgs lib; };
     quickshell.package = pkgs.quickshell;
   };
+
+  # for screen recorder plugin
+  home.packages = with pkgs; [
+    slurp
+    jq
+    grim
+    # gpu-screen-recorder
+    # gsr configured under nixos side
+  ];
+
   qt = {
     enable = true;
     platformTheme.name = "qt6ct";
@@ -64,6 +74,11 @@
       background-effect {
         blur true
       }
+    }
+  '';
+  xdg.configFile."niri/prt-sc.kdl".text = ''
+    binds {
+      Print { spawn "sh" "-c" "dms ipc call screenCaptureToolbar toggle"; }
     }
   '';
   xdg.configFile."niri/floating.kdl".text = ''
