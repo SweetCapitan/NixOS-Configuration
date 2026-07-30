@@ -1,4 +1,10 @@
-{ pkgs, inputs }: with pkgs;
+{
+  pkgs,
+  inputs,
+  unstable,
+  ...
+}:
+with pkgs;
 [
   nixfmt-rfc-style
   sing-box # TODO: remove /usr/share/sing-box/geoip.db
@@ -16,14 +22,19 @@
   gnome-text-editor
   lutris
   nh
+  vkbasalt
+  zls
+  zig
 
   spotify
   wireshark
-  orca-slicer
+  unstable.orca-slicer
+  plasticity
+  freecad-wayland
   podman-compose
 
   xclip
-  opencode
+  # opencode
   pi-coding-agent
   bun
   inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -34,6 +45,7 @@
   gtk3
   gtk4
   gtk2
+  adw-gtk3
 
   cudatoolkit
   llama-cpp

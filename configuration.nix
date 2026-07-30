@@ -63,6 +63,44 @@
     };
   };
 
+  services.scx = {
+    enable = true;
+    scheduler = "scx_lavd";
+  };
+
+  services.ananicy = {
+    enable = true;
+    package = pkgs.ananicy-cpp;
+    rulesProvider = pkgs.ananicy-rules-cachyos;
+  };
+
+  programs.gamescope = {
+    enable = true;
+    # capSysNice = true;
+  };
+
+  services.udev.extraRules = ''
+    # For NVMe SSDs (System): disable the scheduler (none).
+    # NVMe is so fast that the kernel scheduler queues are wasting old CPU cycles.
+    ACTION=="add|change", KERNEL=="nvme[0-9]*n[0-9]*", ATTR{queue/scheduler}="none"
+
+    # For HDD (Games): hard-code the BFQ scheduler.
+    # BFQ (Budget Fair Queueing) groups requests and prevents background processes from
+    # stealing the game's read thread. Texture loading will be prioritized.
+    ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="bfq"
+    # HDD tweak: Increase the read-ahead size to 4MB (4096 KB).
+    # This will force the drive to read data "with reserve" in large linear chunks, which is much easier on an HDD.
+    ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/read_ahead_kb}="4096"
+  '';
+
+  environment.sessionVariables = {
+    # Forces XWayland and third-party libraries to properly initialize EGL on NVIDIA
+    GBM_BACKEND = "nvidia-drm";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    # Critical line to fix "eglInitialize() failed" in containers:
+    EGLECON_DRIVERS_PATH = "/run/opengl-driver/share/egl/egl_external_platform.d";
+  };
+
   programs.xwayland.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.graphics = {
@@ -84,6 +122,10 @@
       "fmask=0022"
       "dmask=0011"
       "nofail"
+      "noatime"
+      "async"
+      # "windows_names"
+      # "ignore_case"
     ];
   };
 
@@ -117,6 +159,9 @@
       }
     ];
   };
+
+  nix.registry.nixpkgs.flake = inputs.nixpkgs;
+  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
 
   virtualisation.podman = {
     enable = true;
