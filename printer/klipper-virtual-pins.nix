@@ -11,8 +11,8 @@ let
 in
 pkgs.klipper.overrideAttrs (old: {
   postInstall = (old.postInstall or "") + ''
-    chmod u+w $out/lib/klippy/extras
-    cp ${virtualPinsSrc}/virtual_pins.py $out/lib/klippy/extras/virtual_pins.py
-    chmod u-w $out/lib/klippy/extras
+    chmod u+w $out/lib/klipper/extras
+    cp ${virtualPinsSrc}/virtual_pins.py $out/lib/klipper/extras/virtual_pins.py
+    chmod u-w $out/lib/klipper/extras
   '';
 })

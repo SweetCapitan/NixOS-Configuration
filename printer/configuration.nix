@@ -97,6 +97,7 @@
           "*.lan"
           "*://app.fluidd.xyz"
           "*://my.mainsail.xyz"
+          "http://localhost:8080"
         ];
         trusted_clients = [
           "10.0.0.0/8"
