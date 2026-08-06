@@ -42,6 +42,7 @@ end
 -- vim.g.nord_cursorline_transparent = false
 -- require("nord").set()
 
+
 -----------------
 -- About noice --
 -----------------
@@ -552,7 +553,7 @@ vim.lsp.config.nixd =
 }
 vim.lsp.enable("nixd")
 
-vim.lsp.config.pyright = {
+vim.lsp.config.basedpyright = {
   capabilities = capabilities,
   settings = {
     python = {
@@ -560,11 +561,19 @@ vim.lsp.config.pyright = {
         typeCheckingMode = "basic",
         autoSearchPaths = true,
         useLibraryCodeForTypes = true
-      }
+      },
+      inlay_hints_show_variable_type_hints = true,
+      inlay_hints_show_parameter_name_hints = true,
+      enable_inlay_hints = true,
     }
-  }
+  },
+  on_attach = function(client, bufnr)
+    if client.supports_method("textDocument/inlayHint") then
+      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+    end
+  end,
 }
-vim.lsp.enable("pyright")
+vim.lsp.enable("basedpyright")
 vim.lsp.config.lua_ls = {
   on_init = function(client)
     if client.workspace_folders then

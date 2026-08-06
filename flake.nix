@@ -53,6 +53,10 @@
       url = "github:lukasl-dev/pi.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    vm-curator = {
+      url = "github:mroboff/vm-curator";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -61,13 +65,9 @@
       disko,
       nixpkgs,
       home-manager,
-      nixvim,
       deploy-rs,
       agenix,
       impermanence,
-      nixpkgs_unstable,
-      dms,
-      dgop,
       ...
     }:
     {

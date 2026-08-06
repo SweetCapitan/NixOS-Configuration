@@ -101,6 +101,21 @@
     EGLECON_DRIVERS_PATH = "/run/opengl-driver/share/egl/egl_external_platform.d";
   };
 
+  services.printing = {
+    enable = true;
+    drivers = with pkgs; [
+      splix
+      samsung-unified-linux-driver
+    ];
+  };
+
+  hardware.sane = {
+    enable = true;
+    extraBackends = with pkgs; [
+      samsung-unified-linux-driver
+    ];
+  };
+
   programs.xwayland.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.graphics = {
@@ -160,9 +175,6 @@
     ];
   };
 
-  nix.registry.nixpkgs.flake = inputs.nixpkgs;
-  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
-
   virtualisation.podman = {
     enable = true;
     dockerCompat = true;
@@ -215,18 +227,29 @@
         "nix-command"
         "flakes"
       ];
+      trusted-users = [
+        "root"
+        "dancho"
+        "@wheel"
+      ];
       auto-optimise-store = true;
       substituters = [
         # Disabled because not work without proxy
         #   "https://cache.nixos-cuda.org"
         "https://cache.nixos.org"
+        # "https://install.determinate.systems"
       ];
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        # "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM="
         #   "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
       ];
 
     };
+    registry.nixpkgs.flake = inputs.nixpkgs;
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+    package = pkgs.lix;
+
     # disabled because we use nh clean
     # gc = {
     #   automatic = true;
@@ -299,6 +322,8 @@
       "libvirtd"
       "podman"
       "wireshark"
+      "scanner"
+      "lp"
     ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       home-manager

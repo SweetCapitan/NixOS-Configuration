@@ -26,6 +26,15 @@ with pkgs;
   zls
   zig
 
+  distrobox
+  distroshelf
+  busybox
+  winboat
+
+  simple-scan
+
+  inputs.vm-curator.packages.${pkgs.system}.default
+
   spotify
   wireshark
   unstable.orca-slicer
@@ -34,7 +43,7 @@ with pkgs;
   podman-compose
 
   xclip
-  # opencode
+  opencode
   pi-coding-agent
   bun
   inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -52,7 +61,8 @@ with pkgs;
   mcporter
   nvtopPackages.nvidia
   # unstable.llama-cpp-vulkan
-  pyright
+  # pyright
+  basedpyright
   ruff
   isort
   fzf
