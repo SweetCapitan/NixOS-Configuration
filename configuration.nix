@@ -109,6 +109,21 @@
     ];
   };
 
+  hardware.printers = {
+    ensureDefaultPrinter = "Samsung_SCX-3200";
+    ensurePrinters = [
+      {
+        name = "Samsung_SCX-3200";
+        description = "Samsung SCX-3200 Series";
+        deviceUri = "usb://Samsung/SCX-3200%20Series?serial=Z5L4BFEB501784X&interface=1";
+        model = "samsung/scx3200.ppd";
+        ppdOptions = {
+          PageSize = "A4";
+        };
+      }
+    ];
+  };
+
   hardware.sane = {
     enable = true;
     extraBackends = with pkgs; [
@@ -288,9 +303,6 @@
   programs.virt-manager.enable = true;
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
 
   nixpkgs.config.allowUnfree = true;
 
