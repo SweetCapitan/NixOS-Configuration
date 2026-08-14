@@ -32,6 +32,7 @@ with pkgs;
   winboat
 
   simple-scan
+  valent
 
   inputs.vm-curator.packages.${pkgs.system}.default
 
@@ -47,7 +48,6 @@ with pkgs;
   pi-coding-agent
   bun
   inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
-  valent
 
   bibata-cursors
   papirus-folders

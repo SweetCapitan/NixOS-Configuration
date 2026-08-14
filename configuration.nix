@@ -23,7 +23,6 @@
     ./avahi.nix
     ./project_mayhem_service.nix
     ./impermanence.nix
-    ./valent.nix
     ./dms/nixosModules.nix
   ];
 

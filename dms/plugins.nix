@@ -13,6 +13,7 @@
     settings = {
       enabled = true;
       dockerBinary = "podman";
+      terminalApp = "ghostty";
     };
   };
   activateLinux = {
