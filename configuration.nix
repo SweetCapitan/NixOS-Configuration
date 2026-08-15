@@ -220,6 +220,25 @@
     ];
   };
 
+  programs.java = {
+    enable = true;
+    package = pkgs.jdk21;
+  };
+  # programs.nix-ld.enable = true;
+  # programs.nix-ld.libraries = with pkgs; [
+  #   stdenv.cc.cc.lib
+  #   zlib
+  #   xorg.libX11
+  #   xorg.libXext
+  #   xorg.libXi
+  #   xorg.libXrender
+  #   xorg.libXtst
+  #   alsa-lib
+  #   wayland
+  #   libxkbcommon
+  #   freetype
+  # ];
+
   services.openssh = {
     enable = true;
     ports = [ 22 ];

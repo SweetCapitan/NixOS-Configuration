@@ -343,6 +343,70 @@ cmp.setup.cmdline(
 -----------------
 -- LSP Support --
 -----------------
+
+vim.lsp.set_log_level("debug")
+
+
+-- fix for open jar from java and kotlin source files
+-- vim.api.nvim_create_autocmd("BufReadCmd", {
+--   pattern = "jar://*",
+--   callback = function(args)
+--     local uri = args.match
+--     -- strip "jar://" prefix, split on "!/"
+--     local path = uri:sub(#"jar://" + 1)
+--     local jar_path, entry_path = path:match("^(.-)!/(.+)$")
+--
+--     if not jar_path or not entry_path then
+--       vim.notify("Could not parse jar URI: " .. uri, vim.log.levels.ERROR)
+--       return
+--     end
+--
+--     local bufnr = args.buf
+--     local output = vim.fn.system({ "unzip", "-p", jar_path, entry_path })
+--
+--     if vim.v.shell_error ~= 0 then
+--       vim.notify("Failed to extract " .. entry_path .. " from " .. jar_path, vim.log.levels.ERROR)
+--       return
+--     end
+--
+--     local lines = vim.split(output, "\n", { plain = true })
+--     vim.bo[bufnr].buftype = "" -- allow it to behave like a normal buffer
+--     vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+--     vim.bo[bufnr].modified = false
+--     vim.bo[bufnr].readonly = true
+--     vim.bo[bufnr].filetype = "kotlin"
+--   end,
+-- })
+--
+-- vim.lsp.config('kotlin_lsp', {
+--   single_file_support = false,
+--   capabilities = vim.tbl_deep_extend('force',
+--     vim.lsp.protocol.make_client_capabilities(),
+--     {
+--       textDocument = {
+--         inlayHint = {
+--           dynamicRegistration = false,
+--         },
+--       },
+--     }
+--   ),
+-- })
+--
+-- vim.lsp.enable('kotlin_lsp')
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client and client:supports_method('textDocument/inlayHint') then
+      vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+    end
+  end,
+})
+
+vim.keymap.set('n', '<leader>th', function()
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+end, { desc = 'Toggle inlay hints' })
+
 -- Настраиваем параметры ZLS через новый встроенный механизм ядра Neovim
 vim.lsp.config('zls', {
   cmd = { "zls" },

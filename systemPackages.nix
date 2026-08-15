@@ -18,7 +18,6 @@ with pkgs;
   baobab
 
   xwayland-satellite
-  jdk25
   gnome-text-editor
   lutris
   nh
@@ -33,6 +32,9 @@ with pkgs;
 
   simple-scan
   valent
+
+  gradle_9
+  virt-viewer
 
   inputs.vm-curator.packages.${pkgs.system}.default
 
