@@ -35,6 +35,7 @@ with pkgs;
 
   gradle_9
   virt-viewer
+  file-roller
 
   inputs.vm-curator.packages.${pkgs.system}.default
 
